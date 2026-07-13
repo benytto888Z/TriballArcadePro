@@ -1,0 +1,11 @@
+
+
+WS: Received: {"type":"start_game_config","matchType":"solo_chrono","gameMode":"classic","players":["Takam"],"targetScore":100,"ballsPerTurn":3,"turnDurationSeconds":40,"turnWarningSeconds":10,"overshootRule":"refuse","options":{"ttsEnabled":true,"soundEnabled":true},"language":"en","theme":"esports","requestedBy":"config_area","ts":1783925658091}
+WS: Sent: {"type":"game_status_update","state":"countdown","currentPlayer":"Takam","scores":{"Takam":0},"elapsedSeconds":0,"currentTurn":0,"ts":1783925638002}
+WS: Received: {"type":"player_avatar","player":"Takam","playerIndex":0,"avatarUrl":"http://192.168.4.4:8080/avatar/0"}
+WS: Received: {"type":"ack","for":"game_status_update","success":true}
+MPV: [error] cplayer: Failed to recognize file format.
+
+
+
+Comment sécuriser l'interface du Config Area pour que une fois le jeu en marche dans Game Area , les joueurs ne puisse pas interargir sur la tablette si ce n'est l'admin. Ils ne doivent plus avoir la possibilité de cliquer ou d'interagir sur les paramètres et les envoyer au Game Area ou au esp32 dès que le jeu est lancé . Mais dès que la partie est terminée et qu'on revient au WaitingScreen l'interface Config Area sera automatiquement déverrouillé pour permettre une nouvelle partie . Seul l'admin peut déverrouiller l'interface  pendant le deroulement d'une partie .

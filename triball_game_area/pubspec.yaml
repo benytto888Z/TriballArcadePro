@@ -1,0 +1,140 @@
+name: Tribal_Game_Area
+description: "triball arcade game pro"
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.4
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  # STATE MANAGEMENT
+  get: ^4.6.6
+  get_storage: ^2.1.1
+  # RESPONSIVE UI
+  flutter_screenutil: ^5.9.3
+
+  # WEBSOCKET
+  web_socket_channel: ^3.0.1
+  path_provider: ^2.1.5
+
+
+
+  # AUDIO
+  just_audio: ^0.9.39
+  audio_session: ^0.1.21
+  just_audio_windows: ^0.2.2      # ✅ support Windows
+  just_audio_media_kit: ^2.0.6    # ✅ support Linux/Windows alternative
+  media_kit_libs_audio: ^1.0.5    # ✅ libs natives pour media_kit
+
+  window_manager: ^0.5.1
+  http: ^1.2.2    # ✅ Pour télécharger les avatars
+
+  # TTS
+  flutter_tts: ^4.0.2
+
+  # ANIMATIONS
+  lottie: ^3.1.2
+  flutter_animate: ^4.5.0
+
+  # STORAGE
+  shared_preferences: ^2.2.3
+
+  # NETWORK
+  connectivity_plus: ^6.0.3
+
+  # ICONS
+  font_awesome_flutter: ^10.7.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/audio/
+    - assets/lottie/
+    - assets/images/
+
+
+
+  fonts:
+    - family: Power Grotesk
+      fonts:
+        - asset: assets/fonts/PowerGrotesk-Regular.ttf
+        - asset: assets/fonts/PowerGrotesk-Black.ttf
+        - asset: assets/fonts/PowerGrotesk-BlackItalic.ttf
+        - asset: assets/fonts/PowerGrotesk-Bold.ttf
+        - asset: assets/fonts/PowerGrotesk-BoldItalic.ttf
+        - asset: assets/fonts/PowerGrotesk-Heavy.ttf
+        - asset: assets/fonts/PowerGrotesk-HeavyItalic.ttf
+        - asset: assets/fonts/PowerGrotesk-Light.ttf
+        - asset: assets/fonts/PowerGrotesk-LightItalic.ttf
+        - asset: assets/fonts/PowerGrotesk-Medium.ttf
+        - asset: assets/fonts/PowerGrotesk-MediumItalic.ttf
+        - asset: assets/fonts/PowerGrotesk-Regular.ttf
+        - asset: assets/fonts/PowerGrotesk-UltraBold.ttf
+        - asset: assets/fonts/PowerGrotesk-UltraBoldItalic.ttf
+        - asset: assets/fonts/PowerGrotesk-UltraLight.ttf
+        - asset: assets/fonts/PowerGrotesk-UltraLightItalic.ttf
+
+
+    - family: Power Grotesk Reg
+      fonts:
+        - asset: assets/fonts/PowerGrotesk-Regular.ttf
+
+    - family: Power Grotesk Bold
+      fonts:
+        - asset: assets/fonts/PowerGrotesk-Bold.ttf
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-Regular.ttf
+        - asset: assets/fonts/Montserrat-Bold.ttf
+        - asset: assets/fonts/Montserrat-Medium.ttf
+    - family: Orbitron
+      fonts:
+        - asset: assets/fonts/Orbitron-Regular.ttf
+        - asset: assets/fonts/Orbitron-Black.ttf
+        - asset: assets/fonts/Orbitron-Bold.ttf
+
+    - family: BebasNeue
+      fonts:
+        - asset: assets/fonts/BebasNeue-Regular.ttf
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Black.ttf
+        - asset: assets/fonts/Poppins-Medium.ttf
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Bold.ttf
+
+    - family: InterTight
+      fonts:
+        - asset: assets/fonts/InterTight-Bold.ttf
+        - asset: assets/fonts/InterTight-Medium.ttf
+        - asset: assets/fonts/InterTight-Regular.ttf
+    - family: Balloo2
+      fonts:
+        - asset: assets/fonts/Baloo2-Regular.ttf
+        - asset: assets/fonts/Baloo2-Bold.ttf
+    - family: Rajdhani
+      fonts:
+        - asset: assets/fonts/Rajdhani-Regular.ttf
+        - asset: assets/fonts/Rajdhani-Bold.ttf
+
+    - family: FredokaOne
+      fonts:
+        - asset: assets/fonts/Fredoka-Regular.ttf
+
+    - family: PressStart2P
+      fonts:
+        - asset: assets/fonts/PressStart2P-Regular.ttf
