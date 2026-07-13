@@ -879,8 +879,8 @@ class GameController extends GetxController {
 
     await _storage.addRecentPlayerName(player.name);
 
-    // Sauvegarder l'avatar
-    _saveWinnerAvatarForTop10(player);
+    // Sauvegarder complètement l'avatar avant d'ouvrir le LeaderboardScreen.
+    await _saveWinnerAvatarForTop10(player);
 
     // Attendre le broadcast auto
     await Future.delayed(const Duration(milliseconds: 2000));
@@ -910,16 +910,17 @@ class GameController extends GetxController {
   }
 
   /// ✅ Sauvegarde l'avatar du gagnant pour persistance top 10
-  void _saveWinnerAvatarForTop10(PlayerModel player) {
+  Future<void> _saveWinnerAvatarForTop10(PlayerModel player) async {
     try {
       final bytes = _avatarStorage.getCachedBytes(player.name);
       if (bytes != null) {
-        // ✅ Sauvegarde avec le mode de jeu
-        _avatarStorage.saveTop10Avatar(
+        await _avatarStorage.saveTop10Avatar(
           gameMode: config.mode.key,
           playerName: player.name,
           bytes: bytes,
         );
+      } else if (kDebugMode) {
+        print('📸 No downloaded avatar to persist for ${player.name}');
       }
     } catch (e) {
       if (kDebugMode) print('⚠️ Save avatar error: $e');

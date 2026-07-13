@@ -1,0 +1,151 @@
+diff --git a/triball_game_area/lib/features/game/game_controller.dart b/triball_game_area/lib/features/game/game_controller.dart
+index 8a2127c..b208e89 100644
+--- a/triball_game_area/lib/features/game/game_controller.dart
++++ b/triball_game_area/lib/features/game/game_controller.dart
+@@ -879,8 +879,8 @@ class GameController extends GetxController {
+ 
+     await _storage.addRecentPlayerName(player.name);
+ 
+-    // Sauvegarder l'avatar
+-    _saveWinnerAvatarForTop10(player);
++    // Sauvegarder complètement l'avatar avant d'ouvrir le LeaderboardScreen.
++    await _saveWinnerAvatarForTop10(player);
+ 
+     // Attendre le broadcast auto
+     await Future.delayed(const Duration(milliseconds: 2000));
+@@ -910,16 +910,17 @@ class GameController extends GetxController {
+   }
+ 
+   /// ✅ Sauvegarde l'avatar du gagnant pour persistance top 10
+-  void _saveWinnerAvatarForTop10(PlayerModel player) {
++  Future<void> _saveWinnerAvatarForTop10(PlayerModel player) async {
+     try {
+       final bytes = _avatarStorage.getCachedBytes(player.name);
+       if (bytes != null) {
+-        // ✅ Sauvegarde avec le mode de jeu
+-        _avatarStorage.saveTop10Avatar(
++        await _avatarStorage.saveTop10Avatar(
+           gameMode: config.mode.key,
+           playerName: player.name,
+           bytes: bytes,
+         );
++      } else if (kDebugMode) {
++        print('📸 No downloaded avatar to persist for ${player.name}');
+       }
+     } catch (e) {
+       if (kDebugMode) print('⚠️ Save avatar error: $e');
+diff --git a/triball_game_area/lib/features/leaderboard/widgets/leaderboard_entry_tile.dart b/triball_game_area/lib/features/leaderboard/widgets/leaderboard_entry_tile.dart
+index b8183ec..1696177 100644
+--- a/triball_game_area/lib/features/leaderboard/widgets/leaderboard_entry_tile.dart
++++ b/triball_game_area/lib/features/leaderboard/widgets/leaderboard_entry_tile.dart
+@@ -3,6 +3,7 @@
+ import 'package:flutter/material.dart';
+ import 'package:flutter_screenutil/flutter_screenutil.dart';
+ import '../../../core/theme/theme_colors.dart';
++import '../../../data/models/game_state_model.dart';
+ import '../../../data/models/leaderboard_entry_model.dart';
+ import '../../../widgets/player_avatar_widget.dart';
+ import '../../game/utils/game_screen_breakpoints.dart';
+@@ -87,6 +88,7 @@ class LeaderboardEntryTile extends StatelessWidget {
+             playerIndex: rank - 1,
+             size: GameScreenBreakpoints.lbEntryRankBadgeSize() * 0.8,
+             borderWidth: 1.5,
++            gameMode: entry.gameMode.key,
+           ),
+           SizedBox(width: 8.w),
+           Expanded(
+diff --git a/triball_game_area/lib/features/leaderboard/widgets/podium_widget.dart b/triball_game_area/lib/features/leaderboard/widgets/podium_widget.dart
+index 1910405..90030b9 100644
+--- a/triball_game_area/lib/features/leaderboard/widgets/podium_widget.dart
++++ b/triball_game_area/lib/features/leaderboard/widgets/podium_widget.dart
+@@ -3,6 +3,7 @@
+ import 'package:flutter/material.dart';
+ import 'package:flutter_screenutil/flutter_screenutil.dart';
+ import '../../../core/theme/theme_colors.dart';
++import '../../../data/models/game_state_model.dart';
+ import '../../../data/models/leaderboard_entry_model.dart';
+ import '../../../widgets/player_avatar_widget.dart';
+ import '../../game/utils/game_screen_breakpoints.dart';
+@@ -111,6 +112,7 @@ class _PodiumStep extends StatelessWidget {
+             playerIndex: rank - 1,
+             size: GameScreenBreakpoints.lbPodiumCardWidth() * 0.4,
+             borderWidth: 2,
++            gameMode: entry.gameMode.key,
+           ),
+           SizedBox(height: 4.h),
+           Text(
+diff --git a/triball_game_area/lib/widgets/player_avatar_widget.dart b/triball_game_area/lib/widgets/player_avatar_widget.dart
+index bb32bdb..00a480e 100644
+--- a/triball_game_area/lib/widgets/player_avatar_widget.dart
++++ b/triball_game_area/lib/widgets/player_avatar_widget.dart
+@@ -29,7 +29,22 @@ class PlayerAvatarWidget extends StatelessWidget {
+     final color = Helpers.playerColor(playerIndex);
+ 
+     return Obx(() {
+-      // 1. Bytes pré-téléchargés (mémoire — partie en cours)
++      // LEADERBOARD : l'index représente le rang, pas l'index du joueur de la
++      // dernière partie. Il faut donc chercher l'avatar persistant par
++      // (mode + nom) avant de consulter le cache temporaire par index.
++      if (gameMode != null) {
++        return _Top10Avatar(
++          key: ValueKey('${gameMode!}:${playerName.toLowerCase()}'),
++          playerName: playerName,
++          gameMode: gameMode!,
++          size: size,
++          borderWidth: borderWidth,
++          color: color,
++          playerIndex: playerIndex,
++        );
++      }
++
++      // GAME SCREEN : bytes pré-téléchargés de la partie en cours.
+       final cachedBytes = avatarService.getCachedBytesByIndex(playerIndex);
+       if (cachedBytes != null) {
+         return _PhotoAvatar(
+@@ -53,19 +68,7 @@ class PlayerAvatarWidget extends StatelessWidget {
+         );
+       }
+ 
+-      // 3. Top 10 fichier disque (async)
+-      if (gameMode != null) {
+-        return _Top10Avatar(
+-          playerName: playerName,
+-          gameMode: gameMode!,
+-          size: size,
+-          borderWidth: borderWidth,
+-          color: color,
+-          playerIndex: playerIndex,
+-        );
+-      }
+-
+-      // 4. Fallback badge
++      // 3. Fallback badge
+       return _FallbackBadge(
+         index: playerIndex,
+         size: size,
+@@ -84,6 +87,7 @@ class _Top10Avatar extends StatefulWidget {
+   final int playerIndex;
+ 
+   const _Top10Avatar({
++    super.key,
+     required this.playerName,
+     required this.gameMode,
+     required this.size,
+@@ -106,6 +110,17 @@ class _Top10AvatarState extends State<_Top10Avatar> {
+     _loadAvatar();
+   }
+ 
++  @override
++  void didUpdateWidget(covariant _Top10Avatar oldWidget) {
++    super.didUpdateWidget(oldWidget);
++    if (oldWidget.playerName != widget.playerName ||
++        oldWidget.gameMode != widget.gameMode) {
++      _bytes = null;
++      _loaded = false;
++      _loadAvatar();
++    }
++  }
++
+   Future<void> _loadAvatar() async {
+     try {
+       final service = Get.find<AvatarStorageService>();

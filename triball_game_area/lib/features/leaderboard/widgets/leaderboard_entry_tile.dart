@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/theme/theme_colors.dart';
+import '../../../data/models/game_state_model.dart';
 import '../../../data/models/leaderboard_entry_model.dart';
 import '../../../widgets/player_avatar_widget.dart';
 import '../../game/utils/game_screen_breakpoints.dart';
@@ -87,6 +88,7 @@ class LeaderboardEntryTile extends StatelessWidget {
             playerIndex: rank - 1,
             size: GameScreenBreakpoints.lbEntryRankBadgeSize() * 0.8,
             borderWidth: 1.5,
+            gameMode: entry.gameMode.key,
           ),
           SizedBox(width: 8.w),
           Expanded(

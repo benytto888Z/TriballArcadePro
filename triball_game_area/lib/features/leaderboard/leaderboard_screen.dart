@@ -116,7 +116,7 @@ class _Header extends GetView<LeaderboardController> {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          /*Obx(() {
+          Obx(() {
             if (!controller.isConnected.value) return const SizedBox.shrink();
             return IconButton(
               onPressed: controller.refresh,
@@ -126,8 +126,8 @@ class _Header extends GetView<LeaderboardController> {
                 size: GameScreenBreakpoints.lbHeaderIconSize(),
               ),
             );
-          }),*/
-          /*Obx(() {
+          }),
+          Obx(() {
             if (controller.isEmpty || !controller.isConnected.value) {
               return const SizedBox.shrink();
             }
@@ -139,7 +139,7 @@ class _Header extends GetView<LeaderboardController> {
                 size: GameScreenBreakpoints.lbHeaderIconSize(),
               ),
             );
-          }),*/
+          }),
           Obx(() {
             if (!controller.autoReturnActive.value) return const SizedBox.shrink();
             final countdown = controller.autoReturnCountdown.value;
@@ -173,7 +173,7 @@ class _Header extends GetView<LeaderboardController> {
     );
   }
 
-  /*void _confirmClear() {
+  void _confirmClear() {
     final codeController = TextEditingController();
     final controller = Get.find<LeaderboardController>();
 
@@ -289,7 +289,7 @@ class _Header extends GetView<LeaderboardController> {
         ],
       ),
     );
-  }*/
+  }
 }
 class _Content extends GetView<LeaderboardController> {
   const _Content();

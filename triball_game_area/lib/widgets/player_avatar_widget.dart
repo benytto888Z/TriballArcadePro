@@ -29,7 +29,22 @@ class PlayerAvatarWidget extends StatelessWidget {
     final color = Helpers.playerColor(playerIndex);
 
     return Obx(() {
-      // 1. Bytes pré-téléchargés (mémoire — partie en cours)
+      // LEADERBOARD : l'index représente le rang, pas l'index du joueur de la
+      // dernière partie. Il faut donc chercher l'avatar persistant par
+      // (mode + nom) avant de consulter le cache temporaire par index.
+      if (gameMode != null) {
+        return _Top10Avatar(
+          key: ValueKey('${gameMode!}:${playerName.toLowerCase()}'),
+          playerName: playerName,
+          gameMode: gameMode!,
+          size: size,
+          borderWidth: borderWidth,
+          color: color,
+          playerIndex: playerIndex,
+        );
+      }
+
+      // GAME SCREEN : bytes pré-téléchargés de la partie en cours.
       final cachedBytes = avatarService.getCachedBytesByIndex(playerIndex);
       if (cachedBytes != null) {
         return _PhotoAvatar(
@@ -53,19 +68,7 @@ class PlayerAvatarWidget extends StatelessWidget {
         );
       }
 
-      // 3. Top 10 fichier disque (async)
-      if (gameMode != null) {
-        return _Top10Avatar(
-          playerName: playerName,
-          gameMode: gameMode!,
-          size: size,
-          borderWidth: borderWidth,
-          color: color,
-          playerIndex: playerIndex,
-        );
-      }
-
-      // 4. Fallback badge
+      // 3. Fallback badge
       return _FallbackBadge(
         index: playerIndex,
         size: size,
@@ -84,6 +87,7 @@ class _Top10Avatar extends StatefulWidget {
   final int playerIndex;
 
   const _Top10Avatar({
+    super.key,
     required this.playerName,
     required this.gameMode,
     required this.size,
@@ -104,6 +108,17 @@ class _Top10AvatarState extends State<_Top10Avatar> {
   void initState() {
     super.initState();
     _loadAvatar();
+  }
+
+  @override
+  void didUpdateWidget(covariant _Top10Avatar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.playerName != widget.playerName ||
+        oldWidget.gameMode != widget.gameMode) {
+      _bytes = null;
+      _loaded = false;
+      _loadAvatar();
+    }
   }
 
   Future<void> _loadAvatar() async {
