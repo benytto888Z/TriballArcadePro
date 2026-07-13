@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:just_audio/just_audio.dart';
@@ -78,8 +79,23 @@ class AudioService extends GetxService {
             .toDouble();
   }
 
-  String _toAssetUri(String path) {
-    return path.startsWith('asset') ? path : path;
+  final Map<String, bool> _assetAvailability = {};
+
+  /// Vérifie l'existence avant de transmettre le chemin à MediaKit.
+  /// Cela évite l'erreur native peu explicite "Failed to recognize file format"
+  /// lorsqu'un asset déclaré dans AssetPaths n'existe pas dans le bundle.
+  Future<bool> _assetExists(String path) async {
+    final cached = _assetAvailability[path];
+    if (cached != null) return cached;
+    try {
+      await rootBundle.load(path);
+      _assetAvailability[path] = true;
+      return true;
+    } catch (_) {
+      _assetAvailability[path] = false;
+      if (kDebugMode) print('🔇 Audio asset missing: $path');
+      return false;
+    }
   }
 
   // ============================================
@@ -88,13 +104,14 @@ class AudioService extends GetxService {
   /// Joue un SFX en utilisant le pool (permet plusieurs sons simultanés)
   Future<void> playSfx(String assetPath, {double? volumeOverride}) async {
     if (!soundEnabled.value) return;
+    if (!await _assetExists(assetPath)) return;
 
     try {
       final player = _sfxPool[_nextSfxIndex];
       _nextSfxIndex = (_nextSfxIndex + 1) % AudioConstants.sfxPoolSize;
 
       await player.stop();
-      await player.setAsset(_toAssetUri(assetPath));
+      await player.setAsset(assetPath);
       await player.setVolume(volumeOverride ?? sfxVolume.value);
       await player.play();
     } catch (e) {
@@ -120,10 +137,11 @@ class AudioService extends GetxService {
       return;
     }
     if (_currentBgmPath == assetPath && _bgmIsPlaying) return;
+    if (!await _assetExists(assetPath)) return;
 
     try {
       await _bgmPlayer.stop();
-      await _bgmPlayer.setAsset(_toAssetUri(assetPath));
+      await _bgmPlayer.setAsset(assetPath);
       await _bgmPlayer.setLoopMode(LoopMode.all);
       await _bgmPlayer.setVolume(musicVolume.value);
       await _bgmPlayer.play();

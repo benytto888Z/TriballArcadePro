@@ -277,75 +277,84 @@ if (strcmp(type, "leaderboard_clear") == 0) {
   // ============================================
 // ✅ NEW : REMOTE DISPLAY COMMANDS
 // ============================================
-else if (strcmp(type, "show_leaderboard") == 0) {
+if (strcmp(type, "show_leaderboard") == 0) {
   if (_relay) {
     int sent = _relay->relayGameConfig(msg, clientNum);
     _sendAck(clientNum, "show_leaderboard", sent > 0);
     if (DEBUG_SERIAL) Serial.printf("📺 Show leaderboard relayed to %d Game Area(s)\n", sent);
   }
+  return;
 }
 
-else if (strcmp(type, "change_filter") == 0) {
+if (strcmp(type, "change_filter") == 0) {
   if (_relay) {
     int sent = _relay->relayGameConfig(msg, clientNum);
     _sendAck(clientNum, "change_filter", sent > 0);
     if (DEBUG_SERIAL) Serial.printf("📺 Change filter relayed to %d Game Area(s)\n", sent);
   }
+  return;
 }
-else if (strcmp(type, "show_waiting") == 0) {
+if (strcmp(type, "show_waiting") == 0) {
   if (_relay) {
     int sent = _relay->relayGameConfig(msg, clientNum);
     _sendAck(clientNum, "show_waiting", sent > 0);
     if (DEBUG_SERIAL) Serial.printf("📺 Show waiting relayed to %d Game Area(s)\n", sent);
   }
+  return;
 }
 
-else if (strcmp(type, "remote_pause") == 0) {
+if (strcmp(type, "remote_pause") == 0) {
   if (_relay) {
     int sent = _relay->relayGameConfig(msg, clientNum);
     _sendAck(clientNum, "remote_pause", sent > 0);
     if (DEBUG_SERIAL) Serial.printf("⏸ Remote pause relayed to %d Game Area(s)\n", sent);
   }
+  return;
 }
-else if (strcmp(type, "remote_resume") == 0) {
+if (strcmp(type, "remote_resume") == 0) {
   if (_relay) {
     int sent = _relay->relayGameConfig(msg, clientNum);
     _sendAck(clientNum, "remote_resume", sent > 0);
     if (DEBUG_SERIAL) Serial.printf("▶ Remote resume relayed to %d Game Area(s)\n", sent);
   }
+  return;
 }
 
-else if (strcmp(type, "player_avatar") == 0) {
+if (strcmp(type, "player_avatar") == 0) {
   if (_relay) {
     int sent = _relay->relayGameConfig(msg, clientNum);
     _sendAck(clientNum, "player_avatar", sent > 0);
     if (DEBUG_SERIAL) Serial.printf("📸 Avatar relayed to %d Game Area(s)\n", sent);
   }
+  return;
 }
-else if (strcmp(type, "clear_avatars") == 0) {
+if (strcmp(type, "clear_avatars") == 0) {
   if (_relay) {
     int sent = _relay->relayGameConfig(msg, clientNum);
     _sendAck(clientNum, "clear_avatars", sent > 0);
     if (DEBUG_SERIAL) Serial.println("🗑 Clear avatars relayed");
   }
+  return;
 }
 
-else if (strcmp(type, "change_theme") == 0) {
+if (strcmp(type, "change_theme") == 0) {
   if (_relay) {
     int sent = _relay->relayGameConfig(msg, clientNum);
     _sendAck(clientNum, "change_theme", sent > 0);
     if (DEBUG_SERIAL) Serial.printf("🎨 Theme change relayed to %d Game Area(s)\n", sent);
   }
+  return;
 }
-else if (strcmp(type, "change_language") == 0) {
+if (strcmp(type, "change_language") == 0) {
   if (_relay) {
     int sent = _relay->relayGameConfig(msg, clientNum);
     _sendAck(clientNum, "change_language", sent > 0);
     if (DEBUG_SERIAL) Serial.printf("🌍 Language change relayed to %d Game Area(s)\n", sent);
   }
+  return;
 }
 
-  // Type inconnu
+  // Type réellement inconnu
   _sendError(clientNum, "Unknown message type");
 }
 

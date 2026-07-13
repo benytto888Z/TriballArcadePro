@@ -240,7 +240,8 @@ class GameController extends GetxController {
     _scoreViewingTimer?.cancel();
     _statusUpdateTimer?.cancel();
     _returnToWaitingTimer?.cancel();
-    _ws.stopGame();
+    // Ne pas envoyer stop_game ici : _cleanup() est aussi appelé par onClose
+    // après une navigation, ce qui provoquait un second stop_game.
   }
 
   // ============================================
@@ -800,6 +801,7 @@ class GameController extends GetxController {
   void _returnToWaiting({required String reason}) {
     if (kDebugMode) print('🔙 Returning to WaitingScreen ($reason)');
 
+    _ws.stopGame();
     _cleanup();
     _audio.stopBgm();
 
@@ -1001,6 +1003,7 @@ class GameController extends GetxController {
   }
 
   void goToLeaderboard() {
+    _ws.stopGame();
     _cleanup();
     _audio.stopBgm();
     Get.offAllNamed(AppRoutes.leaderboard);
