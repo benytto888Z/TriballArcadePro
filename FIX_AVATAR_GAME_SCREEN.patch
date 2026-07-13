@@ -1,0 +1,217 @@
+diff --git a/triball_config_area/android/app/src/main/AndroidManifest.xml b/triball_config_area/android/app/src/main/AndroidManifest.xml
+index 938c793..bce8f47 100644
+--- a/triball_config_area/android/app/src/main/AndroidManifest.xml
++++ b/triball_config_area/android/app/src/main/AndroidManifest.xml
+@@ -1,12 +1,16 @@
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+ 
++    <!-- Requis aussi dans le manifeste release pour WebSocket et serveur avatar HTTP. -->
++    <uses-permission android:name="android.permission.INTERNET" />
++    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+     <uses-permission android:name="android.permission.CAMERA" />
+     <uses-feature android:name="android.hardware.camera" />
+     <uses-feature android:name="android.hardware.camera.front" />
+     <application
+         android:label="Triball Config"
+         android:name="${applicationName}"
+-        android:icon="@mipmap/ic_launcher">
++        android:icon="@mipmap/ic_launcher"
++        android:usesCleartextTraffic="true">
+ 
+         <activity
+             android:name=".MainActivity"
+diff --git a/triball_config_area/lib/core/services/avatar_capture_service.dart b/triball_config_area/lib/core/services/avatar_capture_service.dart
+index d0308ed..93d540a 100644
+--- a/triball_config_area/lib/core/services/avatar_capture_service.dart
++++ b/triball_config_area/lib/core/services/avatar_capture_service.dart
+@@ -230,14 +230,26 @@ class AvatarCaptureService extends GetxService {
+       final interfaces = await NetworkInterface.list(
+         type: InternetAddressType.IPv4,
+       );
+-      for (final interface in interfaces) {
+-        for (final addr in interface.addresses) {
+-          if (addr.address.startsWith('192.168.')) {
+-            serverIp.value = addr.address;
+-            break;
+-          }
+-        }
+-        if (serverIp.value.isNotEmpty) break;
++      // L'ESP32 SoftAP utilise 192.168.4.1 : privilégier strictement cette
++      // interface. Sinon une carte Ethernet/VPN en 192.168.x.x peut être
++      // choisie et rendre l'avatar inaccessible depuis Game Area.
++      final ipv4 = interfaces
++          .expand((interface) => interface.addresses)
++          .map((address) => address.address)
++          .toList();
++
++      serverIp.value = ipv4.firstWhere(
++        (address) => address.startsWith('192.168.4.'),
++        orElse: () => ipv4.firstWhere(
++          (address) => address.startsWith('192.168.'),
++          orElse: () => '',
++        ),
++      );
++
++      if (serverIp.value.isEmpty) {
++        throw StateError(
++          'No local IPv4 address found for the ESP32 network. Addresses: $ipv4',
++        );
+       }
+ 
+       isServerRunning.value = true;
+@@ -264,7 +276,10 @@ class AvatarCaptureService extends GetxService {
+   String? getAvatarUrl(int playerIndex) {
+     if (!_avatarBytes.containsKey(playerIndex)) return null;
+     if (serverIp.value.isEmpty) return null;
+-    return 'http://${serverIp.value}:${serverPort.value}/avatar/$playerIndex';
++    // Version empêche le cache réseau de réutiliser une ancienne photo du
++    // même index lors d'une partie suivante.
++    final version = DateTime.now().millisecondsSinceEpoch;
++    return 'http://${serverIp.value}:${serverPort.value}/avatar/$playerIndex?v=$version';
+   }
+ 
+   // ============================================
+diff --git a/triball_game_area/lib/core/services/avatar_storage_service.dart b/triball_game_area/lib/core/services/avatar_storage_service.dart
+index 804eba4..254aaa9 100644
+--- a/triball_game_area/lib/core/services/avatar_storage_service.dart
++++ b/triball_game_area/lib/core/services/avatar_storage_service.dart
+@@ -15,7 +15,10 @@ class AvatarStorageService extends GetxService {
+   // ============================================
+   final RxMap<String, String> currentAvatarUrls = <String, String>{}.obs;
+   final RxMap<int, String> currentAvatarUrlsByIndex = <int, String>{}.obs;
+-  final Map<String, Uint8List> _cachedBytes = {};
++  /// Cache réactif : le PlayerAvatarWidget se reconstruit dès que le
++  /// téléchargement HTTP est terminé.
++  final RxMap<String, Uint8List> _cachedBytes = <String, Uint8List>{}.obs;
++  final RxMap<int, Uint8List> _cachedBytesByIndex = <int, Uint8List>{}.obs;
+ 
+   // ============================================
+   // DISQUE — Dossier avatars
+@@ -140,14 +143,23 @@ class AvatarStorageService extends GetxService {
+     _avatarSub = PlatformEventBus.instance.onPlayerAvatar.listen((data) {
+       final playerName = data['player'] as String? ?? '';
+       final playerIndex = (data['playerIndex'] as num?)?.toInt() ?? 0;
+-      final avatarUrl = data['avatarUrl'] as String? ?? '';
++      final rawAvatarUrl = data['avatarUrl'] as String? ?? '';
+ 
+-      if (playerName.isEmpty || avatarUrl.isEmpty) return;
++      if (playerName.isEmpty || rawAvatarUrl.isEmpty) return;
++
++      // Normalise une éventuelle URL Markdown avant de l'exposer à l'UI.
++      var avatarUrl = rawAvatarUrl.trim();
++      final markdownUrl = RegExp(r'^\[(https?://[^\]]+)\]\(https?://[^)]+\)$')
++          .firstMatch(avatarUrl);
++      if (markdownUrl != null) avatarUrl = markdownUrl.group(1)!;
+ 
+       currentAvatarUrls[playerName] = avatarUrl;
+       currentAvatarUrlsByIndex[playerIndex] = avatarUrl;
+ 
+-      _preloadAvatar(playerName, avatarUrl);
++      if (kDebugMode) {
++        print('📸 Avatar URL stored: $playerName (#$playerIndex) → $avatarUrl');
++      }
++      _preloadAvatar(playerName, playerIndex, avatarUrl);
+     });
+ 
+     _clearSub = PlatformEventBus.instance.onClearAvatars.listen((_) {
+@@ -158,24 +170,66 @@ class AvatarStorageService extends GetxService {
+   // ============================================
+   // PRÉ-TÉLÉCHARGEMENT
+   // ============================================
+-  Future<void> _preloadAvatar(String playerName, String url) async {
++  Future<void> _preloadAvatar(
++    String playerName,
++    int playerIndex,
++    String rawUrl,
++  ) async {
++    HttpClient? client;
+     try {
+-      final client = HttpClient();
+-      final request = await client.getUrl(Uri.parse(url));
+-      final response = await request.close()
+-          .timeout(const Duration(seconds: 5));
++      // Accepte uniquement l'URL brute. Le remplacement protège aussi contre
++      // une URL accidentellement copiée sous la forme Markdown [url](url).
++      var url = rawUrl.trim();
++      final markdownUrl = RegExp(r'^\[(https?://[^\]]+)\]\(https?://[^)]+\)$')
++          .firstMatch(url);
++      if (markdownUrl != null) url = markdownUrl.group(1)!;
++
++      final uri = Uri.tryParse(url);
++      if (uri == null || !uri.hasScheme || uri.host.isEmpty) {
++        throw FormatException('Invalid avatar URL: $rawUrl');
++      }
++
++      client = HttpClient()..connectionTimeout = const Duration(seconds: 5);
++      final request = await client.getUrl(uri);
++      final response = await request.close().timeout(const Duration(seconds: 8));
+ 
+-      final bytes = <int>[];
++      if (response.statusCode != HttpStatus.ok) {
++        await response.drain<void>();
++        throw HttpException(
++          'HTTP ${response.statusCode} for $uri',
++          uri: uri,
++        );
++      }
++
++      const maxAvatarBytes = 512 * 1024;
++      final builder = BytesBuilder(copy: false);
+       await for (final chunk in response) {
+-        bytes.addAll(chunk);
++        builder.add(chunk);
++        if (builder.length > maxAvatarBytes) {
++          throw const HttpException('Avatar exceeds 512 KB');
++        }
+       }
+-      _cachedBytes[playerName] = Uint8List.fromList(bytes);
++
++      final data = builder.takeBytes();
++      if (data.isEmpty) throw const FormatException('Empty avatar response');
++
++      _cachedBytes[playerName] = data;
++      _cachedBytesByIndex[playerIndex] = data;
+ 
+       if (kDebugMode) {
+-        print('📸 Avatar preloaded: $playerName (${bytes.length} bytes)');
++        print('📸 ✅ Avatar downloaded: player=$playerName, index=$playerIndex');
++        print('   URL: $uri');
++        print('   Bytes: ${data.length}');
++        print('   Content-Type: ${response.headers.contentType}');
+       }
+     } catch (e) {
+-      if (kDebugMode) print('📸 Preload error for $playerName: $e');
++      if (kDebugMode) {
++        print('📸 ❌ Avatar download failed: player=$playerName, index=$playerIndex');
++        print('   URL: $rawUrl');
++        print('   Error: $e');
++      }
++    } finally {
++      client?.close(force: true);
+     }
+   }
+ 
+@@ -187,14 +241,7 @@ class AvatarStorageService extends GetxService {
+ 
+   Uint8List? getCachedBytes(String playerName) => _cachedBytes[playerName];
+ 
+-  Uint8List? getCachedBytesByIndex(int index) {
+-    for (final entry in currentAvatarUrls.entries) {
+-      if (currentAvatarUrlsByIndex[index] == entry.value) {
+-        return _cachedBytes[entry.key];
+-      }
+-    }
+-    return null;
+-  }
++  Uint8List? getCachedBytesByIndex(int index) => _cachedBytesByIndex[index];
+ 
+   bool hasAvatar(String playerName) =>
+       currentAvatarUrls.containsKey(playerName);
+@@ -208,6 +255,7 @@ class AvatarStorageService extends GetxService {
+     currentAvatarUrls.clear();
+     currentAvatarUrlsByIndex.clear();
+     _cachedBytes.clear();
++    _cachedBytesByIndex.clear();
+     if (kDebugMode) print('🗑 Current game avatars cleared');
+   }
+ 

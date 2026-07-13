@@ -15,7 +15,10 @@ class AvatarStorageService extends GetxService {
   // ============================================
   final RxMap<String, String> currentAvatarUrls = <String, String>{}.obs;
   final RxMap<int, String> currentAvatarUrlsByIndex = <int, String>{}.obs;
-  final Map<String, Uint8List> _cachedBytes = {};
+  /// Cache réactif : le PlayerAvatarWidget se reconstruit dès que le
+  /// téléchargement HTTP est terminé.
+  final RxMap<String, Uint8List> _cachedBytes = <String, Uint8List>{}.obs;
+  final RxMap<int, Uint8List> _cachedBytesByIndex = <int, Uint8List>{}.obs;
 
   // ============================================
   // DISQUE — Dossier avatars
@@ -140,14 +143,23 @@ class AvatarStorageService extends GetxService {
     _avatarSub = PlatformEventBus.instance.onPlayerAvatar.listen((data) {
       final playerName = data['player'] as String? ?? '';
       final playerIndex = (data['playerIndex'] as num?)?.toInt() ?? 0;
-      final avatarUrl = data['avatarUrl'] as String? ?? '';
+      final rawAvatarUrl = data['avatarUrl'] as String? ?? '';
 
-      if (playerName.isEmpty || avatarUrl.isEmpty) return;
+      if (playerName.isEmpty || rawAvatarUrl.isEmpty) return;
+
+      // Normalise une éventuelle URL Markdown avant de l'exposer à l'UI.
+      var avatarUrl = rawAvatarUrl.trim();
+      final markdownUrl = RegExp(r'^\[(https?://[^\]]+)\]\(https?://[^)]+\)$')
+          .firstMatch(avatarUrl);
+      if (markdownUrl != null) avatarUrl = markdownUrl.group(1)!;
 
       currentAvatarUrls[playerName] = avatarUrl;
       currentAvatarUrlsByIndex[playerIndex] = avatarUrl;
 
-      _preloadAvatar(playerName, avatarUrl);
+      if (kDebugMode) {
+        print('📸 Avatar URL stored: $playerName (#$playerIndex) → $avatarUrl');
+      }
+      _preloadAvatar(playerName, playerIndex, avatarUrl);
     });
 
     _clearSub = PlatformEventBus.instance.onClearAvatars.listen((_) {
@@ -158,24 +170,66 @@ class AvatarStorageService extends GetxService {
   // ============================================
   // PRÉ-TÉLÉCHARGEMENT
   // ============================================
-  Future<void> _preloadAvatar(String playerName, String url) async {
+  Future<void> _preloadAvatar(
+    String playerName,
+    int playerIndex,
+    String rawUrl,
+  ) async {
+    HttpClient? client;
     try {
-      final client = HttpClient();
-      final request = await client.getUrl(Uri.parse(url));
-      final response = await request.close()
-          .timeout(const Duration(seconds: 5));
+      // Accepte uniquement l'URL brute. Le remplacement protège aussi contre
+      // une URL accidentellement copiée sous la forme Markdown [url](url).
+      var url = rawUrl.trim();
+      final markdownUrl = RegExp(r'^\[(https?://[^\]]+)\]\(https?://[^)]+\)$')
+          .firstMatch(url);
+      if (markdownUrl != null) url = markdownUrl.group(1)!;
 
-      final bytes = <int>[];
-      await for (final chunk in response) {
-        bytes.addAll(chunk);
+      final uri = Uri.tryParse(url);
+      if (uri == null || !uri.hasScheme || uri.host.isEmpty) {
+        throw FormatException('Invalid avatar URL: $rawUrl');
       }
-      _cachedBytes[playerName] = Uint8List.fromList(bytes);
+
+      client = HttpClient()..connectionTimeout = const Duration(seconds: 5);
+      final request = await client.getUrl(uri);
+      final response = await request.close().timeout(const Duration(seconds: 8));
+
+      if (response.statusCode != HttpStatus.ok) {
+        await response.drain<void>();
+        throw HttpException(
+          'HTTP ${response.statusCode} for $uri',
+          uri: uri,
+        );
+      }
+
+      const maxAvatarBytes = 512 * 1024;
+      final builder = BytesBuilder(copy: false);
+      await for (final chunk in response) {
+        builder.add(chunk);
+        if (builder.length > maxAvatarBytes) {
+          throw const HttpException('Avatar exceeds 512 KB');
+        }
+      }
+
+      final data = builder.takeBytes();
+      if (data.isEmpty) throw const FormatException('Empty avatar response');
+
+      _cachedBytes[playerName] = data;
+      _cachedBytesByIndex[playerIndex] = data;
 
       if (kDebugMode) {
-        print('📸 Avatar preloaded: $playerName (${bytes.length} bytes)');
+        print('📸 ✅ Avatar downloaded: player=$playerName, index=$playerIndex');
+        print('   URL: $uri');
+        print('   Bytes: ${data.length}');
+        print('   Content-Type: ${response.headers.contentType}');
       }
     } catch (e) {
-      if (kDebugMode) print('📸 Preload error for $playerName: $e');
+      if (kDebugMode) {
+        print('📸 ❌ Avatar download failed: player=$playerName, index=$playerIndex');
+        print('   URL: $rawUrl');
+        print('   Error: $e');
+      }
+    } finally {
+      client?.close(force: true);
     }
   }
 
@@ -187,14 +241,7 @@ class AvatarStorageService extends GetxService {
 
   Uint8List? getCachedBytes(String playerName) => _cachedBytes[playerName];
 
-  Uint8List? getCachedBytesByIndex(int index) {
-    for (final entry in currentAvatarUrls.entries) {
-      if (currentAvatarUrlsByIndex[index] == entry.value) {
-        return _cachedBytes[entry.key];
-      }
-    }
-    return null;
-  }
+  Uint8List? getCachedBytesByIndex(int index) => _cachedBytesByIndex[index];
 
   bool hasAvatar(String playerName) =>
       currentAvatarUrls.containsKey(playerName);
@@ -208,6 +255,7 @@ class AvatarStorageService extends GetxService {
     currentAvatarUrls.clear();
     currentAvatarUrlsByIndex.clear();
     _cachedBytes.clear();
+    _cachedBytesByIndex.clear();
     if (kDebugMode) print('🗑 Current game avatars cleared');
   }
 

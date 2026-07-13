@@ -230,14 +230,26 @@ class AvatarCaptureService extends GetxService {
       final interfaces = await NetworkInterface.list(
         type: InternetAddressType.IPv4,
       );
-      for (final interface in interfaces) {
-        for (final addr in interface.addresses) {
-          if (addr.address.startsWith('192.168.')) {
-            serverIp.value = addr.address;
-            break;
-          }
-        }
-        if (serverIp.value.isNotEmpty) break;
+      // L'ESP32 SoftAP utilise 192.168.4.1 : privilégier strictement cette
+      // interface. Sinon une carte Ethernet/VPN en 192.168.x.x peut être
+      // choisie et rendre l'avatar inaccessible depuis Game Area.
+      final ipv4 = interfaces
+          .expand((interface) => interface.addresses)
+          .map((address) => address.address)
+          .toList();
+
+      serverIp.value = ipv4.firstWhere(
+        (address) => address.startsWith('192.168.4.'),
+        orElse: () => ipv4.firstWhere(
+          (address) => address.startsWith('192.168.'),
+          orElse: () => '',
+        ),
+      );
+
+      if (serverIp.value.isEmpty) {
+        throw StateError(
+          'No local IPv4 address found for the ESP32 network. Addresses: $ipv4',
+        );
       }
 
       isServerRunning.value = true;
@@ -264,7 +276,10 @@ class AvatarCaptureService extends GetxService {
   String? getAvatarUrl(int playerIndex) {
     if (!_avatarBytes.containsKey(playerIndex)) return null;
     if (serverIp.value.isEmpty) return null;
-    return 'http://${serverIp.value}:${serverPort.value}/avatar/$playerIndex';
+    // Version empêche le cache réseau de réutiliser une ancienne photo du
+    // même index lors d'une partie suivante.
+    final version = DateTime.now().millisecondsSinceEpoch;
+    return 'http://${serverIp.value}:${serverPort.value}/avatar/$playerIndex?v=$version';
   }
 
   // ============================================
