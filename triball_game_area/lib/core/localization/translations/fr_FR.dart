@@ -207,6 +207,7 @@ const Map<String, String> frFR = {
   // LEADERBOARD
   // ==========================================
   'leaderboard_title': 'CLASSEMENT\nTOP 10',
+  'leaderboard_title_cl': 'CLASSEMENT SOLO CHRONO TOP 10',
   'leaderboard_empty': 'Aucun score enregistré',
   'leaderboard_empty_desc': 'Sois le premier à entrer dans le top 10 !',
   'position': 'Position',

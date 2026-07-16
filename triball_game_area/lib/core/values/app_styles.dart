@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../constants/game_constants.dart';
 import '../utils/ dimens.dart';
 import '../values/color_values.dart';
 
@@ -7,7 +8,9 @@ class AppStyles {
   // ==========================================
   // CONSTANTES DE BASE
   // ==========================================
+
   static String get defaultFontFamily => 'Power Grotesk';
+  static String get defaultFontFamily2 =>  GameConstants.gameFontFamily;
   static String get regularFontFamily => 'Power Grotesk Reg';
   static String get boldFontFamily => 'Power Grotesk Bold';
   static double get defaultHeight => 1.25;
@@ -318,6 +321,28 @@ class AppStyles {
     color: c,
     shadows: [
       Shadow(color: Color(0xff000029), offset: Offset(0, 3), blurRadius: 6)
+    ],
+    height: defaultHeight,
+  );
+
+  static TextStyle styleGeneralShadow(ftz, ftw, c) => TextStyle(
+    fontSize: ftz,
+    fontWeight: ftw,
+    fontFamily: defaultFontFamily2,
+    color: c,
+    shadows: [
+      Shadow(color: Color(0xff000029), offset: Offset(0, 3), blurRadius: 6)
+    ],
+    height: defaultHeight,
+  );
+
+  static TextStyle styleGeneralShadowCl(ftz, ftw, c) => TextStyle(
+    fontSize: ftz,
+    fontWeight: ftw,
+    fontFamily: defaultFontFamily2,
+    color: c,
+    shadows: [
+      Shadow(color: Color(0xff0b0302), offset: Offset(0, 4), blurRadius: 7)
     ],
     height: defaultHeight,
   );

@@ -75,6 +75,13 @@ class ScoreViewingPauseOverlay extends GetView<GameController> {
                             fontSize: 55.sp,
                             fontWeight: FontWeight.w700,
                             color: ThemeColors.textSecondary,
+                            shadows: [
+                              Shadow(
+                                color: Color(0xff0b0302),
+                                offset: Offset(0, 6),
+                                blurRadius: 5,
+                              ),
+                            ],
                             letterSpacing: 3,
                           ),
                         ),
@@ -93,10 +100,17 @@ class ScoreViewingPauseOverlay extends GetView<GameController> {
                                 ? [
                               Shadow(
                                 color: playerColor,
+                                offset: Offset(0, 6),
                                 blurRadius: 15,
                               ),
                             ]
-                                : null,
+                                :[
+                              Shadow(
+                              color: Color(0xff0b0302),
+                          offset: Offset(0, 6),
+                          blurRadius: 6,
+                        ),
+                      ],
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -127,7 +141,13 @@ class ScoreViewingPauseOverlay extends GetView<GameController> {
                                       blurRadius: 25,
                                     ),
                                   ]
-                                      : null,
+                                      :  [
+                                    Shadow(
+                                      color: Color(0xff0b0302),
+                                      offset: Offset(0, 6),
+                                      blurRadius: 6,
+                                    ),
+                                  ],
                                 ),
                               ),
                               SizedBox(width: 8.w),
@@ -138,6 +158,13 @@ class ScoreViewingPauseOverlay extends GetView<GameController> {
                                   fontSize: 60.sp,
                                   fontWeight: FontWeight.w600,
                                   color: ThemeColors.textSecondary,
+                                  shadows:[
+                                    Shadow(
+                                      color: Color(0xff0b0302),
+                                      offset: Offset(0, 6),
+                                      blurRadius: 6,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -151,7 +178,15 @@ class ScoreViewingPauseOverlay extends GetView<GameController> {
                           style: TextStyle(
                             fontFamily: GameConstants.gameFontFamily,
                             fontSize: 45.sp,
+                            fontWeight: FontWeight.w900,
                             color: ThemeColors.textSecondary,
+                            shadows:[
+                              Shadow(
+                                color: Color(0xff0b0302),
+                                offset: Offset(0, 6),
+                                blurRadius: 6,
+                              ),
+                            ],
                             letterSpacing: 2,
                           ),
                         ),
@@ -178,6 +213,13 @@ class ScoreViewingPauseOverlay extends GetView<GameController> {
                                 Icons.timer,
                                 color: ThemeColors.warning,
                                 size: 55.sp,
+                                shadows:[
+                                  Shadow(
+                                    color: Color(0xff0b0302),
+                                    offset: Offset(0, 6),
+                                    blurRadius: 6,
+                                  ),
+                                ],
                               ),
                               SizedBox(width: 8.w),
                               Text(
@@ -185,7 +227,15 @@ class ScoreViewingPauseOverlay extends GetView<GameController> {
                                 style: TextStyle(
                                   fontFamily: GameConstants.gameFontFamily,
                                   fontSize: 55.sp,
+                                  fontWeight: FontWeight.w900,
                                   color: ThemeColors.textSecondary,
+                                  shadows:[
+                                    Shadow(
+                                      color: Color(0xff0b0302),
+                                      offset: Offset(0, 6),
+                                      blurRadius: 6,
+                                    ),
+                                  ],
                                   letterSpacing: 1,
                                 ),
                               ),
@@ -196,6 +246,13 @@ class ScoreViewingPauseOverlay extends GetView<GameController> {
                                   fontSize: GameScreenBreakpoints.scoreViewingCountdownFontSize(),
                                   fontWeight: FontWeight.w900,
                                   color: ThemeColors.warning,
+                                  shadows:[
+                                    Shadow(
+                                      color: Color(0xff0b0302),
+                                      offset: Offset(0, 6),
+                                      blurRadius: 6,
+                                    ),
+                                  ],
                                 ),
                               ),
                               Text(
@@ -204,6 +261,13 @@ class ScoreViewingPauseOverlay extends GetView<GameController> {
                                   fontFamily: GameConstants.gameFontFamily,
                                   fontSize: 55.sp,
                                   color: ThemeColors.warning,
+                                  shadows:[
+                                    Shadow(
+                                      color: Color(0xff0b0302),
+                                      offset: Offset(0, 6),
+                                      blurRadius: 6,
+                                    ),
+                                  ],
                                   letterSpacing: 1,
                                 ),
                               ),

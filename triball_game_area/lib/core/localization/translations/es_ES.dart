@@ -174,6 +174,7 @@ const Map<String, String> esES = {
   // LEADERBOARD
   // ==========================================
   'leaderboard_title': 'CLASIFICACIÓN\nTOP 10',
+  'leaderboard_title_cl': 'CLASIFICACIÓN SOLO CHRONO TOP 10',
   'leaderboard_empty': 'No hay puntuaciones',
   'leaderboard_empty_desc': '¡Sé el primero en entrar al top 10!',
   'position': 'Posición',

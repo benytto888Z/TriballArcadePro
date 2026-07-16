@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/theme_colors.dart';
+import '../../../core/values/app_styles.dart';
 import '../../game/utils/game_screen_breakpoints.dart';
 import '../leaderboard_controller.dart';
 
@@ -92,11 +93,10 @@ class _Stat extends StatelessWidget {
             SizedBox(width: 4.w),
             Text(
               value,
-              style: TextStyle(
-                fontFamily: 'Orbitron',
-                fontSize: GameScreenBreakpoints.lbStatValueFontSize(),
-                fontWeight: FontWeight.w900,
-                color: color,
+              style: AppStyles.styleGeneralShadowCl(
+                GameScreenBreakpoints.lbStatValueFontSize()*1.3,
+                FontWeight.w900,
+               color,
               ),
             ),
           ],
@@ -104,11 +104,9 @@ class _Stat extends StatelessWidget {
         SizedBox(height: 2.h),
         Text(
           label.toUpperCase(),
-          style: TextStyle(
-            fontFamily: 'Orbitron',
-            fontSize: GameScreenBreakpoints.lbStatLabelFontSize(),
-            color: ThemeColors.textSecondary,
-            letterSpacing: 1.2,
+          style: AppStyles.styleGeneralShadowCl(
+            GameScreenBreakpoints.lbStatLabelFontSize()*1.3,
+            FontWeight.w700, ThemeColors.textSecondary,
           ),
         ),
       ],

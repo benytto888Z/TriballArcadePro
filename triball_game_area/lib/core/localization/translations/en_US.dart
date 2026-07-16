@@ -172,6 +172,7 @@ const Map<String, String> enUS = {
   // LEADERBOARD
   // ==========================================
   'leaderboard_title': 'LEADERBOARD\nTOP 10',
+  'leaderboard_title_cl': 'LEADERBOARD SOLO CHRONO TOP 10',
   'leaderboard_empty': 'No scores recorded',
   'leaderboard_empty_desc': 'Be the first to enter the top 10!',
   'position': 'Position',

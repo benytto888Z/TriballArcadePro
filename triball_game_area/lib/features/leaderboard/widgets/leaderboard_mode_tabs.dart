@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/theme_colors.dart';
+import '../../../core/values/app_styles.dart';
 import '../../../data/models/game_state_model.dart';
 import '../../game/utils/game_screen_breakpoints.dart';
 import '../leaderboard_controller.dart';
@@ -99,13 +100,19 @@ class _ModeTab extends StatelessWidget {
             SizedBox(width: 6.w),
             Text(
               mode.translationKey.tr.toUpperCase(),
-              style: TextStyle(
+              style: AppStyles.styleGeneralShadowCl(
+                  GameScreenBreakpoints.lbTabFontSize()*1.08,
+                  FontWeight.w800,
+                isSelected ? accent : ThemeColors.textSecondary,
+              ),
+
+              /*TextStyle(
                 fontFamily: 'Orbitron',
                 fontSize: GameScreenBreakpoints.lbTabFontSize(),
                 fontWeight: FontWeight.w800,
                 color: isSelected ? accent : ThemeColors.textSecondary,
                 letterSpacing: 1.2,
-              ),
+              ),*/
             ),
           ],
         ),

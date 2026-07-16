@@ -2,7 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../core/constants/game_constants.dart';
 import '../../../core/theme/theme_colors.dart';
+import '../../../core/values/app_styles.dart';
 import '../../../data/models/game_state_model.dart';
 import '../../../data/models/leaderboard_entry_model.dart';
 import '../../../widgets/player_avatar_widget.dart';
@@ -110,7 +112,7 @@ class _PodiumStep extends StatelessWidget {
           PlayerAvatarWidget(
             playerName: entry.playerName,
             playerIndex: rank - 1,
-            size: GameScreenBreakpoints.lbPodiumCardWidth() * 0.4,
+            size: GameScreenBreakpoints.lbPodiumCardWidth() * 0.5,
             borderWidth: 2,
             gameMode: entry.gameMode.key,
           ),
@@ -121,11 +123,12 @@ class _PodiumStep extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              fontFamily: 'Orbitron',
-              fontSize: GameScreenBreakpoints.lbPodiumNameFontSize(),
+              fontFamily:  GameConstants.gameFontFamily,
+              fontSize: GameScreenBreakpoints.lbPodiumNameFontSize() * 1.2,
               fontWeight: FontWeight.w800,
               color: color,
-              shadows: [Shadow(color: Colors.black.withOpacity(0.6), blurRadius: 4)],
+             // shadows: [Shadow(color: Colors.black.withOpacity(0.6), blurRadius: 4)],
+               shadows: [ Shadow(color: Color(0xff0b0302), offset: Offset(0, 4), blurRadius: 7)]
             ),
           ),
           SizedBox(height: 3.h),
@@ -138,11 +141,10 @@ class _PodiumStep extends StatelessWidget {
             ),
             child: Text(
               entry.timeFormatted,
-              style: TextStyle(
-                fontFamily: 'Orbitron',
-                fontSize: GameScreenBreakpoints.lbPodiumTimeFontSize(),
-                fontWeight: FontWeight.w800,
-                color: color,
+              style: AppStyles.styleGeneralShadowCl(
+                GameScreenBreakpoints.lbPodiumTimeFontSize()*1.08,
+                FontWeight.w800,
+                color,
               ),
             ),
           ),
@@ -169,11 +171,12 @@ class _PodiumStep extends StatelessWidget {
               child: Text(
                 '$rank',
                 style: TextStyle(
-                  fontFamily: 'Orbitron',
-                  fontSize: GameScreenBreakpoints.lbPodiumRankFontSize(),
+                  fontFamily: AppStyles.defaultFontFamily2,
+                  fontSize: GameScreenBreakpoints.lbPodiumRankFontSize()*1.2,
                   fontWeight: FontWeight.w900,
                   color: Colors.white,
-                  shadows: [Shadow(color: color, blurRadius: 12)],
+                    shadows: [ Shadow(color: Color(0xff0b0302), offset: Offset(0, 4), blurRadius: 6)]
+
                 ),
               ),
             ),

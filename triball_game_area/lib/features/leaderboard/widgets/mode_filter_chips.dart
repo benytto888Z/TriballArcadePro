@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/theme_colors.dart';
+import '../../../core/values/app_styles.dart';
 import '../../../data/repositories/leaderboard_repository.dart';
 import '../../game/utils/game_screen_breakpoints.dart';
 import '../leaderboard_controller.dart';
@@ -43,15 +44,14 @@ class ModeFilterChips extends GetView<LeaderboardController> {
                 ),
                 child: Text(
                   filter.translationKey.tr.toUpperCase(),
-                  style: TextStyle(
-                    fontFamily: 'Orbitron',
-                    fontSize: GameScreenBreakpoints.lbFilterFontSize(),
-                    fontWeight: FontWeight.w700,
-                    color: isSelected
-                        ? ThemeColors.secondary
-                        : ThemeColors.textSecondary,
-                    letterSpacing: 1,
+                  style: AppStyles.styleGeneralShadowCl(
+                    GameScreenBreakpoints.lbFilterFontSize()*1.3,
+                    FontWeight.w700,
+                      isSelected
+                          ? ThemeColors.secondary
+                          : ThemeColors.textSecondary,
                   ),
+
                 ),
               ),
             ),

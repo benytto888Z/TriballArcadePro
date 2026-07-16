@@ -11,7 +11,7 @@ import '../../../data/models/player_model.dart';
 import '../../../data/models/score_event_model.dart';
 import '../../../widgets/player_avatar_widget.dart';
 import '../game_controller.dart';
-import '../utils/game_screen_breakpoints.dart';       // ✅ NEW
+import '../utils/game_screen_breakpoints.dart'; // ✅ NEW
 
 class PlayerScoreCard extends StatelessWidget {
   final PlayerModel player;
@@ -33,32 +33,37 @@ class PlayerScoreCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = Helpers.playerColor(index);
 
-
     return Obx(() {
       final isActive = player.isActive.value;
       final score = player.score.value;
       final progress = (score / targetScore).clamp(0.0, 1.0);
       final controller = Get.find<GameController>();
-      final isHardcoreOvershoot = controller.gameMode == GameMode.hardcore && score > controller.targetScore;
+      final isHardcoreOvershoot =
+          controller.gameMode == GameMode.hardcore &&
+          score > controller.targetScore;
       return LayoutBuilder(
         builder: (context, constraints) {
           final h = constraints.maxHeight;
 
           // ✅ Utilise breakpoints
-          final scoreSize =
-          GameScreenBreakpoints.playerScoreFontSize(isCompact, h);
+          final scoreSize = GameScreenBreakpoints.playerScoreFontSize(
+            isCompact,
+            h,
+          );
           final showProgress = h > 100;
           final showRecentEvents = h > 100;
           final borderWidthActive =
-          GameScreenBreakpoints.playerBorderWidthActive();
+              GameScreenBreakpoints.playerBorderWidthActive();
 
           return AnimatedContainer(
             duration: const Duration(milliseconds: 350),
             padding: EdgeInsets.only(
-              left: GameScreenBreakpoints.playerCardPadding(isCompact),   // ✅
-              right: GameScreenBreakpoints.playerCardPadding(isCompact),   // ✅
-              top: GameScreenBreakpoints.playerCardPadding(isCompact),   // ✅
-              bottom: GameScreenBreakpoints.playerCardPaddingBootom(isCompact),   // ✅
+              left: GameScreenBreakpoints.playerCardPadding(isCompact), // ✅
+              right: GameScreenBreakpoints.playerCardPadding(isCompact), // ✅
+              top: GameScreenBreakpoints.playerCardPadding(isCompact), // ✅
+              bottom: GameScreenBreakpoints.playerCardPaddingBootom(
+                isCompact,
+              ), // ✅
             ),
             decoration: BoxDecoration(
               color: isActive
@@ -71,40 +76,26 @@ class PlayerScoreCard extends StatelessWidget {
               ),
               boxShadow: isActive && ThemeColors.useGlow
                   ? [
-                BoxShadow(
-                  color: color.withValues(alpha: 0.3),
-                  blurRadius: 10,
-                  spreadRadius: 1,
-                ),
-              ]
-                  : null,
+                      BoxShadow(
+                        color: color.withValues(alpha: 0.4),
+                        blurRadius: 10,
+                        offset: Offset(0, 6),
+                        spreadRadius: 1,
+                      ),
+                    ]
+                  : null/*[
+                      BoxShadow(
+                        color: Color(0xff0b0302),
+                        offset: Offset(0, 6),
+                        blurRadius: 5,
+                      ),
+                    ],*/
             ),
             child: Column(
               children: [
                 // ============= HEADER =============
                 Row(
                   children: [
-                    // Badge numéro joueur
-                    /*Container(
-                      width: GameScreenBreakpoints.playerBadgeSize(),   // ✅
-                      height: GameScreenBreakpoints.playerBadgeSize(),  // ✅
-                      decoration: BoxDecoration(
-                        color: color,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: Text(
-                          '${index + 1}',
-                          style: TextStyle(
-                            fontFamily: GameConstants.gameFontFamily,
-                            fontSize:
-                            GameScreenBreakpoints.playerBadgeFontSize(),
-                            fontWeight: FontWeight.w900,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),*/
                     // ✅ AVATAR (photo ou badge numéro)
                     PlayerAvatarWidget(
                       playerName: player.name,
@@ -120,11 +111,18 @@ class PlayerScoreCard extends StatelessWidget {
                         player.name.toUpperCase(),
                         style: TextStyle(
                           fontFamily: GameConstants.gameFontFamily,
-                          fontSize: GameScreenBreakpoints
-                              .playerNameFontSize(isCompact),
-                          fontWeight: FontWeight.w700,
-                          color:
-                          isActive ? color : ThemeColors.textPrimary,
+                          fontSize: GameScreenBreakpoints.playerNameFontSize(
+                            isCompact,
+                          ),
+                          fontWeight: FontWeight.w800,
+                          color: isActive ? color : ThemeColors.textPrimary,
+                          shadows: [
+                            Shadow(
+                              color: Color(0xff0b0302),
+                              offset: Offset(0, 6),
+                              blurRadius: 5,
+                            ),
+                          ],
                           letterSpacing: 1,
                         ),
                         maxLines: 1,
@@ -153,10 +151,17 @@ class PlayerScoreCard extends StatelessWidget {
                           'T$turn',
                           style: TextStyle(
                             fontFamily: GameConstants.gameFontFamily,
-                            fontSize: GameScreenBreakpoints
-                                .playerTurnBadgeFontSize(),
+                            fontSize:
+                                GameScreenBreakpoints.playerTurnBadgeFontSize(),
                             fontWeight: FontWeight.w800,
                             color: color,
+                            shadows: [
+                              Shadow(
+                                color: Color(0xff0b0302),
+                                offset: Offset(0, 6),
+                                blurRadius: 5,
+                              ),
+                            ],
                             letterSpacing: 0.5,
                             height: 1,
                           ),
@@ -172,16 +177,27 @@ class PlayerScoreCard extends StatelessWidget {
                         fontSize: scoreSize * 0.9,
                         fontWeight: FontWeight.w900,
                         color: isHardcoreOvershoot
-                            ? ThemeColors.warning     // ✅ Orange si dépassement
+                            ? ThemeColors
+                                  .warning // ✅ Orange si dépassement
                             : color,
                         letterSpacing: 2,
                         height: 1,
                         shadows: isActive && ThemeColors.useGlow
-                            ? [Shadow(
-                          color: isHardcoreOvershoot ? ThemeColors.warning : color,
-                          blurRadius: 20,
-                        )]
-                            : null,
+                            ? [
+                                Shadow(
+                                  color: isHardcoreOvershoot
+                                      ? ThemeColors.warning
+                                      : color,
+                                  blurRadius: 20,
+                                ),
+                              ]
+                            : [
+                                Shadow(
+                                  color: Color(0xff0b0302),
+                                  offset: Offset(0, 6),
+                                  blurRadius: 5,
+                                ),
+                              ],
                       ),
                     ),
                     SizedBox(width: 10.w),
@@ -193,6 +209,13 @@ class PlayerScoreCard extends StatelessWidget {
                           Icons.star,
                           size: GameScreenBreakpoints.playerStarSize(),
                           color: color,
+                          shadows: [
+                            Shadow(
+                              color: Color(0xff0b0302),
+                              offset: Offset(0, 6),
+                              blurRadius: 5,
+                            ),
+                          ],
                         ),
                       ),
                   ],
@@ -205,8 +228,7 @@ class PlayerScoreCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(4),
                     child: LinearProgressIndicator(
                       value: progress,
-                      minHeight:
-                      GameScreenBreakpoints.playerProgressHeight(),
+                      minHeight: GameScreenBreakpoints.playerProgressHeight(),
                       backgroundColor: color.withValues(alpha: 0.15),
                       valueColor: AlwaysStoppedAnimation(color),
                     ),
@@ -215,7 +237,9 @@ class PlayerScoreCard extends StatelessWidget {
                 // ============= RECENT EVENTS =============
                 if (showRecentEvents) ...[
                   SizedBox(height: 16.h),
-          SizedBox(height: GameScreenBreakpoints.sizeboxBetweenProEvents()),
+                  SizedBox(
+                    height: GameScreenBreakpoints.sizeboxBetweenProEvents(),
+                  ),
                   _PlayerRecentEvents(
                     events: player.recentEvents.toList(),
                     color: color,
@@ -255,7 +279,7 @@ class _PlayerRecentEvents extends StatelessWidget {
             '—',
             style: TextStyle(
               fontFamily: GameConstants.gameFontFamily,
-              fontSize: GameScreenBreakpoints.eventEmptyFontSize(),   // ✅
+              fontSize: GameScreenBreakpoints.eventEmptyFontSize(), // ✅
               color: ThemeColors.textSecondary.withValues(alpha: 0.5),
             ),
           ),
@@ -299,7 +323,7 @@ class _EventChip extends StatelessWidget {
     final color = _color();
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: GameScreenBreakpoints.eventChipPadding(),      // ✅
+        horizontal: GameScreenBreakpoints.eventChipPadding(), // ✅
         vertical: 3.h,
       ),
       decoration: BoxDecoration(
@@ -311,10 +335,16 @@ class _EventChip extends StatelessWidget {
         event.displayValue,
         style: TextStyle(
           fontFamily: GameConstants.gameFontFamily,
-          fontSize:
-          GameScreenBreakpoints.eventChipFontSize(isCompact),   // ✅
+          fontSize: GameScreenBreakpoints.eventChipFontSize(isCompact), // ✅
           fontWeight: FontWeight.w800,
           color: color,
+          shadows: [
+            Shadow(
+              color: Color(0xff0b0302),
+              offset: Offset(0, 6),
+              blurRadius: 6,
+            ),
+          ],
         ),
       ),
     );

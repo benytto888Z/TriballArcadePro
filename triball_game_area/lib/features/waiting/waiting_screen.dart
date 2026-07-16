@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../core/theme/theme_colors.dart';
+import '../../core/values/app_styles.dart';
 import '../../widgets/animated_logo.dart';
 import '../../widgets/floating_particles.dart';
 import '../game/utils/game_screen_breakpoints.dart';
@@ -76,10 +77,11 @@ class WaitingScreen extends GetView<WaitingController> {
                                 child: Text(
                                   'GAME AREA',
                                   style: TextStyle(
-                                    fontFamily: 'Orbitron',
-                                    fontSize: GameScreenBreakpoints.waitingBadgeFontSize(),
+                                    fontFamily: AppStyles.defaultFontFamily2,
+                                    fontSize: GameScreenBreakpoints.waitingBadgeFontSize()*1.2,
                                     fontWeight: FontWeight.w800,
                                     color: ThemeColors.accent,
+                                    shadows: [Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 12)],
                                     letterSpacing: 6,
                                   ),
                                 ),

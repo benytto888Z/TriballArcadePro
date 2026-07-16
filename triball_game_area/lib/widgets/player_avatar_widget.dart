@@ -3,6 +3,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../core/constants/game_constants.dart';
 import '../core/services/avatar_storage_service.dart';
 import '../core/theme/theme_colors.dart';
 import '../core/utils/helpers.dart';
@@ -28,23 +29,24 @@ class PlayerAvatarWidget extends StatelessWidget {
     final avatarService = Get.find<AvatarStorageService>();
     final color = Helpers.playerColor(playerIndex);
 
-    return Obx(() {
-      // LEADERBOARD : l'index représente le rang, pas l'index du joueur de la
-      // dernière partie. Il faut donc chercher l'avatar persistant par
-      // (mode + nom) avant de consulter le cache temporaire par index.
-      if (gameMode != null) {
-        return _Top10Avatar(
-          key: ValueKey('${gameMode!}:${playerName.toLowerCase()}'),
-          playerName: playerName,
-          gameMode: gameMode!,
-          size: size,
-          borderWidth: borderWidth,
-          color: color,
-          playerIndex: playerIndex,
-        );
-      }
+    // LEADERBOARD : ce chemin est asynchrone mais n'utilise aucune variable
+    // Rx pendant build(). Il doit rester EN DEHORS de Obx, sinon GetX lève
+    // "improper use of Obx" et le classement devient une zone blanche.
+    if (gameMode != null) {
+      return _Top10Avatar(
+        key: ValueKey('${gameMode!}:${playerName.toLowerCase()}'),
+        playerName: playerName,
+        gameMode: gameMode!,
+        size: size,
+        borderWidth: borderWidth,
+        color: color,
+        playerIndex: playerIndex,
+      );
+    }
 
-      // GAME SCREEN : bytes pré-téléchargés de la partie en cours.
+    // GAME SCREEN : le cache temporaire est Rx et doit rester dans Obx.
+    return Obx(() {
+      // Bytes pré-téléchargés de la partie en cours.
       final cachedBytes = avatarService.getCachedBytesByIndex(playerIndex);
       if (cachedBytes != null) {
         return _PhotoAvatar(
@@ -283,15 +285,26 @@ class _FallbackBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: color,
         shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.cyan.withOpacity(0.6), // Couleur néon transparente
+            spreadRadius: 4,                     // Rayonnement large
+            blurRadius: 30,                      // Flou très diffus
+            offset: const Offset(0, 0),          // Centré pour un effet d'halo équilibré
+          ),
+        ],
+
       ),
       child: Center(
         child: Text(
           '${index + 1}',
           style: TextStyle(
-            fontFamily: 'Orbitron',
+            fontFamily: GameConstants.gameFontFamily,
             fontSize: size * 0.5,
             fontWeight: FontWeight.w900,
             color: Colors.black,
+              shadows: [ Shadow(color: Color(0xfff3f3fa), offset: Offset(0, 2), blurRadius: 5)]
+
           ),
         ),
       ),

@@ -17,7 +17,7 @@ class AnimatedTriballBackground extends StatefulWidget {
   const AnimatedTriballBackground({
     super.key,
     this.opacity = 0.45,
-    this.speedFactor = 1.0,
+    this.speedFactor = 1.5,
   });
 
   @override

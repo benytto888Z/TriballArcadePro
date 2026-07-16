@@ -122,7 +122,15 @@ class _StatItem extends StatelessWidget {
           style: TextStyle(
             fontFamily: GameConstants.gameFontFamily,
             fontSize: GameScreenBreakpoints.statsPanelLabelSize(),
+            fontWeight: FontWeight.w900,
             color: ThemeColors.textSecondary,
+            shadows: [
+              Shadow(
+                color: Color(0xff0b0302),
+                offset: Offset(0, 6),
+                blurRadius: 6,
+              ),
+            ],
             letterSpacing: 1.2,
             height: 1,
           ),
@@ -138,8 +146,15 @@ class _StatItem extends StatelessWidget {
               style: TextStyle(
                 fontFamily: GameConstants.gameFontFamily,
                 fontSize:  GameScreenBreakpoints.statsPanelValueSize(),
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
                 color: color,
+                shadows: [
+                  Shadow(
+                    color: Color(0xff0b0302),
+                    offset: Offset(0, 6),
+                    blurRadius: 5,
+                  ),
+                ],
                 height: 1,
               ),
             ),

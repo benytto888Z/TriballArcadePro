@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../core/controllers/platform_event_bus.dart';
 import '../../../core/theme/theme_colors.dart';
+import '../../../core/values/app_styles.dart';
 import '../../../data/models/game_state_model.dart';
 import '../../../data/models/leaderboard_entry_model.dart';
 import '../../../data/models/platform_leaderboard_model.dart';
@@ -48,8 +49,9 @@ class _CarouselContentState extends State<_CarouselContent> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(
-        GameScreenBreakpoints.waitingLeaderboardPadding(),
+      padding: EdgeInsets.symmetric(
+        horizontal: GameScreenBreakpoints.waitingLeaderboardPadding(),
+        vertical: GameScreenBreakpoints.waitingLeaderboardPadding() *0.5
       ),
       decoration: BoxDecoration(
         color: ThemeColors.surface.withOpacity(0.5),
@@ -92,10 +94,11 @@ class _CarouselContentState extends State<_CarouselContent> {
                     Text(
                       'TOP 10',
                       style: TextStyle(
-                        fontFamily: 'Orbitron',
-                        fontSize: GameScreenBreakpoints.waitingLeaderboardTitleSize(),
+                        fontFamily: AppStyles.defaultFontFamily2,
+                        fontSize: GameScreenBreakpoints.waitingLeaderboardTitleSize()*1.3,
                         fontWeight: FontWeight.w900,
                         color: ThemeColors.warning,
+                        shadows: [Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 12)],
                         letterSpacing: 3,
                       ),
                     ),
@@ -112,13 +115,13 @@ class _CarouselContentState extends State<_CarouselContent> {
               ],
             );
           }),
-          SizedBox(height: 6.h),
+          SizedBox(height: 2.h),
 
           // ===== MODE NAME =====
           Obx(() {
             final mode = controller.currentMode;
             return Container(
-              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
+              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 1.h),
               decoration: BoxDecoration(
                 color: ThemeColors.primary.withOpacity(0.15),
                 borderRadius: BorderRadius.circular(20),
@@ -136,10 +139,11 @@ class _CarouselContentState extends State<_CarouselContent> {
                   Text(
                     mode.translationKey.tr.toUpperCase(),
                     style: TextStyle(
-                      fontFamily: 'Orbitron',
-                      fontSize: GameScreenBreakpoints.waitingLeaderboardModeFontSize(),
+                      fontFamily: AppStyles.defaultFontFamily2,
+                      fontSize: GameScreenBreakpoints.waitingLeaderboardModeFontSize()*1.3,
                       fontWeight: FontWeight.w800,
                       color: ThemeColors.primary,
+                      shadows: [Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 12)],
                       letterSpacing: 2,
                     ),
                   ),
@@ -147,7 +151,7 @@ class _CarouselContentState extends State<_CarouselContent> {
               ),
             );
           }),
-          SizedBox(height: 14.h),
+          SizedBox(height: 10.h),
 
           // ===== ENTRIES =====
           Expanded(
@@ -156,9 +160,11 @@ class _CarouselContentState extends State<_CarouselContent> {
               child: Text(
                 'leaderboard_empty'.tr,
                 style: TextStyle(
-                  fontFamily: 'Orbitron',
-                  fontSize: GameScreenBreakpoints.waitingLeaderboardNameFontSize(),
+                  fontFamily: AppStyles.defaultFontFamily2,
+                  fontSize: GameScreenBreakpoints.waitingLeaderboardNameFontSize()*1.5,
+                  fontWeight: FontWeight.w900,
                   color: ThemeColors.textSecondary,
+                  shadows: [Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 12)],
                 ),
               ),
             )
@@ -209,7 +215,7 @@ class _EntryRow extends StatelessWidget {
 
     return Container(
       margin: EdgeInsets.only(bottom: 4.h),
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 2.h),
       decoration: BoxDecoration(
         color: isTop3
             ? color.withOpacity(0.1)
@@ -222,21 +228,22 @@ class _EntryRow extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(
-            width: 30.w,
+            width: 70.w,
             child: isTop3
                 ? Text(
               _rankEmoji(),
               style: TextStyle(
-                fontSize: GameScreenBreakpoints.waitingLeaderboardRankEmojiSize(),
+                fontSize: GameScreenBreakpoints.waitingLeaderboardRankEmojiSize()*1.8,
               ),
             )
                 : Text(
               '$rank',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: 'Orbitron',
-                fontSize: GameScreenBreakpoints.waitingLeaderboardRankFontSize(),
+                fontFamily: AppStyles.defaultFontFamily2,
+                fontSize: GameScreenBreakpoints.waitingLeaderboardRankFontSize()*1.8,
                 fontWeight: FontWeight.w800,
+                shadows: [Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 12)],
                 color: ThemeColors.textSecondary,
               ),
             ),
@@ -248,10 +255,11 @@ class _EntryRow extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                fontFamily: 'Orbitron',
-                fontSize: GameScreenBreakpoints.waitingLeaderboardNameFontSize(),
+                fontFamily: AppStyles.defaultFontFamily2,
+                fontSize: GameScreenBreakpoints.waitingLeaderboardNameFontSize()*1.3,
                 fontWeight: FontWeight.w700,
                 color: isTop3 ? color : ThemeColors.textPrimary,
+                shadows: [Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 12)],
                 letterSpacing: 1,
               ),
             ),
@@ -259,11 +267,12 @@ class _EntryRow extends StatelessWidget {
           Text(
             entry.timeFormatted,
             style: TextStyle(
-              fontFamily: 'Orbitron',
-              fontSize: GameScreenBreakpoints.waitingLeaderboardTimeFontSize(),
+              fontFamily: AppStyles.defaultFontFamily2,
+              fontSize: GameScreenBreakpoints.waitingLeaderboardTimeFontSize()*1.3,
               fontWeight: FontWeight.w900,
               color: isTop3 ? color : ThemeColors.primary,
-              letterSpacing: 1,
+              shadows: [Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 12)],
+              letterSpacing: 1.7,
             ),
           ),
         ],

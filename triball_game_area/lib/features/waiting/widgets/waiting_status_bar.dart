@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/theme_colors.dart';
+import '../../../core/values/app_styles.dart';
 import '../../game/utils/game_screen_breakpoints.dart';
 import '../waiting_controller.dart';
 
@@ -76,8 +77,8 @@ class _StatusItem extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          width: 10,
-          height: 10,
+          width: 10.w,
+          height: 10.w,
           decoration: BoxDecoration(
             color: color,
             shape: BoxShape.circle,
@@ -99,21 +100,18 @@ class _StatusItem extends StatelessWidget {
           children: [
             Text(
               label.toUpperCase(),
-              style: TextStyle(
-                fontFamily: 'Orbitron',
-                fontSize: GameScreenBreakpoints.waitingStatusLabelSize(),
-                fontWeight: FontWeight.w700,
-                color: ThemeColors.textSecondary,
-                letterSpacing: 1.5,
+              style: AppStyles.styleGeneralShadowCl(
+                GameScreenBreakpoints.waitingStatusLabelSize() * 1.3,
+                FontWeight.w700,
+                ThemeColors.textSecondary,
               ),
             ),
             Text(
               isConnected ? 'connected'.tr : 'disconnected'.tr,
-              style: TextStyle(
-                fontFamily: 'Orbitron',
-                fontSize: GameScreenBreakpoints.waitingStatusValueSize(),
-                fontWeight: FontWeight.w600,
-                color: color,
+              style: AppStyles.styleGeneralShadowCl(
+                GameScreenBreakpoints.waitingStatusValueSize() * 1.3,
+                FontWeight.w600,
+                color,
               ),
             ),
           ],
@@ -144,7 +142,7 @@ class _ClockWidgetState extends State<_ClockWidget> {
     final now = DateTime.now();
     setState(() {
       _time =
-      '${now.hour.toString().padLeft(2, '0')}:'
+          '${now.hour.toString().padLeft(2, '0')}:'
           '${now.minute.toString().padLeft(2, '0')}';
     });
   }
@@ -154,14 +152,15 @@ class _ClockWidgetState extends State<_ClockWidget> {
     return Text(
       _time,
       style: TextStyle(
-        fontFamily: 'Orbitron',
-        fontSize: GameScreenBreakpoints.waitingClockFontSize(),
+        fontFamily: AppStyles.defaultFontFamily2,
+        fontSize: GameScreenBreakpoints.waitingClockFontSize()*1.3,
         fontWeight: FontWeight.w900,
         color: ThemeColors.primary,
         letterSpacing: 3,
-        shadows: ThemeColors.useGlow
-            ? [Shadow(color: ThemeColors.primary, blurRadius: 12)]
-            : null,
+        shadows: [Shadow(color: Color(0xff0b0302), offset: Offset(0, 4), blurRadius: 7)]
+        /*shadows: ThemeColors.useGlow
+            ? [Shadow(color: Color(0xff0b0302), offset: Offset(0, 4), blurRadius: 7)]
+            : null,*/
       ),
     );
   }

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../core/theme/theme_colors.dart';
+import '../core/values/app_styles.dart';
 
 /// Logo TRIBALL animé avec effet glow pulsé et glitch.
 class AnimatedLogo extends StatefulWidget {
@@ -89,31 +90,12 @@ class _AnimatedLogoState extends State<AnimatedLogo>
                 return Text(
                   'TRIBALL',
                   style: TextStyle(
-                    fontFamily: ThemeColors.fontDisplay,
-                    fontSize: widget.fontSize.sp,
+                    fontFamily: AppStyles.defaultFontFamily2,
+                    fontSize: widget.fontSize.sp*1.2,
                     fontWeight: FontWeight.w900,
                     color: ThemeColors.primary,
                     letterSpacing: 10,
-                    shadows: ThemeColors.useGlow
-                        ? [
-                      Shadow(
-                        color: ThemeColors.primary
-                            .withOpacity(_glowAnimation.value),
-                        blurRadius: 30 * _glowAnimation.value,
-                      ),
-                      Shadow(
-                        color: ThemeColors.secondary
-                            .withOpacity(_glowAnimation.value * 0.8),
-                        blurRadius: 60 * _glowAnimation.value,
-                      ),
-                    ]
-                        : [
-                      Shadow(
-                        color: Colors.black.withOpacity(0.4),
-                        blurRadius: 8,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
+                    shadows: [Shadow(color: Color(0xff0b0302), offset: Offset(0, 5), blurRadius: 9)]
                   ),
                 );
               },
@@ -126,20 +108,12 @@ class _AnimatedLogoState extends State<AnimatedLogo>
                   return Text(
                     'ARCADE PROS',
                     style: TextStyle(
-                      fontFamily: ThemeColors.fontPrimary,
-                      fontSize: widget.subtitleFontSize.sp,
+                      fontFamily: AppStyles.defaultFontFamily2,
+                      fontSize: widget.subtitleFontSize.sp*1.2,
                       color: ThemeColors.secondary,
                       letterSpacing: 8,
                       fontWeight: FontWeight.w700,
-                      shadows: ThemeColors.useGlow
-                          ? [
-                        Shadow(
-                          color: ThemeColors.secondary
-                              .withOpacity(_glowAnimation.value),
-                          blurRadius: 20 * _glowAnimation.value,
-                        ),
-                      ]
-                          : null,
+                        shadows: [Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 12)]
                     ),
                   );
                 },

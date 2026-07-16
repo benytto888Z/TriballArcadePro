@@ -175,6 +175,7 @@ const Map<String, String> deDE = {
   // LEADERBOARD
   // ==========================================
   'leaderboard_title': 'BESTENLISTE\nTOP 10',
+  'leaderboard_title_cl': 'BESTENLISTE SOLO CHRONO TOP 10',
   'leaderboard_empty': 'Keine Punktzahlen vorhanden',
   'leaderboard_empty_desc': 'Sei der Erste in der Top 10!',
   'position': 'Position',

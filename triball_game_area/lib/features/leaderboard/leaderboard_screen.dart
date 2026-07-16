@@ -1,5 +1,6 @@
 // triball_game_area/lib/features/leaderboard/leaderboard_screen.dart
 
+import 'package:Tribal_Game_Area/core/values/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -40,7 +41,7 @@ class LeaderboardScreen extends GetView<LeaderboardController> {
               children: [
                 const _Header(),
                 const LeaderboardModeTabs(),
-                SizedBox(height: 8.h),
+                SizedBox(height: 10.h),
                 Expanded(
                   child: Obx(() {
                     if (!controller.isConnected.value) {
@@ -107,14 +108,23 @@ class _Header extends GetView<LeaderboardController> {
           ),
           SizedBox(width: 8.w),
           Expanded(
-            child: ThemedText.headline(
-              'leaderboard_title'.tr,
+            child: Text(
+              'leaderboard_title_cl'.tr,
+              style: AppStyles.styleGeneralShadowCl(
+                GameScreenBreakpoints.lbHeaderFontSize()*1.05,
+                FontWeight.w700, ThemeColors.primary
+              ),
+            )
+
+            /*ThemedText.headline(
+              'leaderboard_title_cl'.tr,
               fontSize: GameScreenBreakpoints.lbHeaderFontSize(),
+
               withGlow: true,
               color: ThemeColors.primary,
               maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+              overflow: TextOverflow.ellipsis,*/
+
           ),
           Obx(() {
             if (!controller.isConnected.value) return const SizedBox.shrink();
@@ -337,14 +347,14 @@ class _Content extends GetView<LeaderboardController> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
+                  /*Padding(
                     padding: EdgeInsets.only(left: 4.w, bottom: 8.h),
                     child: ThemedText.caption(
                       'other_rankings'.tr.toUpperCase(),
                       fontSize: GameScreenBreakpoints.lbStatLabelFontSize(),
                       color: ThemeColors.textSecondary,
                     ),
-                  ),
+                  ),*/
                   Expanded(
                     child: ListView.builder(
                       itemCount: rest.length,

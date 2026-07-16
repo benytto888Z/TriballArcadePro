@@ -8,7 +8,6 @@ import '../../../core/constants/game_constants.dart';
 import '../game_controller.dart';
 import '../utils/game_screen_breakpoints.dart';
 
-
 class TurnTimerWidget extends GetView<GameController> {
   final double size;
 
@@ -25,7 +24,7 @@ class TurnTimerWidget extends GetView<GameController> {
       final remaining = controller.turnRemainingSeconds.value;
       final progress = controller.turnProgress;
       final isWarning = controller.isTurnWarning.value;
-      final isBonus = controller.bonusTurnActive.value;   // ✅ NEW
+      final isBonus = controller.bonusTurnActive.value; // ✅ NEW
 
       // ✅ Si bonus turn → couleur SUCCESS
       final color = isBonus
@@ -72,13 +71,22 @@ class TurnTimerWidget extends GetView<GameController> {
                                 '$remaining',
                                 style: TextStyle(
                                   fontFamily: GameConstants.gameFontFamily,
-                                  fontSize: GameScreenBreakpoints.turnTimerFontSize(),
+                                  fontSize:
+                                      GameScreenBreakpoints.turnTimerFontSize(),
                                   fontWeight: FontWeight.w900,
                                   color: color,
                                   height: 1,
-                                  shadows: (isWarning || isBonus) && ThemeColors.useGlow
-                                      ? [Shadow(color: color, blurRadius: 12)]
-                                      : null,
+                                  shadows: [
+                                    Shadow(
+                                      color: Color(0xff0b0302),
+                                      offset: Offset(0, 6),
+                                      blurRadius: 5,
+                                    ),
+                                  ],
+
+                                  /*shadows: (isWarning || isBonus) && ThemeColors.useGlow
+                                      ? [Shadow(color: color, offset: Offset(0, 6),blurRadius: 5)]
+                                      : [Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 5)],*/
                                 ),
                               ),
                               Text(
@@ -86,8 +94,16 @@ class TurnTimerWidget extends GetView<GameController> {
                                 style: TextStyle(
                                   fontFamily: GameConstants.gameFontFamily,
                                   fontWeight: FontWeight.w700,
-                                  fontSize: GameScreenBreakpoints.turnTimerSecFontSize(),
-                                  color: color.withOpacity(0.7),
+                                  fontSize:
+                                      GameScreenBreakpoints.turnTimerSecFontSize(),
+                                  color: color.withOpacity(0.85),
+                                  shadows: [
+                                    Shadow(
+                                      color: Color(0xff0b0302),
+                                      offset: Offset(0, 6),
+                                      blurRadius: 5,
+                                    ),
+                                  ],
                                   letterSpacing: 1.5,
                                   height: 1,
                                 ),
@@ -113,11 +129,11 @@ class TurnTimerWidget extends GetView<GameController> {
                         borderRadius: BorderRadius.circular(8),
                         boxShadow: ThemeColors.useGlow
                             ? [
-                          BoxShadow(
-                            color: ThemeColors.success.withOpacity(0.8),
-                            blurRadius: 8,
-                          )
-                        ]
+                                BoxShadow(
+                                  color: ThemeColors.success.withOpacity(0.8),
+                                  blurRadius: 8,
+                                ),
+                              ]
                             : null,
                       ),
                       child: Text(
@@ -126,6 +142,13 @@ class TurnTimerWidget extends GetView<GameController> {
                           fontFamily: GameConstants.gameFontFamily,
                           fontSize: 8.sp,
                           fontWeight: FontWeight.w900,
+                          shadows: [
+                            Shadow(
+                              color: Color(0xff0b0302),
+                              offset: Offset(0, 6),
+                              blurRadius: 5,
+                            ),
+                          ],
                           color: Colors.white,
                         ),
                       ),
@@ -138,5 +161,4 @@ class TurnTimerWidget extends GetView<GameController> {
       );
     });
   }
-
 }

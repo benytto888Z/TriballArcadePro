@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/theme/theme_colors.dart';
+import '../../../core/values/app_styles.dart';
 import '../../../data/models/game_state_model.dart';
 import '../../../data/models/leaderboard_entry_model.dart';
 import '../../../widgets/player_avatar_widget.dart';
@@ -52,17 +53,20 @@ class LeaderboardEntryTile extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(
-            width: GameScreenBreakpoints.lbEntryRankBadgeSize(),
+            width: GameScreenBreakpoints.lbEntryRankSize(),
             child: isTop3
                 ? Text(
               rankEmoji,
               style: TextStyle(
                 fontSize: GameScreenBreakpoints.lbEntryRankEmojiSize(),
+                shadows: [
+                  Shadow(color: Color(0xff0b0302), offset: Offset(0, 4), blurRadius: 7)
+                ],
               ),
               textAlign: TextAlign.center,
             )
                 : Container(
-              padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+              padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
               decoration: BoxDecoration(
                 color: ThemeColors.primary.withOpacity(0.15),
                 borderRadius: BorderRadius.circular(8),
@@ -73,12 +77,12 @@ class LeaderboardEntryTile extends StatelessWidget {
               child: Text(
                 '$rank',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'Orbitron',
-                  fontSize: GameScreenBreakpoints.lbStatValueFontSize() * 0.7,
-                  fontWeight: FontWeight.w900,
-                  color: ThemeColors.primary,
+                style: AppStyles.styleGeneralShadowCl(
+                  GameScreenBreakpoints.lbEntryRankFontSize()*0.6,
+                  FontWeight.w900,
+                  ThemeColors.primary,
                 ),
+
               ),
             ),
           ),
@@ -86,7 +90,7 @@ class LeaderboardEntryTile extends StatelessWidget {
           PlayerAvatarWidget(
             playerName: entry.playerName,
             playerIndex: rank - 1,
-            size: GameScreenBreakpoints.lbEntryRankBadgeSize() * 0.8,
+            size: GameScreenBreakpoints.lbEntryRankBadgeSize()*1.10,
             borderWidth: 1.5,
             gameMode: entry.gameMode.key,
           ),
@@ -100,13 +104,12 @@ class LeaderboardEntryTile extends StatelessWidget {
                   entry.playerName.toUpperCase(),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontFamily: 'Orbitron',
-                    fontSize: GameScreenBreakpoints.lbEntryNameFontSize(),
-                    fontWeight: FontWeight.w800,
-                    color: isTop3 ? rankColor : ThemeColors.textPrimary,
-                    letterSpacing: 1,
+                  style: AppStyles.styleGeneralShadowCl(
+                    GameScreenBreakpoints.lbEntryNameFontSize()*1.12,
+                    FontWeight.w800,
+                    isTop3 ? rankColor : ThemeColors.textPrimary,
                   ),
+
                 ),
                 SizedBox(height: 2.h),
                 Row(
@@ -117,23 +120,27 @@ class LeaderboardEntryTile extends StatelessWidget {
                     SizedBox(width: 3.w),
                     Text(
                       entry.dateFormatted,
-                      style: TextStyle(
-                        fontFamily: 'Orbitron',
-                        fontSize: GameScreenBreakpoints.lbEntryDateFontSize(),
-                        color: ThemeColors.textSecondary,
+                      style: AppStyles.styleGeneralShadowCl(
+                        GameScreenBreakpoints.lbEntryDateFontSize()*1.2,
+                        FontWeight.w600,
+                        ThemeColors.textSecondary,
                       ),
                     ),
                     SizedBox(width: 10.w),
                     Icon(Icons.sports_baseball,
-                        size: GameScreenBreakpoints.lbEntryDateFontSize(),
+                        size: GameScreenBreakpoints.lbEntryDateFontSize()*1.3,
                         color: ThemeColors.textSecondary),
                     SizedBox(width: 3.w),
                     Text(
                       '${entry.totalBalls}',
                       style: TextStyle(
-                        fontFamily: 'Orbitron',
-                        fontSize: GameScreenBreakpoints.lbEntryDateFontSize(),
+                        fontFamily: AppStyles.defaultFontFamily2,
+                        fontSize: GameScreenBreakpoints.lbEntryDateFontSize()*1.6,
+                        fontWeight: FontWeight.w900,
                         color: ThemeColors.textSecondary,
+                        shadows: [
+                          Shadow(color: Color(0xff0b0302), offset: Offset(0, 4), blurRadius: 7)
+                        ],
                       ),
                     ),
                   ],
@@ -150,13 +157,17 @@ class LeaderboardEntryTile extends StatelessWidget {
             ),
             child: Text(
               entry.timeFormatted,
-              style: TextStyle(
-                fontFamily: 'Orbitron',
-                fontSize: GameScreenBreakpoints.lbEntryTimeFontSize(),
+              style:  TextStyle(
+                fontFamily: AppStyles.defaultFontFamily2,
+                fontSize: GameScreenBreakpoints.lbEntryTimeFontSize()*1.2,
                 fontWeight: FontWeight.w900,
                 color: rankColor,
                 letterSpacing: 1,
+                shadows: [
+                  Shadow(color: Color(0xff0b0302), offset: Offset(0, 4), blurRadius: 7)
+                ],
               ),
+
             ),
           ),
         ],

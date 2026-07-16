@@ -233,7 +233,7 @@ class GameScreenBreakpoints {
 
   // --- PARTICLES ---
   static int particlesCount() => value(
-    mobile: 15, tablet: 20, iPad: 90, tv32: 90, tv45: 90,
+    mobile: 15, tablet: 20, iPad: 150, tv32: 150, tv45: 150,
   );
 
   // ============================================
@@ -349,11 +349,11 @@ class GameScreenBreakpoints {
   );
 
   static double waitingScreenPaddingV() => value(
-    mobile: 12.h, tablet: 16.h, iPad: 20.h, tv32: 24.h, tv45: 32.h,
+    mobile: 12.h, tablet: 16.h, iPad: 10.h, tv32: 10.h, tv45: 10.h,
   );
 
   static int waitingParticlesCount() => value(
-    mobile: 20, tablet: 30, iPad: 55, tv32: 75, tv45: 90,
+    mobile: 20, tablet: 30, iPad: 150, tv32: 150, tv45: 150,
   );
 
   // ============================================
@@ -364,94 +364,102 @@ class GameScreenBreakpoints {
 
   // --- LEADERBOARD HEADER ---
   static double lbHeaderFontSize() => value(
-    mobile: 18.sp, tablet: 22.sp, iPad: 55.sp, tv32: 32.sp, tv45: 40.sp,
+    mobile: 18.sp, tablet: 22.sp, iPad: 60.sp, tv32: 60.sp, tv45: 60.sp,
   );
 
   static double lbHeaderIconSize() => value(
-    mobile: 22.sp, tablet: 26.sp, iPad: 50.sp, tv32: 36.sp, tv45: 44.sp,
+    mobile: 22.sp, tablet: 26.sp, iPad: 55.sp, tv32: 55.sp, tv45: 55.sp,
   );
 
   // --- LEADERBOARD TABS ---
   static double lbTabFontSize() => value(
-    mobile: 11.sp, tablet: 13.sp, iPad: 14.sp, tv32: 17.sp, tv45: 22.sp,
+    mobile: 11.sp, tablet: 13.sp, iPad: 35.sp, tv32: 35.sp, tv45: 35.sp,
   );
 
   static double lbTabIconSize() => value(
-    mobile: 16.sp, tablet: 18.sp, iPad: 20.sp, tv32: 24.sp, tv45: 30.sp,
+    mobile: 16.sp, tablet: 18.sp, iPad: 30.sp, tv32: 30.sp, tv45: 30.sp,
   );
 
   static double lbTabHeight() => value(
-    mobile: 44.h, tablet: 50.h, iPad: 56.h, tv32: 64.h, tv45: 76.h,
+    mobile: 44.h, tablet: 50.h, iPad: 70.h, tv32: 70.h, tv45: 70.h,
   );
 
   static double lbTabPaddingH() => value(
-    mobile: 14.w, tablet: 18.w, iPad: 22.w, tv32: 28.w, tv45: 36.w,
+    mobile: 14.w, tablet: 18.w, iPad: 15.w, tv32: 15.w, tv45: 15.w,
   );
 
   static double lbTabPaddingV() => value(
-    mobile: 8.h, tablet: 10.h, iPad: 12.h, tv32: 14.h, tv45: 18.h,
+    mobile: 8.h, tablet: 10.h, iPad: 8.h, tv32: 8.h, tv45: 8.h,
   );
 
   // --- LEADERBOARD PODIUM ---
   static double lbPodiumHeight() => value(
-    mobile: 220.h, tablet: 280.h, iPad: 340.h, tv32: 400.h, tv45: 480.h,
+    mobile: 220.h, tablet: 280.h, iPad: 660.h, tv32: 660.h, tv45: 660.h,
   );
 
   static double lbPodiumPillar1Height() => value(
-    mobile: 120.h, tablet: 160.h, iPad: 200.h, tv32: 240.h, tv45: 300.h,
+    mobile: 120.h, tablet: 160.h, iPad: 400.h, tv32: 400.h, tv45: 400.h,
   );
 
   static double lbPodiumPillar2Height() => value(
-    mobile: 90.h, tablet: 120.h, iPad: 150.h, tv32: 180.h, tv45: 220.h,
+    mobile: 90.h, tablet: 120.h, iPad: 280.h, tv32: 300.h, tv45: 300.h,
   );
 
   static double lbPodiumPillar3Height() => value(
-    mobile: 70.h, tablet: 96.h, iPad: 120.h, tv32: 150.h, tv45: 180.h,
+    mobile: 70.h, tablet: 96.h, iPad: 220.h, tv32: 220.h, tv45: 220.h,
   );
 
   static double lbPodiumCardWidth() => value(
-    mobile: 90.w, tablet: 110.w, iPad: 130.w, tv32: 160.w, tv45: 200.w,
+    mobile: 90.w, tablet: 110.w, iPad: 250.w, tv32: 250.w, tv45: 250.w,
   );
 
   static double lbPodiumEmojiSize() => value(
-    mobile: 24.sp, tablet: 28.sp, iPad: 32.sp, tv32: 40.sp, tv45: 50.sp,
+    mobile: 24.sp, tablet: 28.sp, iPad: 60.sp, tv32: 60.sp, tv45: 60.sp,
   );
 
   static double lbPodiumNameFontSize() => value(
-    mobile: 10.sp, tablet: 12.sp, iPad: 14.sp, tv32: 18.sp, tv45: 22.sp,
+    mobile: 10.sp, tablet: 12.sp, iPad: 30.sp, tv32: 30.sp, tv45: 30.sp,
   );
 
   static double lbPodiumTimeFontSize() => value(
-    mobile: 8.sp, tablet: 10.sp, iPad: 12.sp, tv32: 15.sp, tv45: 18.sp,
+    mobile: 8.sp, tablet: 10.sp, iPad: 25.sp, tv32: 25.sp, tv45: 25.sp,
   );
 
   static double lbPodiumRankFontSize() => value(
-    mobile: 28.sp, tablet: 36.sp, iPad: 42.sp, tv32: 52.sp, tv45: 64.sp,
+    mobile: 28.sp, tablet: 36.sp, iPad: 55.sp, tv32: 55.sp, tv45: 55.sp,
   );
 
   // --- LEADERBOARD ENTRY TILE ---
   static double lbEntryNameFontSize() => value(
-    mobile: 13.sp, tablet: 15.sp, iPad: 17.sp, tv32: 22.sp, tv45: 28.sp,
+    mobile: 13.sp, tablet: 15.sp, iPad: 28.sp, tv32: 28.sp, tv45: 28.sp,
   );
 
   static double lbEntryTimeFontSize() => value(
-    mobile: 14.sp, tablet: 16.sp, iPad: 18.sp, tv32: 24.sp, tv45: 30.sp,
+    mobile: 14.sp, tablet: 16.sp, iPad: 28.sp, tv32: 28.sp, tv45: 28.sp,
   );
 
   static double lbEntryDateFontSize() => value(
-    mobile: 9.sp, tablet: 10.sp, iPad: 11.sp, tv32: 14.sp, tv45: 17.sp,
+    mobile: 9.sp, tablet: 10.sp, iPad: 17.sp, tv32: 17.sp, tv45: 17.sp,
   );
 
   static double lbEntryRankBadgeSize() => value(
-    mobile: 32.w, tablet: 40.w, iPad: 48.w, tv32: 56.w, tv45: 68.w,
+    mobile: 32.w, tablet: 40.w, iPad: 80.w, tv32: 80.w, tv45: 80.w,
+  );
+
+  static double lbEntryRankSize() => value(
+    mobile: 32.w, tablet: 40.w, iPad: 50.w, tv32: 50.w, tv45: 50.w,
+  );
+
+  static double lbEntryRankFontSize() => value(
+    mobile: 20.sp, tablet: 24.sp, iPad: 65.sp, tv32: 65.sp, tv45: 65.sp,
   );
 
   static double lbEntryRankEmojiSize() => value(
-    mobile: 20.sp, tablet: 24.sp, iPad: 28.sp, tv32: 34.sp, tv45: 42.sp,
+    mobile: 20.sp, tablet: 24.sp, iPad: 75.sp, tv32: 75.sp, tv45: 75.sp,
   );
 
   static double lbEntryPaddingH() => value(
-    mobile: 10.w, tablet: 14.w, iPad: 18.w, tv32: 24.w, tv45: 30.w,
+    mobile: 10.w, tablet: 14.w, iPad: 8.w, tv32: 24.w, tv45: 30.w,
   );
 
   static double lbEntryPaddingV() => value(
@@ -464,20 +472,20 @@ class GameScreenBreakpoints {
 
   // --- LEADERBOARD STATS SUMMARY ---
   static double lbStatValueFontSize() => value(
-    mobile: 13.sp, tablet: 16.sp, iPad: 30.sp, tv32: 24.sp, tv45: 30.sp,
+    mobile: 13.sp, tablet: 16.sp, iPad: 30.sp, tv32: 30.sp, tv45: 30.sp,
   );
 
   static double lbStatLabelFontSize() => value(
-    mobile: 7.sp, tablet: 9.sp, iPad: 25.sp, tv32: 13.sp, tv45: 16.sp,
+    mobile: 7.sp, tablet: 9.sp, iPad: 25.sp, tv32: 25.sp, tv45: 25.sp,
   );
 
   static double lbStatIconSize() => value(
-    mobile: 12.sp, tablet: 14.sp, iPad: 35.sp, tv32: 20.sp, tv45: 24.sp,
+    mobile: 12.sp, tablet: 14.sp, iPad: 35.sp, tv32: 35.sp, tv45: 35.sp,
   );
 
   // --- LEADERBOARD FILTER CHIPS ---
   static double lbFilterFontSize() => value(
-    mobile: 10.sp, tablet: 12.sp, iPad: 13.sp, tv32: 16.sp, tv45: 20.sp,
+    mobile: 10.sp, tablet: 12.sp, iPad: 22.sp, tv32: 22.sp, tv45: 22.sp,
   );
 
   static double lbFilterPaddingH() => value(
