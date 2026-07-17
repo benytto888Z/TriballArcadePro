@@ -52,7 +52,7 @@ class PodiumWidget extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 12.h),
+              padding: EdgeInsets.symmetric(vertical: 2.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -124,8 +124,8 @@ class _PodiumStep extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontFamily:  GameConstants.gameFontFamily,
-              fontSize: GameScreenBreakpoints.lbPodiumNameFontSize() * 1.2,
-              fontWeight: FontWeight.w800,
+              fontSize: GameScreenBreakpoints.lbPodiumNameFontSize() * 1.4,
+              fontWeight: FontWeight.w900,
               color: color,
              // shadows: [Shadow(color: Colors.black.withOpacity(0.6), blurRadius: 4)],
                shadows: [ Shadow(color: Color(0xff0b0302), offset: Offset(0, 4), blurRadius: 7)]
@@ -142,8 +142,8 @@ class _PodiumStep extends StatelessWidget {
             child: Text(
               entry.timeFormatted,
               style: AppStyles.styleGeneralShadowCl(
-                GameScreenBreakpoints.lbPodiumTimeFontSize()*1.08,
-                FontWeight.w800,
+                GameScreenBreakpoints.lbPodiumTimeFontSize()*1.4,
+                FontWeight.w900,
                 color,
               ),
             ),

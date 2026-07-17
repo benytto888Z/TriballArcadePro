@@ -1,5 +1,6 @@
 // lib/data/models/leaderboard_entry_model.dart
 
+import '../../core/utils/game_time_formatter.dart';
 import 'game_state_model.dart';
 import 'match_type_model.dart';
 
@@ -67,16 +68,9 @@ class LeaderboardEntryModel {
   // ============================================
   // FORMATTERS
   // ============================================
-  String get timeFormatted {
-    final minutes =
-    completionTime.inMinutes.remainder(60).toString().padLeft(2, '0');
-    final seconds =
-    completionTime.inSeconds.remainder(60).toString().padLeft(2, '0');
-    final millis = (completionTime.inMilliseconds.remainder(1000) ~/ 10)
-        .toString()
-        .padLeft(2, '0');
-    return '$minutes:$seconds.$millis';
-  }
+  /// Podium et Top 10 : même mm:ss que GameScreen, avec les centièmes.
+  String get timeFormatted =>
+      GameTimeFormatter.mmSsHundredths(completionTime);
 
   String get dateFormatted {
     return '${date.day.toString().padLeft(2, '0')}/'

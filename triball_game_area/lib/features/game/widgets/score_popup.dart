@@ -135,13 +135,11 @@ class _AnimatedPopupState extends State<_AnimatedPopup>
                         widget.event.displayValue,
                         style: TextStyle(
                           fontFamily: GameConstants.gameFontFamily,
-                          fontSize: GameScreenBreakpoints.scorePopupFontSize(),
+                          fontSize: GameScreenBreakpoints.scorePopupFontSize()*3,
                           fontWeight: FontWeight.w900,
                           color: color,
                           letterSpacing: 2,
-                          shadows: [
-                            Shadow(color: color, blurRadius: 16),
-                          ],
+                            shadows: [ Shadow(color: Color(0x84070707), offset: Offset(0, 6), blurRadius: 7)]
                         ),
                       ),
                       if (!widget.applied) ...[
@@ -150,10 +148,11 @@ class _AnimatedPopupState extends State<_AnimatedPopup>
                           'OVERSHOOT',
                           style: TextStyle(
                             fontFamily: GameConstants.gameFontFamily,
-                            fontSize: 55.sp,
+                            fontSize: 120.sp,
                             color: ThemeColors.error,
                             letterSpacing: 2,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w900,
+                              shadows: [ Shadow(color: Color(0x84070707), offset: Offset(0, 6), blurRadius: 7)]
                           ),
                         ),
                       ],

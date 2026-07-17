@@ -1,6 +1,7 @@
 // lib/data/models/player_model.dart
 
 import 'package:get/get.dart';
+import '../../core/utils/game_time_formatter.dart';
 import 'score_event_model.dart';
 
 class PlayerModel {
@@ -13,6 +14,10 @@ class PlayerModel {
   final RxList<ScoreHistoryEntry> history;
   final Rx<DateTime?> startTime;
   final Rx<DateTime?> endTime;
+
+  /// Durée officielle figée par GameController à la victoire.
+  /// Elle garantit la même base temporelle que GameScreen et VictoryDialog.
+  final Rx<Duration?> officialElapsedDuration = Rx<Duration?>(null);
 
   // ✅ NEW : Compteur de balles LOCAL au tour actuel
   final RxInt ballsThrownThisTurn = 0.obs;
@@ -64,20 +69,21 @@ class PlayerModel {
   }
 
   Duration? get elapsedTime {
+    // Après la victoire, ne plus recalculer avec DateTime.now().
+    // Cette valeur est exactement celle utilisée par le controller.
+    final official = officialElapsedDuration.value;
+    if (official != null) return official;
+
     if (startTime.value == null) return null;
     final end = endTime.value ?? DateTime.now();
     return end.difference(startTime.value!);
   }
 
+  /// Même format que GameController.elapsedFormatted et
+  /// GameController.victoryTimeFormatted : mm:ss uniquement.
   String get elapsedTimeFormatted {
-    final d = elapsedTime;
-    if (d == null) return '--:--';
-    final minutes = d.inMinutes.remainder(60).toString().padLeft(2, '0');
-    final seconds = d.inSeconds.remainder(60).toString().padLeft(2, '0');
-    final millis = (d.inMilliseconds.remainder(1000) ~/ 10)
-        .toString()
-        .padLeft(2, '0');
-    return '$minutes:$seconds.$millis';
+    final duration = elapsedTime;
+    return duration == null ? '--:--' : GameTimeFormatter.mmSs(duration);
   }
 
   int get positiveShotsCount => positiveShots.value;
@@ -163,6 +169,7 @@ class PlayerModel {
     recentEvents.clear();
     startTime.value = null;
     endTime.value = null;
+    officialElapsedDuration.value = null;
 
     // Reset stats
     totalShots.value = 0;

@@ -14,6 +14,7 @@ import '../../core/services/avatar_storage_service.dart';
 import '../../core/services/game_settings_service.dart';
 import '../../core/services/tts_service.dart';
 import '../../core/services/storage_service.dart';
+import '../../core/utils/game_time_formatter.dart';
 import '../../data/models/combo_model.dart';
 import '../../data/models/game_config_model.dart';
 import '../../data/models/game_state_model.dart';
@@ -152,34 +153,16 @@ class GameController extends GetxController {
   Duration get elapsedDuration =>
       Duration(seconds: elapsedSeconds.value);
 
-  String get elapsedFormatted {
-    final secs = elapsedSeconds.value;
-    final m = (secs ~/ 60).toString().padLeft(2, '0');
-    final s = (secs % 60).toString().padLeft(2, '0');
-    return '$m:$s';
-  }
+  String get elapsedFormatted => GameTimeFormatter.mmSs(elapsedDuration);
 
+  /// Strictement le même mm:ss que celui figé depuis GameScreen.
+  String get victoryTimeFormatted => GameTimeFormatter.mmSs(
+    Duration(seconds: victorySnapshotSeconds.value),
+  );
 
-  /// Temps formaté IDENTIQUE au GameScreen (mm:ss)
-  String get victoryTimeFormatted {
-    final secs = victorySnapshotSeconds.value;
-    final m = (secs ~/ 60).toString().padLeft(2, '0');
-    final s = (secs % 60).toString().padLeft(2, '0');
-    return '$m:$s';
-  }
-
-  /// Temps détaillé pour Solo Chrono (mm:ss.cc)
-  String get victoryTimeDetailed {
-    final d = victoryExactDuration.value;
-    if (d == null) return victoryTimeFormatted;
-    final m = d.inMinutes.remainder(60).toString().padLeft(2, '0');
-    final s = d.inSeconds.remainder(60).toString().padLeft(2, '0');
-    final ms = (d.inMilliseconds.remainder(1000) ~/ 10)
-        .toString()
-        .padLeft(2, '0');
-    // return '$m:$s.$ms';
-    return victoryTimeFormatted;
-  }
+  /// VictoryDialog reste en mm:ss. Les centièmes sont réservés au podium
+  /// et aux lignes du classement.
+  String get victoryTimeDetailed => victoryTimeFormatted;
 
   Duration get victoryExactDurationOrZero {
     return victoryExactDuration.value ??
@@ -686,20 +669,17 @@ class GameController extends GetxController {
     // ✅ CRUCIAL : Capturer le temps AVANT tout
     victorySnapshotSeconds.value = elapsedSeconds.value;
 
-    if (gameStartTime.value != null) {
-      victoryExactDuration.value =
-          DateTime.now().difference(gameStartTime.value!);
-    } else {
-      victoryExactDuration.value =
-          Duration(seconds: elapsedSeconds.value);
-    }
+    final preciseMeasurement = gameStartTime.value == null
+        ? Duration(seconds: elapsedSeconds.value)
+        : DateTime.now().difference(gameStartTime.value!);
 
-    // ✅ Protection anti-zero
-    if (victoryExactDuration.value == null ||
-        victoryExactDuration.value!.inMilliseconds == 0) {
-      victoryExactDuration.value =
-          Duration(seconds: elapsedSeconds.value);
-    }
+    // Les secondes officielles viennent du compteur visible. On conserve
+    // uniquement les centièmes de la mesure précise pour le classement.
+    // Ainsi 02:42 à l'écran devient par exemple 02:42.88, jamais 03:22.88.
+    victoryExactDuration.value = GameTimeFormatter.officialDuration(
+      displayedSeconds: victorySnapshotSeconds.value,
+      preciseMeasurement: preciseMeasurement,
+    );
 
     // ✅ STOPPER LE TIMER IMMÉDIATEMENT (avant toute autre opération)
     _gameTimer?.cancel();
@@ -709,6 +689,7 @@ class GameController extends GetxController {
     winner.value = player;
     gameEndTime.value = DateTime.now();
     player.endTime.value = gameEndTime.value;
+    player.officialElapsedDuration.value = victoryExactDuration.value;
     _stopTurnTimer();
     _stopStatusUpdates();
     _ws.stopGame();

@@ -46,7 +46,26 @@ class CountdownOverlay extends GetView<GameController> {
           : targetPlayer.turnsPlayed.value + 1;
 
       return Container(
-        color: Colors.black.withValues(alpha:0.94),
+        //color: Colors.black.withValues(alpha:0.2),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.2),
+              offset: const Offset(
+                5.0,
+                5.0,
+              ),
+              blurRadius: 10.0,
+              spreadRadius: 5.0,
+            ), //BoxShadow
+            /*BoxShadow(
+              color: Colors.white,
+              offset: const Offset(0.0, 0.0),
+              blurRadius: 0.0,
+              spreadRadius: 0.0,
+            ), //BoxShadow*/
+          ],
+        ),
         child: Center(
           child: TweenAnimationBuilder<double>(
             key: ValueKey(value),
@@ -89,8 +108,8 @@ class CountdownOverlay extends GetView<GameController> {
                     if (!isGo) ...[
                       SizedBox(height: 10.h),
                       // ============= PLAYER NAME =============
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             playerName.toUpperCase(),
@@ -100,35 +119,41 @@ class CountdownOverlay extends GetView<GameController> {
                               color: playerColor,
                               letterSpacing: 6,
                               fontWeight: FontWeight.w900,
-                              shadows: [
+                              /*shadows: [
                                 Shadow(
                                   color: playerColor,
                                   blurRadius: 15,
+                                ),
+                              ],*/
+                              shadows: [
+                                Shadow(
+                                 // color: Color(0xff0b0302),
+                                  color: playerColor,
+                                  offset: Offset(0, 6),
+                                  blurRadius: 85,
                                 ),
                               ],
                             ),
                             textAlign: TextAlign.center,
                           ),
-                          SizedBox(height: 8.h),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 16.w,
-                              vertical: 4.h,
-                            ),
-                            decoration: BoxDecoration(
-                              color: playerColor.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: playerColor, width: 1.5),
-                            ),
-                            child: Text(
-                              "${'turn_number'.tr} $turnNumber",
-                              style: TextStyle(
-                                fontFamily: GameConstants.gameFontFamily,
-                                fontSize: GameScreenBreakpoints.countdownSubtitleSize(),
-                                color: playerColor,
-                                letterSpacing: 2,
-                                fontWeight: FontWeight.w700,
-                              ),
+                          SizedBox(width: 18.w),
+                          Text(
+                            " - ${'turn_number'.tr}$turnNumber".toUpperCase(),
+                            style: TextStyle(
+                              fontFamily: GameConstants.gameFontFamily,
+                              fontSize: GameScreenBreakpoints.countdownSubtitleSize(),
+                              color: playerColor,
+                              letterSpacing: 2,
+                              fontWeight: FontWeight.w900,
+                              shadows: [
+                                Shadow(
+                                 // color: Color(0x730b0302),
+                                  color: playerColor,
+                                  offset: Offset(0, 6),
+                                  blurRadius: 75,
+
+                                ),
+                              ],
                             ),
                           ),
                         ],

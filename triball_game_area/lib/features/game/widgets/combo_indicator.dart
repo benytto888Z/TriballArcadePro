@@ -129,13 +129,12 @@ class _AnimatedComboBannerState extends State<_AnimatedComboBanner>
                         combo.type.translationKey.tr.toUpperCase(),
                         style: TextStyle(
                           fontFamily: GameConstants.gameFontFamily,
-                          fontSize: 22.sp,
+                          fontSize: 110.sp,
                           fontWeight: FontWeight.w900,
                           color: color,
                           letterSpacing: 3,
-                          shadows: [
-                            Shadow(color: color, blurRadius: 15),
-                          ],
+                            shadows: [ Shadow(color: Color(0x84070707), offset: Offset(0, 4), blurRadius: 7)]
+
                         ),
                       ),
                       if (mult > 1.0) ...[
@@ -144,10 +143,11 @@ class _AnimatedComboBannerState extends State<_AnimatedComboBanner>
                           '×${mult.toStringAsFixed(0)} ${'multiplier'.tr}',
                           style: TextStyle(
                             fontFamily: GameConstants.gameFontFamily,
-                            fontSize: 12.sp,
+                            fontSize: 75.sp,
                             color: color.withOpacity(0.9),
                             letterSpacing: 1.5,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w900,
+                              shadows: [ Shadow(color: Color(0x84070707), offset: Offset(0, 4), blurRadius: 7)]
                           ),
                         ),
                       ],
@@ -173,17 +173,21 @@ class _AnimatedComboBannerState extends State<_AnimatedComboBanner>
                               Icon(
                                 Icons.add_circle,
                                 color: ThemeColors.success,
-                                size: 12.sp,
+                                size: 75.sp,
+                                  shadows: [ Shadow(color: Color(0x84070707), offset: Offset(0, 4), blurRadius: 7)]
+
                               ),
                               SizedBox(width: 4.w),
                               Text(
                                 'bonus_turn'.tr.toUpperCase(),
                                 style: TextStyle(
                                   fontFamily: GameConstants.gameFontFamily,
-                                  fontSize: 9.sp,
+                                  fontSize: 70.sp,
                                   color: ThemeColors.success,
                                   letterSpacing: 1.5,
-                                  fontWeight: FontWeight.w800,
+                                  fontWeight: FontWeight.w900,
+                                    shadows: [ Shadow(color: Color(0x84070707), offset: Offset(0, 4), blurRadius: 7)]
+
                                 ),
                               ),
                             ],
