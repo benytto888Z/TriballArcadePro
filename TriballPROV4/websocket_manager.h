@@ -16,7 +16,8 @@ typedef void (*ConfigCmdHandler)(JsonDocument& doc);
 // Leaderboard callbacks (v3.0)
 typedef void (*LeaderboardSubmitHandler)(const String& mode, const String& player,
                                           uint32_t timeMs, uint16_t balls,
-                                          const String& date);
+                                          const String& date,
+                                          const String& avatarId);
 typedef void (*LeaderboardGetHandler)(uint8_t clientNum, const String& mode);
 typedef void (*LeaderboardClearHandler)(const String& mode);
 typedef void (*LeaderboardClearAllHandler)();

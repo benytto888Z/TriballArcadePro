@@ -429,13 +429,15 @@ class WebSocketController extends GetxController {
 
   /// ✅ Envoie l'avatar d'un joueur au Game Area
   void sendPlayerAvatar({
+    required String avatarId,
     required String playerName,
-    required String avatarUrl,        // ✅ URL au lieu de base64
+    required String avatarUrl,
     required int playerIndex,
   }) {
     if (!isConnected) return;
     sendCommand({
       'type': GameConstants.msgTypePlayerAvatar,
+      'avatarId': avatarId,
       'player': playerName,
       'playerIndex': playerIndex,
       'avatarUrl': avatarUrl,          // ✅ URL courte

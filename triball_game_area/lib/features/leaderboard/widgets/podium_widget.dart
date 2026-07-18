@@ -115,6 +115,7 @@ class _PodiumStep extends StatelessWidget {
             size: GameScreenBreakpoints.lbPodiumCardWidth() * 0.5,
             borderWidth: 2,
             gameMode: entry.gameMode.key,
+            avatarId: entry.avatarId,
           ),
           SizedBox(height: 4.h),
           Text(

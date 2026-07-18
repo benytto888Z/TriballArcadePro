@@ -18,6 +18,7 @@ dependencies:
   # RESPONSIVE UI
   flutter_screenutil: ^5.9.3
 
+
   # WEBSOCKET
   web_socket_channel: ^3.0.1
 
@@ -33,6 +34,7 @@ dependencies:
   path_provider: ^2.1.5
   shelf: ^1.4.2              # ✅ Serveur HTTP léger
   shelf_router: ^1.1.4       # ✅ Routage
+  uuid: ^4.5.1               # Identité stable des avatars
 
 
 

@@ -228,12 +228,15 @@ class LeaderboardController extends GetxController {
 
   void _syncTop10Avatars(List<LeaderboardEntryModel> entries) {
     try {
-      final top10Names = entries.map((e) => e.playerName).toList();
+      final top10AvatarIds = entries
+          .map((e) => e.avatarId ?? '')
+          .where((id) => id.isNotEmpty)
+          .toList();
       // ✅ Utilise le mode actuel
       final modeKey = selectedMode.value.key;
       _avatarStorage.syncTop10WithLeaderboard(
         gameMode: modeKey,
-        top10Names: top10Names,
+        top10AvatarIds: top10AvatarIds,
       );
     } catch (e) {
       if (kDebugMode) print('⚠️ Sync top 10 avatars error: $e');

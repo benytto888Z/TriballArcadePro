@@ -14,13 +14,15 @@ struct LeaderboardEntry {
   char     player[LEADERBOARD_NAME_MAXLEN + 1];
   uint32_t timeMs;
   uint16_t balls;
-  char     date[24];   // ISO 8601 : "2025-01-15T14:30:00Z"
+  char     date[24];   // ISO 8601
+  char     avatarId[37]; // UUID v4 + null
 
   LeaderboardEntry() {
     player[0] = '\0';
     timeMs = 0;
     balls = 0;
     date[0] = '\0';
+    avatarId[0] = '\0';
   }
 
   bool isValid() const {

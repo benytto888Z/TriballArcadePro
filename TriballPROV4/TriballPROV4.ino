@@ -180,7 +180,8 @@ void onConfigCommand(JsonDocument& doc) {
 // triball.ino
 
 void onLeaderboardSubmit(const String& mode, const String& player,
-                          uint32_t timeMs, uint16_t balls, const String& date) {
+                          uint32_t timeMs, uint16_t balls, const String& date,
+                          const String& avatarId) {
   Serial.println("════════════════════════════════════════");
   Serial.println("📥 LEADERBOARD SUBMIT RECEIVED");
   Serial.printf("   mode: '%s'\n", mode.c_str());
@@ -200,6 +201,8 @@ void onLeaderboardSubmit(const String& mode, const String& player,
   entry.balls  = balls;
   strncpy(entry.date, date.c_str(), 23);
   entry.date[23] = '\0';
+  strncpy(entry.avatarId, avatarId.c_str(), 36);
+  entry.avatarId[36] = '\0';
 
   Serial.printf("   entry.isValid(): %s\n", entry.isValid() ? "YES" : "NO");
   Serial.printf("   entry.player: '%s' (len=%d)\n", entry.player, strlen(entry.player));

@@ -464,9 +464,11 @@ class GameSetupController extends GetxController {
     final trimmedNames = playerNames.map((n) => n.trim()).toList();
 
     for (int i = 0; i < trimmedNames.length; i++) {
+      final avatarId = avatarService.getAvatarId(i);
       final url = avatarService.getAvatarUrl(i);
-      if (url != null) {
+      if (avatarId != null && url != null) {
         ws.sendPlayerAvatar(
+          avatarId: avatarId,
           playerName: trimmedNames[i],
           avatarUrl: url,           // ✅ URL au lieu de base64
           playerIndex: i,
@@ -498,12 +500,9 @@ class GameSetupController extends GetxController {
     // Retour obligatoire au HomeScreen et destruction du SetupController.
     Get.offAllNamed(AppRoutes.home);
 
-    // Game Area télécharge les images via HTTP après réception des URLs.
-    // Garder les octets quelques secondes, puis vider caméra + previews afin
-    // que la prochaine configuration reparte réellement de zéro.
-    Future.delayed(const Duration(seconds: 5), () {
-      avatarService.clearAllAvatars();
-    });
+    // Réinitialiser l'affichage du prochain setup, sans supprimer les octets
+    // servis en HTTP. Game Area demandera clear_avatars en fin de partie.
+    avatarService.clearUiPreviews();
   }
 
   // ============================================

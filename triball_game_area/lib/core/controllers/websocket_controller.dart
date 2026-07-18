@@ -470,6 +470,7 @@ class WebSocketController extends GetxController {
     required String playerName,
     required int timeMs,
     required int balls,
+    String? avatarId,
     DateTime? date,
   }) {
     if (!isConnected) {
@@ -485,6 +486,7 @@ class WebSocketController extends GetxController {
       'player': playerName,
       'time_ms': timeMs,
       'balls': balls,
+      if (avatarId != null) 'avatar_id': avatarId,
       'date': (date ?? DateTime.now()).toIso8601String(),
     };
 

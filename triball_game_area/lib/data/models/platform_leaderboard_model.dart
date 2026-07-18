@@ -39,6 +39,7 @@ class PlatformLeaderboardData {
             DateTime.now(),
         matchType: MatchType.soloChrono, // Toujours soloChrono côté ESP32
         gameMode: mode,
+        avatarId: entryJson['avatar_id'] as String?,
       );
     }).toList();
 

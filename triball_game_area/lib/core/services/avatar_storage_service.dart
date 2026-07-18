@@ -15,6 +15,8 @@ class AvatarStorageService extends GetxService {
   // ============================================
   final RxMap<String, String> currentAvatarUrls = <String, String>{}.obs;
   final RxMap<int, String> currentAvatarUrlsByIndex = <int, String>{}.obs;
+  final RxMap<String, String> currentAvatarIds = <String, String>{}.obs;
+  final RxMap<int, String> currentAvatarIdsByIndex = <int, String>{}.obs;
   /// Cache réactif : le PlayerAvatarWidget se reconstruit dès que le
   /// téléchargement HTTP est terminé.
   final RxMap<String, Uint8List> _cachedBytes = <String, Uint8List>{}.obs;
@@ -141,11 +143,12 @@ class AvatarStorageService extends GetxService {
   // ============================================
   void _listenToAvatars() {
     _avatarSub = PlatformEventBus.instance.onPlayerAvatar.listen((data) {
+      final avatarId = data['avatarId'] as String? ?? '';
       final playerName = data['player'] as String? ?? '';
       final playerIndex = (data['playerIndex'] as num?)?.toInt() ?? 0;
       final rawAvatarUrl = data['avatarUrl'] as String? ?? '';
 
-      if (playerName.isEmpty || rawAvatarUrl.isEmpty) return;
+      if (avatarId.isEmpty || playerName.isEmpty || rawAvatarUrl.isEmpty) return;
 
       // Normalise une éventuelle URL Markdown avant de l'exposer à l'UI.
       var avatarUrl = rawAvatarUrl.trim();
@@ -155,6 +158,8 @@ class AvatarStorageService extends GetxService {
 
       currentAvatarUrls[playerName] = avatarUrl;
       currentAvatarUrlsByIndex[playerIndex] = avatarUrl;
+      currentAvatarIds[playerName] = avatarId;
+      currentAvatarIdsByIndex[playerIndex] = avatarId;
 
       if (kDebugMode) {
         print('📸 Avatar URL stored: $playerName (#$playerIndex) → $avatarUrl');
@@ -239,6 +244,8 @@ class AvatarStorageService extends GetxService {
   String? getAvatarUrl(String playerName) => currentAvatarUrls[playerName];
   String? getAvatarUrlByIndex(int index) => currentAvatarUrlsByIndex[index];
 
+  String? getAvatarId(String playerName) => currentAvatarIds[playerName];
+
   Uint8List? getCachedBytes(String playerName) => _cachedBytes[playerName];
 
   Uint8List? getCachedBytesByIndex(int index) => _cachedBytesByIndex[index];
@@ -254,6 +261,8 @@ class AvatarStorageService extends GetxService {
   void clearCurrentGameAvatars() {
     currentAvatarUrls.clear();
     currentAvatarUrlsByIndex.clear();
+    currentAvatarIds.clear();
+    currentAvatarIdsByIndex.clear();
     _cachedBytes.clear();
     _cachedBytesByIndex.clear();
     if (kDebugMode) print('🗑 Current game avatars cleared');
@@ -264,24 +273,22 @@ class AvatarStorageService extends GetxService {
   // ============================================
 
   /// Nom de fichier sécurisé
-  String _safeFileName(String gameMode, String playerName) {
-    final safeName = playerName
-        .replaceAll(RegExp(r'[^\w\s-]'), '')
-        .replaceAll(RegExp(r'\s+'), '_')
-        .toLowerCase()
-        .trim();
-    return '${gameMode}_$safeName.jpg';
+  String _safeFileName(String gameMode, String avatarId) {
+    final safeUuid = avatarId.toLowerCase().replaceAll(
+      RegExp(r'[^a-f0-9-]'),
+      '',
+    );
+    return '${gameMode}_$safeUuid.jpg';
   }
 
-  /// Chemin complet du fichier
-  String _avatarFilePath(String gameMode, String playerName) {
-    return '$_avatarsDir/${_safeFileName(gameMode, playerName)}';
+  String _avatarFilePath(String gameMode, String avatarId) {
+    return '$_avatarsDir/${_safeFileName(gameMode, avatarId)}';
   }
 
   /// ✅ Sauvegarde l'avatar sur le disque
   Future<void> saveTop10Avatar({
     required String gameMode,
-    required String playerName,
+    required String avatarId,
     required Uint8List bytes,
   }) async {
     if (_avatarsDir == null) {
@@ -290,7 +297,7 @@ class AvatarStorageService extends GetxService {
     }
 
     try {
-      final filePath = _avatarFilePath(gameMode, playerName);
+      final filePath = _avatarFilePath(gameMode, avatarId);
       final file = File(filePath);
       await file.writeAsBytes(bytes, flush: true);
 
@@ -309,12 +316,12 @@ class AvatarStorageService extends GetxService {
   /// ✅ Récupère l'avatar top 10
   Future<Uint8List?> getTop10AvatarBytes({
     required String gameMode,
-    required String playerName,
+    required String avatarId,
   }) async {
     if (_avatarsDir == null) return null;
 
     try {
-      final file = File(_avatarFilePath(gameMode, playerName));
+      final file = File(_avatarFilePath(gameMode, avatarId));
       if (await file.exists()) {
         final bytes = await file.readAsBytes();
         if (kDebugMode) {
@@ -331,11 +338,11 @@ class AvatarStorageService extends GetxService {
   /// ✅ Vérifie si un avatar top 10 existe
   Future<bool> hasTop10Avatar({
     required String gameMode,
-    required String playerName,
+    required String avatarId,
   }) async {
     if (_avatarsDir == null) return false;
     try {
-      final file = File(_avatarFilePath(gameMode, playerName));
+      final file = File(_avatarFilePath(gameMode, avatarId));
       return await file.exists();
     } catch (_) {
       return false;
@@ -345,38 +352,22 @@ class AvatarStorageService extends GetxService {
   /// ✅ Supprime les joueurs qui ne sont plus dans le top 10
   Future<void> syncTop10WithLeaderboard({
     required String gameMode,
-    required List<String> top10Names,
+    required List<String> top10AvatarIds,
   }) async {
     if (_avatarsDir == null) return;
-
+    final validIds = top10AvatarIds.where((id) => id.isNotEmpty).toSet();
     try {
       final dir = Directory(_avatarsDir!);
       if (!await dir.exists()) return;
-
       final prefix = '${gameMode}_';
-
       await for (final entity in dir.list()) {
-        if (entity is File) {
-          final filename = entity.uri.pathSegments.last;
-          if (filename.startsWith(prefix) && filename.endsWith('.jpg')) {
-            final namepart = filename
-                .replaceFirst(prefix, '')
-                .replaceAll('.jpg', '');
-
-            final isInTop10 = top10Names.any((name) {
-              final safeName = name
-                  .replaceAll(RegExp(r'[^\w\s-]'), '')
-                  .replaceAll(RegExp(r'\s+'), '_')
-                  .toLowerCase()
-                  .trim();
-              return safeName == namepart;
-            });
-
-            if (!isInTop10) {
-              await entity.delete();
-              if (kDebugMode) print('🗑 Removed old avatar: $filename');
-            }
-          }
+        if (entity is! File) continue;
+        final filename = entity.uri.pathSegments.last;
+        if (!filename.startsWith(prefix) || !filename.endsWith('.jpg')) continue;
+        final avatarId = filename.substring(prefix.length, filename.length - 4);
+        if (!validIds.contains(avatarId)) {
+          await entity.delete();
+          if (kDebugMode) print('🗑 Removed orphan avatar UUID: $filename');
         }
       }
     } catch (e) {

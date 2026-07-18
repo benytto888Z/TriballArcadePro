@@ -14,6 +14,7 @@ class PlayerAvatarWidget extends StatelessWidget {
   final double size;
   final double borderWidth;
   final String? gameMode;
+  final String? avatarId;
 
   const PlayerAvatarWidget({
     super.key,
@@ -22,6 +23,7 @@ class PlayerAvatarWidget extends StatelessWidget {
     this.size = 32,
     this.borderWidth = 2,
     this.gameMode,
+    this.avatarId,
   });
 
   @override
@@ -33,9 +35,12 @@ class PlayerAvatarWidget extends StatelessWidget {
     // Rx pendant build(). Il doit rester EN DEHORS de Obx, sinon GetX lève
     // "improper use of Obx" et le classement devient une zone blanche.
     if (gameMode != null) {
+      if (avatarId == null || avatarId!.isEmpty) {
+        return _FallbackBadge(index: playerIndex, size: size, color: color);
+      }
       return _Top10Avatar(
-        key: ValueKey('${gameMode!}:${playerName.toLowerCase()}'),
-        playerName: playerName,
+        key: ValueKey('${gameMode!}:$avatarId'),
+        avatarId: avatarId!,
         gameMode: gameMode!,
         size: size,
         borderWidth: borderWidth,
@@ -81,7 +86,7 @@ class PlayerAvatarWidget extends StatelessWidget {
 }
 
 class _Top10Avatar extends StatefulWidget {
-  final String playerName;
+  final String avatarId;
   final String gameMode;
   final double size;
   final double borderWidth;
@@ -90,7 +95,7 @@ class _Top10Avatar extends StatefulWidget {
 
   const _Top10Avatar({
     super.key,
-    required this.playerName,
+    required this.avatarId,
     required this.gameMode,
     required this.size,
     required this.borderWidth,
@@ -115,7 +120,7 @@ class _Top10AvatarState extends State<_Top10Avatar> {
   @override
   void didUpdateWidget(covariant _Top10Avatar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.playerName != widget.playerName ||
+    if (oldWidget.avatarId != widget.avatarId ||
         oldWidget.gameMode != widget.gameMode) {
       _bytes = null;
       _loaded = false;
@@ -128,7 +133,7 @@ class _Top10AvatarState extends State<_Top10Avatar> {
       final service = Get.find<AvatarStorageService>();
       final bytes = await service.getTop10AvatarBytes(
         gameMode: widget.gameMode,
-        playerName: widget.playerName,
+        avatarId: widget.avatarId,
       );
       if (mounted) {
         setState(() {

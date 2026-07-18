@@ -227,12 +227,14 @@ if (strcmp(type, "leaderboard_submit") == 0) {
     const char* player = doc["player"] | "";
     uint32_t timeMs    = doc["time_ms"] | 0;      // ✅ "time_ms" pas "timeMs"
     uint16_t balls     = doc["balls"]   | 0;
-    const char* date   = doc["date"]    | "";
+    const char* date   = doc["date"]      | "";
+    const char* avatar = doc["avatar_id"] | "";
 
     Serial.printf("🔧 Parsed: mode='%s' player='%s' time=%u balls=%u\n",
                   mode, player, timeMs, balls);
 
-    _onLbSubmit(String(mode), String(player), timeMs, balls, String(date));
+    _onLbSubmit(String(mode), String(player), timeMs, balls,
+                String(date), String(avatar));
     _sendAck(clientNum, "leaderboard_submit", true);
   } else {
     Serial.println("❌ _onLbSubmit handler NOT SET");

@@ -11,6 +11,7 @@ import 'package:image/image.dart' as img;
 import 'package:shelf/shelf.dart' as shelf;
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_router/shelf_router.dart';
+import 'package:uuid/uuid.dart';
 import '../constants/game_constants.dart';
 import '../controllers/platform_event_bus.dart';
 
@@ -30,6 +31,9 @@ class AvatarCaptureService extends GetxService {
   // ============================================
   /// Map playerIndex → JPEG bytes
   final Map<int, Uint8List> _avatarBytes = {};
+  final Map<int, String> _avatarIdsByIndex = {};
+  final Map<String, Uint8List> _avatarBytesById = {};
+  static const Uuid _uuid = Uuid();
 
   /// Map playerIndex → Base64 (pour preview local)
   final RxMap<int, String> avatarPreviews = <int, String>{}.obs;
@@ -160,8 +164,13 @@ class AvatarCaptureService extends GetxService {
         img.encodeJpg(image, quality: GameConstants.avatarJpegQuality),
       );
 
-      // Stocker en mémoire
+      // Chaque nouvelle photo reçoit un UUID indépendant du nom et du rang.
+      final oldId = _avatarIdsByIndex[playerIndex];
+      if (oldId != null) _avatarBytesById.remove(oldId);
+      final avatarId = _uuid.v4();
+      _avatarIdsByIndex[playerIndex] = avatarId;
       _avatarBytes[playerIndex] = jpegBytes;
+      _avatarBytesById[avatarId] = jpegBytes;
 
       // Base64 pour preview local
       final base64 = base64Encode(jpegBytes);
@@ -194,15 +203,16 @@ class AvatarCaptureService extends GetxService {
     try {
       final router = Router();
 
-      // Route : GET /avatar/{index}
-      router.get('/avatar/<index>', (shelf.Request request, String index) {
-        final idx = int.tryParse(index);
-        if (idx == null || !_avatarBytes.containsKey(idx)) {
+      // Route : GET /avatar/{uuid}
+      router.get('/avatar/<avatarId>',
+          (shelf.Request request, String avatarId) {
+        final bytes = _avatarBytesById[avatarId];
+        if (bytes == null) {
           return shelf.Response.notFound('Avatar not found');
         }
 
         return shelf.Response.ok(
-          _avatarBytes[idx]!,
+          bytes,
           headers: {
             'Content-Type': 'image/jpeg',
             'Cache-Control': 'no-cache',
@@ -212,7 +222,7 @@ class AvatarCaptureService extends GetxService {
 
       // Route : GET /avatars (liste des avatars disponibles)
       router.get('/avatars', (shelf.Request request) {
-        final available = _avatarBytes.keys.toList();
+        final available = _avatarBytesById.keys.toList();
         return shelf.Response.ok(
           jsonEncode({'avatars': available}),
           headers: {'Content-Type': 'application/json'},
@@ -273,13 +283,13 @@ class AvatarCaptureService extends GetxService {
   // ============================================
   // ✅ GET AVATAR URL (pour envoyer au Game Area)
   // ============================================
+  String? getAvatarId(int playerIndex) => _avatarIdsByIndex[playerIndex];
+
   String? getAvatarUrl(int playerIndex) {
-    if (!_avatarBytes.containsKey(playerIndex)) return null;
+    final avatarId = getAvatarId(playerIndex);
+    if (avatarId == null || !_avatarBytesById.containsKey(avatarId)) return null;
     if (serverIp.value.isEmpty) return null;
-    // Version empêche le cache réseau de réutiliser une ancienne photo du
-    // même index lors d'une partie suivante.
-    final version = DateTime.now().millisecondsSinceEpoch;
-    return 'http://${serverIp.value}:${serverPort.value}/avatar/$playerIndex?v=$version';
+    return 'http://${serverIp.value}:${serverPort.value}/avatar/$avatarId';
   }
 
   // ============================================
@@ -294,13 +304,21 @@ class AvatarCaptureService extends GetxService {
   // ============================================
   // ✅ CLEAR
   // ============================================
+  /// Réinitialise seulement l'UI après l'envoi. Les octets HTTP restent
+  /// disponibles jusqu'au clear_avatars envoyé par Game Area en fin de partie.
+  void clearUiPreviews() => avatarPreviews.clear();
+
   void clearAllAvatars() {
     _avatarBytes.clear();
+    _avatarIdsByIndex.clear();
+    _avatarBytesById.clear();
     avatarPreviews.clear();
     if (kDebugMode) print('🗑 All avatars cleared from memory');
   }
 
   void removeAvatar(int playerIndex) {
+    final avatarId = _avatarIdsByIndex.remove(playerIndex);
+    if (avatarId != null) _avatarBytesById.remove(avatarId);
     _avatarBytes.remove(playerIndex);
     avatarPreviews.remove(playerIndex);
   }

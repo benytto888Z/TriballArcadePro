@@ -93,6 +93,7 @@ class LeaderboardEntryTile extends StatelessWidget {
             size: GameScreenBreakpoints.lbEntryRankBadgeSize()*1.10,
             borderWidth: 1.5,
             gameMode: entry.gameMode.key,
+            avatarId: entry.avatarId,
           ),
           SizedBox(width: 8.w),
           Expanded(

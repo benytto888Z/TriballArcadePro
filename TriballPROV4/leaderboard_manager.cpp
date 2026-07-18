@@ -72,7 +72,7 @@ int LeaderboardManager::getEntries(const String& mode, LeaderboardEntry outEntri
 // PUBLIC : GET JSON
 // ============================================
 String LeaderboardManager::getLeaderboardJson(const String& mode) {
-  StaticJsonDocument<2048> doc;
+  StaticJsonDocument<4096> doc;
   doc["type"] = "leaderboard_data";
   doc["mode"] = mode;
 
@@ -94,6 +94,9 @@ String LeaderboardManager::getLeaderboardJson(const String& mode) {
     e["time_ms"] = rawEntries[i].timeMs;
     e["balls"] = rawEntries[i].balls;
     e["date"] = rawEntries[i].date;
+    if (rawEntries[i].avatarId[0] != '\0') {
+      e["avatar_id"] = rawEntries[i].avatarId;
+    }
   }
 
   doc["count"] = count;
@@ -201,6 +204,7 @@ String LeaderboardManager::_entryToString(const LeaderboardEntry& e) {
   doc["t"] = e.timeMs;
   doc["b"] = e.balls;
   doc["d"] = e.date;
+  if (e.avatarId[0] != '\0') doc["a"] = e.avatarId;
 
   String output;
   serializeJson(doc, output);
@@ -225,6 +229,10 @@ bool LeaderboardManager::_stringToEntry(const String& s, LeaderboardEntry& outEn
   const char* d = doc["d"] | "";
   strncpy(outEntry.date, d, 23);
   outEntry.date[23] = '\0';
+
+  const char* a = doc["a"] | "";
+  strncpy(outEntry.avatarId, a, 36);
+  outEntry.avatarId[36] = '\0';
 
   return outEntry.isValid();
 }

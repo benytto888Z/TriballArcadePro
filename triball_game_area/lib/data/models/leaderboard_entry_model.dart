@@ -13,7 +13,8 @@ class LeaderboardEntryModel {
   final int totalBalls;
   final DateTime date;
   final MatchType matchType;      // ✅ NEW
-  final GameMode gameMode;         // ✅ Type modifié (GameMode enum au lieu de String)
+  final GameMode gameMode;
+  final String? avatarId;
 
   LeaderboardEntryModel({
     required this.playerName,
@@ -22,6 +23,7 @@ class LeaderboardEntryModel {
     required this.date,
     required this.matchType,
     required this.gameMode,
+    this.avatarId,
   });
 
   // ============================================
@@ -43,6 +45,7 @@ class LeaderboardEntryModel {
       gameMode: GameModeExtension.fromKey(
           json['gameMode'] ?? json['mode'] ?? 'classic') ??
           GameMode.classic,
+      avatarId: json['avatarId'] ?? json['avatar_id'],
     );
   }
 
@@ -53,6 +56,7 @@ class LeaderboardEntryModel {
     'date': date.toIso8601String(),
     'matchType': matchType.key,
     'gameMode': gameMode.key,
+    if (avatarId != null) 'avatarId': avatarId,
   };
 
   /// Format compact pour envoi WebSocket vers ESP32

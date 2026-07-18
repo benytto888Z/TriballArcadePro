@@ -885,6 +885,7 @@ class GameController extends GetxController {
       playerName: player.name,
       timeMs: timeMs,
       balls: player.ballsThrown.value,
+      avatarId: _avatarStorage.getAvatarId(player.name),
       date: DateTime.now(),
     );
 
@@ -925,11 +926,12 @@ class GameController extends GetxController {
   /// ✅ Sauvegarde l'avatar du gagnant pour persistance top 10
   Future<void> _saveWinnerAvatarForTop10(PlayerModel player) async {
     try {
+      final avatarId = _avatarStorage.getAvatarId(player.name);
       final bytes = _avatarStorage.getCachedBytes(player.name);
-      if (bytes != null) {
+      if (avatarId != null && bytes != null) {
         await _avatarStorage.saveTop10Avatar(
           gameMode: config.mode.key,
-          playerName: player.name,
+          avatarId: avatarId,
           bytes: bytes,
         );
       } else if (kDebugMode) {

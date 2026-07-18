@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/theme/theme_colors.dart';
+import '../../../core/values/app_styles.dart';
 
 /// Background animé reproduisant la grille Triball 3×3
 /// avec trous illuminés en pulsation néon
@@ -17,7 +18,7 @@ class AnimatedTriballBackground extends StatefulWidget {
   const AnimatedTriballBackground({
     super.key,
     this.opacity = 0.45,
-    this.speedFactor = 1.5,
+    this.speedFactor = 2.5,
   });
 
   @override
@@ -97,7 +98,8 @@ class _AnimatedTriballBackgroundState extends State<AnimatedTriballBackground>
                   animation: _rotateCtrl,
                   builder: (context, _) {
                     return Transform.rotate(
-                      angle: _rotateCtrl.value * 2 * pi * 0.05,
+                      angle: _rotateCtrl.value * 2 * pi * 0.15,
+                      // angle: _rotateCtrl.value * 2 * pi * 0.05,
                       child: CustomPaint(
                         size: Size(
                           constraints.maxWidth,
@@ -115,8 +117,8 @@ class _AnimatedTriballBackgroundState extends State<AnimatedTriballBackground>
                     animation: _pulseCtrl,
                     builder: (context, _) {
                       return SizedBox(
-                        width: 160.w,
-                        height: 270.h,
+                        width: 320.w,
+                        height: 540.h,
                         child: GridView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           gridDelegate:
@@ -133,7 +135,8 @@ class _AnimatedTriballBackgroundState extends State<AnimatedTriballBackground>
                             final phase =
                                 (_pulseCtrl.value + (index * 0.11)) % 1.0;
                             final wave =
-                            (sin(phase * 2 * pi) * 0.5 + 0.5);
+                            (sin(phase * 2 * pi) * 0.5 + 1.5);
+                            // (sin(phase * 2 * pi) * 0.5 + 0.5);
 
                             return _AnimatedHole(
                               value: hole.value,
@@ -197,9 +200,9 @@ class _AnimatedHole extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: color.withOpacity(0.15 * intensity),
+          color: color.withOpacity(0.10 * intensity),
           border: Border.all(
-            color: color.withOpacity(0.7 + intensity * 0.3),
+            color: color.withOpacity(0.9 + intensity * 0.3),
             width: 2,
           ),
           boxShadow: [
@@ -219,8 +222,8 @@ class _AnimatedHole extends StatelessWidget {
           child: Text(
             value,
             style: TextStyle(
-              fontFamily: 'Orbitron',
-              fontSize: 14.sp,
+              fontFamily: AppStyles.defaultFontFamily2,
+              fontSize: 48.sp,
               fontWeight: FontWeight.w900,
               color: color,
               letterSpacing: 1,
