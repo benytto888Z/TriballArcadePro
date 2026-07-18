@@ -85,11 +85,14 @@ class GameSetupController extends GetxController {
 
   /// ✅ Peut-on envoyer ? (config valide + Game Area connectée)
   bool get canSendToGameArea =>
-      canStart && _broadcaster.hasGameAreaConnected;
+      canStart && !isSending.value && _broadcaster.canStartGame;
 
   /// ✅ Raison si on ne peut pas envoyer
   String get cannotSendReason {
     if (!canStart) return 'error_invalid_name'.tr;
+    if (!_broadcaster.isConfigAreaReady) {
+      return 'platform_disconnected'.tr;
+    }
     if (!_broadcaster.hasGameAreaConnected) {
       return 'no_game_area_connected'.tr;
     }
@@ -367,8 +370,8 @@ class GameSetupController extends GetxController {
       return;
     }
 
-    // Guard 2 : Game Area connectée
-    if (!_broadcaster.hasGameAreaConnected) {
+    // Guard 2 : Config Area ET Game Area doivent être déclarés sur l'ESP32.
+    if (!_broadcaster.canStartGame) {
       _showNoGameAreaDialog();
       return;
     }
@@ -440,9 +443,11 @@ class GameSetupController extends GetxController {
     if (success) {
       sendSuccess.value = true;
       _audio.playSfx(AssetPaths.audioVictory);
-      _showSendConfirmationDialog(config);
-      // ✅ Envoie les avatars après la config
+
+      // L'ACK ESP32 confirme qu'au moins un Game Area a reçu la config.
+      // Envoyer les URLs avant de nettoyer la session locale.
       _sendAvatars();
+      await _resetConfigAreaAfterSuccessfulSend();
     } else {
       sendError.value = 'config_send_failed'.tr;
       Helpers.showSnackbar(
@@ -472,6 +477,33 @@ class GameSetupController extends GetxController {
     if (kDebugMode) {
       print('📸 Avatar URLs sent to Game Area');
     }
+  }
+
+  Future<void> _resetConfigAreaAfterSuccessfulSend() async {
+    final avatarService = Get.find<AvatarCaptureService>();
+
+    // Réinitialisation immédiate de l'état de tous les écrans de setup.
+    playerAvatars.clear();
+    selectedMatchType.value = MatchType.competition;
+    selectedMode.value = GameMode.classic;
+    playerNames.assignAll(['Player 1', 'Player 2']);
+    ttsEnabled.value = true;
+    soundEnabled.value = true;
+    overshootBounce.value = false;
+    currentPage.value = 0;
+    matchTypePreselected.value = false;
+    sendSuccess.value = false;
+    sendError.value = '';
+
+    // Retour obligatoire au HomeScreen et destruction du SetupController.
+    Get.offAllNamed(AppRoutes.home);
+
+    // Game Area télécharge les images via HTTP après réception des URLs.
+    // Garder les octets quelques secondes, puis vider caméra + previews afin
+    // que la prochaine configuration reparte réellement de zéro.
+    Future.delayed(const Duration(seconds: 5), () {
+      avatarService.clearAllAvatars();
+    });
   }
 
   // ============================================

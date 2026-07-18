@@ -177,14 +177,13 @@ class WebSocketService {
     if (_isDisposed || _reconnectTimer != null) return;
 
     reconnectAttempts++;
-    if (reconnectAttempts > Esp32Config.maxReconnectAttempts) {
-      print('WS: Max reconnect attempts reached');
-      _updateState(WsConnectionState.error);
-      return;
-    }
 
+    // Mode borne : ne jamais abandonner. Dès que le SoftAP ESP32 redevient
+    // disponible, Game Area doit se reconnecter sans action humaine.
+    final cappedAttempt = reconnectAttempts
+        .clamp(1, Esp32Config.maxReconnectAttempts) as int;
     int delay = Esp32Config.reconnectDelay *
-        (reconnectAttempts > 3 ? 3 : reconnectAttempts);
+        (cappedAttempt > 3 ? 3 : cappedAttempt);
     print('WS: Reconnecting in $delay s (attempt $reconnectAttempts)');
     _updateState(WsConnectionState.reconnecting);
     _reconnectTimer = Timer(Duration(seconds: delay), () {

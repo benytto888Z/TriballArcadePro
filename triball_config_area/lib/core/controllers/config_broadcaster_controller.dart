@@ -49,6 +49,9 @@ class ConfigBroadcasterController extends GetxController {
   StreamSubscription<Map<String, dynamic>>? _ackSub;
   StreamSubscription<Map<String, dynamic>>? _statusSub;
   StreamSubscription<Map<String, dynamic>>? _clientsInfoSub;
+  Worker? _connectionWorker;
+  Timer? _clientsRefreshTimer;
+  Completer<bool>? _pendingConfigAck;
 
   // ============================================
   // LIFECYCLE
@@ -59,8 +62,21 @@ class ConfigBroadcasterController extends GetxController {
     _declareAsConfigArea();
     _setupBusListeners();
 
-    // Refresh clients info toutes les 10s
-    Timer.periodic(const Duration(seconds: 10), (_) {
+    // La disponibilité exige une information clients fraîche. Toute
+    // déconnexion invalide immédiatement le Game Area précédemment détecté.
+    _connectionWorker = ever(_ws.connectionState, (_) {
+      if (!_ws.isConnected) {
+        gameAreaCount.value = 0;
+        remoteGameStatus.value = null;
+        gameAreaIsPlaying.value = false;
+        final pending = _pendingConfigAck;
+        if (pending != null && !pending.isCompleted) pending.complete(false);
+        return;
+      }
+      _ws.requestClientsInfo();
+    });
+
+    _clientsRefreshTimer = Timer.periodic(const Duration(seconds: 3), (_) {
       if (_ws.isConnected) _ws.requestClientsInfo();
     });
   }
@@ -70,6 +86,11 @@ class ConfigBroadcasterController extends GetxController {
     _ackSub?.cancel();
     _statusSub?.cancel();
     _clientsInfoSub?.cancel();
+    _connectionWorker?.dispose();
+    _clientsRefreshTimer?.cancel();
+    final pending = _pendingConfigAck;
+    if (pending != null && !pending.isCompleted) pending.complete(false);
+    _pendingConfigAck = null;
     super.onClose();
   }
 
@@ -92,6 +113,12 @@ class ConfigBroadcasterController extends GetxController {
     // Écoute les ACK
     _ackSub = PlatformEventBus.instance.onAck.listen((ack) {
       if (kDebugMode) print('📨 ACK reçu: $ack');
+      if (ack['for'] == GameConstants.msgTypeStartGameConfig) {
+        final pending = _pendingConfigAck;
+        if (pending != null && !pending.isCompleted) {
+          pending.complete(ack['success'] == true);
+        }
+      }
     });
 
     // Écoute les status Game Area
@@ -136,10 +163,15 @@ class ConfigBroadcasterController extends GetxController {
   /// Envoie la configuration de partie à toutes les Game Area connectées
   /// Retourne true si l'envoi a réussi (WebSocket ok, pas de garantie de réception)
   Future<bool> sendGameConfig(GameConfig config) async {
-    if (!_ws.isConnected) {
-      if (kDebugMode) print('⚠️ Cannot send config: not connected to ESP32');
+    if (!canStartGame) {
+      if (kDebugMode) {
+        print('⚠️ Cannot send config: Config Area and Game Area are not both ready');
+      }
       return false;
     }
+
+    // Une seule transaction d'envoi à la fois.
+    if (_pendingConfigAck != null) return false;
 
     // Construction du JSON complet
     final configJson = _buildConfigJson(config);
@@ -152,13 +184,25 @@ class ConfigBroadcasterController extends GetxController {
       print('   Game Area count: ${gameAreaCount.value}');
     }
 
+    final completer = Completer<bool>();
+    _pendingConfigAck = completer;
     _ws.sendGameConfig(configJson);
 
-    // Update state
-    lastSentConfig.value = config;
-    lastSentAt.value = DateTime.now();
+    try {
+      final acknowledged = await completer.future.timeout(
+        const Duration(seconds: 5),
+        onTimeout: () => false,
+      );
+      if (!acknowledged) return false;
 
-    return true;
+      lastSentConfig.value = config;
+      lastSentAt.value = DateTime.now();
+      return true;
+    } finally {
+      if (identical(_pendingConfigAck, completer)) {
+        _pendingConfigAck = null;
+      }
+    }
   }
 
   /// Construit le JSON de config à envoyer
@@ -222,9 +266,11 @@ class ConfigBroadcasterController extends GetxController {
 
   /// Vérifie si au moins une Game Area est connectée
   bool get hasGameAreaConnected => gameAreaCount.value > 0;
+  bool get isConfigAreaReady => _ws.isConnected && _ws.isDeclared.value;
 
-  /// Vérifie si on peut démarrer une partie
-  bool get canStartGame => _ws.isConnected && hasGameAreaConnected;
+  /// Obligatoire : Config Area déclaré + au moins un Game Area déclaré,
+  /// tous reliés à la même plateforme ESP32.
+  bool get canStartGame => isConfigAreaReady && hasGameAreaConnected;
 
   /// Refresh manuel des infos clients
   void refreshClientsInfo() {

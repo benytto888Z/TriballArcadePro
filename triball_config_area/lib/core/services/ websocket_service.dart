@@ -176,14 +176,14 @@ class WebSocketService {
     if (_isDisposed || _reconnectTimer != null) return;
 
     reconnectAttempts++;
-    if (reconnectAttempts > Esp32Config.maxReconnectAttempts) {
-      print('WS: Max reconnect attempts reached');
-      _updateState(WsConnectionState.error);
-      return;
-    }
 
+    // Ne jamais abandonner : la tablette doit se reconnecter automatiquement
+    // dès que le Wi-Fi/SoftAP ESP32 redevient disponible. La valeur max sert
+    // uniquement à plafonner le backoff et le compteur affiché.
+    final cappedAttempt = reconnectAttempts
+        .clamp(1, Esp32Config.maxReconnectAttempts) as int;
     int delay = Esp32Config.reconnectDelay *
-        (reconnectAttempts > 3 ? 3 : reconnectAttempts);
+        (cappedAttempt > 3 ? 3 : cappedAttempt);
     print('WS: Reconnecting in $delay s (attempt $reconnectAttempts)');
     _updateState(WsConnectionState.reconnecting);
     _reconnectTimer = Timer(Duration(seconds: delay), () {

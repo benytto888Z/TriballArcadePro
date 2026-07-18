@@ -71,10 +71,6 @@ void main() async {
   Get.put(SettingsExportService(), permanent: true);
   Get.put(AvatarCaptureService(), permanent: true);
 
-
-  // ✅ NEW : Broadcaster de config (Config Area → Game Area)
-  Get.put(ConfigBroadcasterController(), permanent: true);
-
   await Get.find<ScreenService>().setPortraitNormal();
 
   if (kDebugMode) {

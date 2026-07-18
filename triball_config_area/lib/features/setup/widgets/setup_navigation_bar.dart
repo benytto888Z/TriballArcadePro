@@ -20,7 +20,7 @@ class SetupNavigationBar extends GetView<GameSetupController> {
       final isFirst = controller.isFirstPage &&
           !controller.matchTypePreselected.value;
       final isSending = controller.isSending.value;
-      final hasGameArea = broadcaster.hasGameAreaConnected;
+      final bothAreasReady = broadcaster.canStartGame;
 
       return Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
@@ -28,7 +28,7 @@ class SetupNavigationBar extends GetView<GameSetupController> {
           mainAxisSize: MainAxisSize.min,
           children: [
             // ✅ Warning si pas de Game Area connectée (dernière page)
-            if (isLast && !hasGameArea)
+            if (isLast && !bothAreasReady)
               Container(
                 margin: EdgeInsets.only(bottom: 8.h),
                 padding: EdgeInsets.symmetric(
@@ -93,13 +93,11 @@ class SetupNavigationBar extends GetView<GameSetupController> {
                     variant: ButtonVariant.primary,
                     height: 50.h,
                     fontSize: 12.sp,
-                    onPressed: isSending
-                        ? null
-                        : (controller.canSendToGameArea
+                    // Aucun fallback local : les DEUX applications doivent
+                    // être présentes sur la plateforme ESP32.
+                    onPressed: controller.canSendToGameArea
                         ? controller.sendToGameArea
-                        : controller.canStart
-                        ? controller.sendToGameArea
-                        : null),
+                        : null,
                   )
                       : ThemedButton(
                     // BOUTON NEXT (pages intermédiaires)
