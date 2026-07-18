@@ -101,6 +101,8 @@ class GameConstants {
   // ✅ NEW : Pause après le tour pour visualiser le score
   static const int scoreViewingPauseSeconds = 5;
 
+  /// En mode Combo, laisse le feedback TRIPLE visible avant le récapitulatif.
+  static const int comboTriplePauseBeforeScoreOverlaySeconds = 3;
 
   // ==========================================
   // ✅ VICTORY DIALOG DISPLAY DURATION

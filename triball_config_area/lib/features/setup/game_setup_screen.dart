@@ -106,10 +106,17 @@ class _HeaderTitle extends GetView<GameSetupController> {
       final page = controller.currentPage.value;
       String title;
       switch (page) {
-        case 0: title = 'match_type'.tr; break;
-        case 1: title = 'game_mode'.tr; break;
-        case 2: title = 'players'.tr; break;
-        default: title = 'game_setup'.tr;
+        case 0:
+          title = 'match_type'.tr;
+          break;
+        case 1:
+          title = 'game_mode'.tr;
+          break;
+        case 2:
+          title = 'players'.tr;
+          break;
+        default:
+          title = 'game_setup'.tr;
       }
       return ThemedText.headline(
         title.toUpperCase(),
@@ -633,7 +640,8 @@ class _PlayerCountSection extends GetView<GameSetupController> {
               SizedBox(width: 8.w),
               Expanded(
                 child: ThemedText.body(
-                  '1 ${'player'.tr.toLowerCase()} — ${'match_type_solo_chrono'.tr}',
+                  '1 ${'player'.tr.toLowerCase()} — ${'match_type_solo_chrono'
+                      .tr}',
                   fontSize: 13.sp,
                 ),
               ),
@@ -715,11 +723,13 @@ class _PlayerCountSection extends GetView<GameSetupController> {
               onChanged: controller.setPlayerCount,
             ),
             SizedBox(height: 8.h),
-            ThemedText.caption(
-              'player_count'.trParams({'count': '$count'}),
-              fontSize: 11.sp,
-              color: ThemeColors.textSecondary,
-            ),
+            Obx(() {
+              return ThemedText.caption(
+                'player_count'.trParams({'count': '$count'}),
+                fontSize: 11.sp,
+                color: ThemeColors.textSecondary,
+              );
+            }),
           ],
         );
       }),
@@ -755,6 +765,7 @@ class _PlayerNamesSection extends GetView<GameSetupController> {
 
 class _PlayerNameRow extends GetView<GameSetupController> {
   final int index;
+
   const _PlayerNameRow({required this.index});
 
   @override
@@ -973,6 +984,7 @@ class _PlayerAvatarPreview extends StatelessWidget {
       }),
     );
   }
+
   void _openCapture(BuildContext context) {
     final setupController = Get.find<GameSetupController>();
     final playerName = setupController.playerNames[index];
@@ -1058,7 +1070,10 @@ class _RecentPlayersSection extends GetView<GameSetupController> {
                   name: name,
                   onTap: () {
                     int targetIdx = controller.playerNames.indexWhere(
-                          (n) => n.trim().isEmpty || n.startsWith('Player '),
+                          (n) =>
+                      n
+                          .trim()
+                          .isEmpty || n.startsWith('Player '),
                     );
                     if (targetIdx < 0) {
                       targetIdx = controller.playerNames.length - 1;
@@ -1134,11 +1149,12 @@ class _OptionRow extends StatelessWidget {
           Expanded(
             child: ThemedText.body(label, fontSize: 13.sp),
           ),
-          Obx(() => Switch(
-            value: observable.value,
-            onChanged: (_) => onToggle(),
-            activeColor: ThemeColors.primary,
-          )),
+          Obx(() =>
+              Switch(
+                value: observable.value,
+                onChanged: (_) => onToggle(),
+                activeColor: ThemeColors.primary,
+              )),
         ],
       ),
     );

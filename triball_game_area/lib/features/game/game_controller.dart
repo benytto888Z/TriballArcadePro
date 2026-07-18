@@ -87,6 +87,7 @@ class GameController extends GetxController {
   final RxBool showScoreViewingPause = false.obs;
   final RxInt scoreViewingRemainingSeconds = 0.obs;
   Timer? _scoreViewingTimer;
+  Timer? _comboTriplePauseTimer;
 
   final RxInt victorySnapshotSeconds = 0.obs;
   final Rx<Duration?> victoryExactDuration = Rx<Duration?>(null);
@@ -221,6 +222,7 @@ class GameController extends GetxController {
     _comboBannerTimer?.cancel();
     _transitionTimer?.cancel();
     _scoreViewingTimer?.cancel();
+    _comboTriplePauseTimer?.cancel();
     _statusUpdateTimer?.cancel();
     _returnToWaitingTimer?.cancel();
     // Ne pas envoyer stop_game ici : _cleanup() est aussi appelé par onClose
@@ -450,13 +452,33 @@ class GameController extends GetxController {
   // ============================================
   // AUTO-SWITCH + SCORE VIEWING PAUSE
   // ============================================
-  void _autoSwitchToNextPlayer({required String reason}) {
+  void _autoSwitchToNextPlayer({
+    required String reason,
+    Duration scoreOverlayDelay = Duration.zero,
+  }) {
     if (!isPlaying) return;
+
+    // Bloquer immédiatement le tour et les capteurs : aucune balle
+    // supplémentaire ne doit être comptée pendant le feedback TRIPLE.
     _stopTurnTimer();
     _ws.stopGame();
     phase.value = GamePhase.turnTransition;
     currentPlayer?.incrementTurn();
-    _startScoreViewingPause();
+
+    _comboTriplePauseTimer?.cancel();
+    if (scoreOverlayDelay > Duration.zero) {
+      if (kDebugMode) {
+        print('🔥 TRIPLE pause: ${scoreOverlayDelay.inSeconds}s before score overlay');
+      }
+      _comboTriplePauseTimer = Timer(scoreOverlayDelay, () {
+        _comboTriplePauseTimer = null;
+        if (phase.value == GamePhase.turnTransition) {
+          _startScoreViewingPause();
+        }
+      });
+    } else {
+      _startScoreViewingPause();
+    }
   }
 
   void _startScoreViewingPause() {
@@ -610,8 +632,18 @@ class GameController extends GetxController {
 
       if (!hasBonusTurn &&
           player.ballsThrownThisTurn.value >= config.ballsPerTurn) {
+        final isTripleCombo = isComboMode &&
+            result.combo?.type == ComboType.tripleCombo;
+
         _autoSwitchToNextPlayer(
-            reason: '${config.ballsPerTurn} balls played');
+          reason: '${config.ballsPerTurn} balls played',
+          scoreOverlayDelay: isTripleCombo
+              ? const Duration(
+                  seconds: GameConstants
+                      .comboTriplePauseBeforeScoreOverlaySeconds,
+                )
+              : Duration.zero,
+        );
       }
     } catch (e) {
       if (kDebugMode) print('❌ Detection error: $e');
