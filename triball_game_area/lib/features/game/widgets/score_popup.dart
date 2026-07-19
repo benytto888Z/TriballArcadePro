@@ -22,7 +22,7 @@ class ScorePopup extends GetView<GameController> {
       return _AnimatedPopup(
         key: ValueKey(event.timestamp),
         event: event,
-        applied: result.applied,
+        isOvershoot: result.isOvershoot,
       );
     });
   }
@@ -30,12 +30,12 @@ class ScorePopup extends GetView<GameController> {
 
 class _AnimatedPopup extends StatefulWidget {
   final dynamic event;
-  final bool applied;
+  final bool isOvershoot;
 
   const _AnimatedPopup({
     super.key,
     required this.event,
-    required this.applied,
+    required this.isOvershoot,
   });
 
   @override
@@ -142,7 +142,7 @@ class _AnimatedPopupState extends State<_AnimatedPopup>
                             shadows: [ Shadow(color: Color(0x84070707), offset: Offset(0, 6), blurRadius: 7)]
                         ),
                       ),
-                      if (!widget.applied) ...[
+                      if (widget.isOvershoot) ...[
                         SizedBox(height: 4.h),
                         Text(
                           'OVERSHOOT',

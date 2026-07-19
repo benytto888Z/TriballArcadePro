@@ -80,8 +80,7 @@ class GameRepository {
       // 3. Score normal : +5, +10, +30, -5, -10
       newScore = currentScore + event.value;
 
-      // 4. Plancher à 0 (pas de score négatif global)
-      if (newScore < 0) newScore = 0;
+      // Les scores négatifs sont autorisés : 0 - 5 = -5, puis -5 + 10 = 5.
 
       // 5. Plafond à hardcoreMaxScore (200)
       if (newScore > GameConstants.hardcoreMaxScore) {
@@ -166,10 +165,12 @@ class GameRepository {
       newScore = currentScore + valueToAdd;
     }
 
-    if (newScore < 0) newScore = 0;
+    // Aucun plancher : un hit négatif doit toujours être comptabilisé.
+    bool wasOvershoot = false;
 
     // ===== OVERSHOOT HANDLING (Classic, Champion, Combo) =====
     if (newScore > target) {
+      wasOvershoot = true;
       switch (config.overshootRule) {
         case OvershootRule.refuse:
           return ScoreApplyResult(
@@ -181,14 +182,14 @@ class GameRepository {
             message: 'overshoot_refused',
             baseValue: baseValue,
             appliedMultiplier: appliedMultiplier,
-            modifiers: modifiers,
-            combo: combo,
+            // OVERSHOOT a priorité absolue sur les bonus visuels/sonores.
+            modifiers: const [],
+            combo: null,
           );
 
         case OvershootRule.bounce:
           int overshoot = newScore - target;
           newScore = target - overshoot;
-          if (newScore < 0) newScore = 0;
           message = 'overshoot_bounce';
           break;
 
@@ -205,7 +206,7 @@ class GameRepository {
       newScore: newScore,
       applied: true,
       isVictory: isVictory,
-      isOvershoot: false,
+      isOvershoot: wasOvershoot,
       message: isVictory ? 'victory' : message,
       baseValue: baseValue,
       appliedMultiplier: appliedMultiplier,

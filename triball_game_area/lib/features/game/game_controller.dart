@@ -587,7 +587,14 @@ class GameController extends GetxController {
       lastResult.value = result;
       player.registerShot(event: event, applied: result.applied);
 
-      if (result.hasCombo) {
+      if (result.isOvershoot) {
+        // Priorité absolue : aucun combo visuel, sonore ou tour bonus pour
+        // le hit qui provoque l'overshoot.
+        _comboBannerTimer?.cancel();
+        showComboBanner.value = false;
+        currentCombo.value = null;
+        comboCount.value = 0;
+      } else if (result.hasCombo) {
         final combo = result.combo!;
         currentCombo.value = combo;
         comboCount.value = combo.count;
@@ -613,25 +620,27 @@ class GameController extends GetxController {
       }
       player.incrementBallsThisTurn();
 
-      _playScoreFeedback(event, result);
-
-      if (result.isVictory) {
-        _onVictory(player);
-        return;
-      }
-
       if (result.isOvershoot) {
+        _playSfx(AssetPaths.audioOvershoot);
         if (config.mode == GameMode.hardcore) {
-          final overshootBy = player.score.value - config.targetScore;
+          final overshootBy = result.newScore - config.targetScore;
           _ttsSpeak('tts_hardcore_overshoot', params: {
             'points': '$overshootBy',
           });
         } else {
           _ttsSpeak('tts_overshoot');
         }
+      } else {
+        _playScoreFeedback(event, result);
       }
 
-      final hasBonusTurn = result.hasCombo &&
+      if (result.isVictory) {
+        _onVictory(player);
+        return;
+      }
+
+      final hasBonusTurn = !result.isOvershoot &&
+          result.hasCombo &&
           result.combo!.grantsBonusTurn;
 
       if (!hasBonusTurn &&
