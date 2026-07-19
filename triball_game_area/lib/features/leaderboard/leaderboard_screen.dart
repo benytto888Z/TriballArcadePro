@@ -1,11 +1,11 @@
 // triball_game_area/lib/features/leaderboard/leaderboard_screen.dart
 
-import 'package:Tribal_Game_Area/core/values/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../core/constants/game_constants.dart';
 import '../../core/theme/theme_colors.dart';
+import '../../core/values/app_styles.dart';
 import '../../data/models/game_state_model.dart';
 import '../../widgets/floating_particles.dart';
 import '../../widgets/themed_text.dart';

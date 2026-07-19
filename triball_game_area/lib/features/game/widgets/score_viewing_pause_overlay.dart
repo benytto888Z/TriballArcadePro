@@ -243,7 +243,7 @@ class ScoreViewingPauseOverlay extends GetView<GameController> {
                                 '$remaining',
                                 style: TextStyle(
                                   fontFamily: GameConstants.gameFontFamily,
-                                  fontSize: GameScreenBreakpoints.scoreViewingCountdownFontSize(),
+                                  fontSize: GameScreenBreakpoints.scoreViewingCountdownFontSize() * 1.7,
                                   fontWeight: FontWeight.w900,
                                   color: ThemeColors.warning,
                                   shadows:[

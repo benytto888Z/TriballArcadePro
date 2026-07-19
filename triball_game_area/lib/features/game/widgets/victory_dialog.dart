@@ -14,8 +14,11 @@ class VictoryDialog extends GetView<GameController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      if (!controller.isVictory) return const SizedBox.shrink();
+      return Obx(() {
+        if (!controller.isVictory ||
+            !controller.showVictoryDialog.value) {
+          return const SizedBox.shrink();
+        }
       final winner = controller.winner.value;
       if (winner == null) return const SizedBox.shrink();
 
@@ -268,66 +271,22 @@ class VictoryDialog extends GetView<GameController> {
                                 ),
                               ],
 
-                              // SizedBox(height: 18.h),
-
-                              // Actions
-                              /*Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  if (!controller.isTournament)
-                                    _ActionButton(
-                                      label: 'play_again'.tr,
-                                      icon: Icons.replay,
-                                      color: ThemeColors.primary,
-                                      onTap: controller.restartGame,
-                                    ),
-                                  // ✅ GAME AREA : Pas de "Rejouer" (la config vient de Config Area)
-                                  // Le retour est AUTOMATIQUE après 10s
-
-                                  // Leaderboard (si Solo Chrono)
-                                  if (controller.isSoloChrono)
-                                    _ActionButton(
-                                      label: 'view_leaderboard'.tr,
-                                      icon: Icons.leaderboard,
-                                      color: ThemeColors.warning,
-                                      onTap: controller.goToLeaderboard,
-                                    ),
-
-                                  // Retour immédiat au Waiting
-                                  _ActionButton(
-                                    label: 'back_to_waiting'.tr,
-                                    icon: Icons.tv,
-                                    color: ThemeColors.textSecondary,
-                                    onTap: controller.quitGame,
-                                  ),
-                                ],
-                              ),*/
-                              /* SizedBox(height: 12.h),
-                              Obx(() {
-                                final countdown =
-                                    controller.returnToWaitingCountdown.value;
-                                if (countdown <= 0) return const SizedBox.shrink();
-                                return Text(
-                                  // '${'auto_return_in'.tr} $countdown s',
-                                  '$countdown s',
+                              if (controller.isNotInTop10.value &&
+                                  controller.isSoloChrono) ...[
+                                SizedBox(height: 14.h),
+                                Text(
+                                  'not_in_top_10'.tr,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontFamily: GameConstants.gameFontFamily,
-                                    fontSize: 90.sp,
-                                    fontWeight: FontWeight.w800,
-                                    color: ThemeColors.textSecondary,
-                                    shadows:[
-                                      Shadow(
-                                        color: Color(0xff0b0302),
-                                        offset: Offset(0, 6),
-                                        blurRadius: 6,
-                                      ),
-                                    ],
+                                    color: ThemeColors.warning,
+                                    fontSize: 60.sp,
+                                    fontWeight: FontWeight.w900,
                                     letterSpacing: 2,
                                   ),
-                                );
-                              }),
-                              SizedBox(height: 18.h),*/
+                                ),
+                              ],
+
                             ],
                           ),
                         ],

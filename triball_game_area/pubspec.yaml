@@ -1,4 +1,4 @@
-name: Tribal_Game_Area
+name: tribal_game_area
 description: "triball arcade game pro"
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev

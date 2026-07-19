@@ -68,6 +68,8 @@ class GameController extends GetxController {
   final Rx<ScoreApplyResult?> lastResult = Rx<ScoreApplyResult?>(null);
   final Rx<PlayerModel?> winner = Rx<PlayerModel?>(null);
   final RxBool isNewRecord = false.obs;
+  final RxBool isNotInTop10 = false.obs;
+  final RxBool showVictoryDialog = false.obs;
   final RxInt newRecordRank = 0.obs;
   final RxInt comboCount = 0.obs;
 
@@ -454,7 +456,9 @@ class GameController extends GetxController {
   // ============================================
   void _autoSwitchToNextPlayer({
     required String reason,
-    Duration scoreOverlayDelay = Duration.zero,
+    Duration scoreOverlayDelay = const Duration(
+      seconds: GameConstants.comboTriplePauseBeforeScoreOverlaySeconds,
+    ),
   }) {
     if (!isPlaying) return;
 
@@ -468,7 +472,7 @@ class GameController extends GetxController {
     _comboTriplePauseTimer?.cancel();
     if (scoreOverlayDelay > Duration.zero) {
       if (kDebugMode) {
-        print('🔥 TRIPLE pause: ${scoreOverlayDelay.inSeconds}s before score overlay');
+        print('⏸ UI pause: ${scoreOverlayDelay.inSeconds}s before score overlay');
       }
       _comboTriplePauseTimer = Timer(scoreOverlayDelay, () {
         _comboTriplePauseTimer = null;
@@ -632,17 +636,8 @@ class GameController extends GetxController {
 
       if (!hasBonusTurn &&
           player.ballsThrownThisTurn.value >= config.ballsPerTurn) {
-        final isTripleCombo = isComboMode &&
-            result.combo?.type == ComboType.tripleCombo;
-
         _autoSwitchToNextPlayer(
           reason: '${config.ballsPerTurn} balls played',
-          scoreOverlayDelay: isTripleCombo
-              ? const Duration(
-                  seconds: GameConstants
-                      .comboTriplePauseBeforeScoreOverlaySeconds,
-                )
-              : Duration.zero,
         );
       }
     } catch (e) {
@@ -731,16 +726,13 @@ class GameController extends GetxController {
 
     _sendStatusToConfigArea('victory');
 
-    // ✅ Reset le flag anti-double
     _leaderboardSaved = false;
+    isNewRecord.value = false;
+    isNotInTop10.value = false;
+    showVictoryDialog.value = false;
 
-    // ✅ Sauvegarde UNE SEULE FOIS
-    if (savesToLeaderboard && !_leaderboardSaved) {
-      _leaderboardSaved = true;
-      _saveToLeaderboard(player);
-    }
-
-    _startReturnToWaitingTimer();
+    // Le résultat Top 10 est déterminé avant l'affichage du dialogue.
+    _prepareVictoryPresentation(player);
 
     if (kDebugMode) {
       print('🏆 VICTORY:');
@@ -752,6 +744,30 @@ class GameController extends GetxController {
     }
   }
 
+
+  Future<void> _prepareVictoryPresentation(PlayerModel player) async {
+    final minimumPause = Future<void>.delayed(
+      const Duration(
+        seconds: GameConstants.comboTriplePauseBeforeScoreOverlaySeconds,
+      ),
+    );
+
+    bool enteredTop10 = false;
+    if (savesToLeaderboard && !_leaderboardSaved) {
+      _leaderboardSaved = true;
+      enteredTop10 = await _saveToLeaderboard(player);
+    }
+
+    if (isSoloChrono && !enteredTop10) {
+      isNotInTop10.value = true;
+      _ttsSpeak('tts_not_in_top_10');
+    }
+
+    await minimumPause;
+    if (isClosed || phase.value != GamePhase.victory) return;
+    showVictoryDialog.value = true;
+    _startReturnToWaitingTimer();
+  }
 
   // ============================================
   // ✅ RETURN TO WAITING TIMER — Ne re-sauvegarde PAS
@@ -846,11 +862,11 @@ class GameController extends GetxController {
 // ============================================
   // ✅ SAVE TO LEADERBOARD — Version anti-double
   // ============================================
-  Future<void> _saveToLeaderboard(PlayerModel player) async {
+  Future<bool> _saveToLeaderboard(PlayerModel player) async {
     // ✅ Double check anti-double
     if (!_leaderboardSaved) {
       if (kDebugMode) print('❌ _saveToLeaderboard called but flag is false');
-      return;
+      return false;
     }
 
     // ✅ Utilise le snapshot (pas un recalcul)
@@ -871,12 +887,12 @@ class GameController extends GetxController {
 
     if (timeMs <= 0) {
       if (kDebugMode) print('❌ Cannot save: timeMs is 0');
-      return;
+      return false;
     }
 
     if (!_ws.isConnected) {
       if (kDebugMode) print('❌ Cannot save: not connected');
-      return;
+      return false;
     }
 
     // ✅ ENVOI UNIQUE
@@ -916,11 +932,13 @@ class GameController extends GetxController {
           newRecordRank.value = idx + 1;
           _ttsSpeak('tts_new_record');
           if (kDebugMode) print('🏅 NEW RECORD! Rank #${idx + 1}');
+          return true;
         }
       }
     } catch (e) {
       if (kDebugMode) print('⚠️ Fetch leaderboard error: $e');
     }
+    return false;
   }
 
   /// ✅ Sauvegarde l'avatar du gagnant pour persistance top 10
@@ -990,6 +1008,8 @@ class GameController extends GetxController {
     gameEndTime.value = null;
     winner.value = null;
     isNewRecord.value = false;
+    isNotInTop10.value = false;
+    showVictoryDialog.value = false;
     newRecordRank.value = 0;
     lastEvent.value = null;
     lastResult.value = null;
