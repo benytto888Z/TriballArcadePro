@@ -4,6 +4,20 @@ import 'package:flutter/material.dart';
 
 class GameConstants {
 
+  // ============================================
+// ADMIN SECURITY
+// ============================================
+
+  /// Code administrateur de Config Area.
+  ///
+  /// Utilisé pour :
+  /// - déverrouiller l'interface pendant une partie ;
+  /// - accéder aux commandes administratives protégées.
+  static const String adminSecurityCode = '1234';
+
+  /// Alias temporaire pour rester compatible avec l'ancien code.
+  static const String leaderboardClearCode = adminSecurityCode;
+
   // ==========================================
   // ✅ NEW : REMOTE THEME + LANGUAGE SYNC
   // ==========================================

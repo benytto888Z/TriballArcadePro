@@ -656,6 +656,9 @@ const Map<String, String> frFR = {
   'leaderboard_display_duration': 'Durée affichage classement',
   'admin_controls': 'Contrôles admin',
   'unlock_admin': 'Déverrouiller (code admin)',
+  'admin_unlock': 'Déverrouillage administrateur',
+  'session_locked_title': 'PARTIE EN COURS',
+  'session_locked_message': 'La configuration est verrouillée. Elle sera automatiquement déverrouillée lorsque Game Area reviendra à l’écran d’attente.',
   'lock_admin': 'Verrouiller',
   'state_paused': 'En pause',
 

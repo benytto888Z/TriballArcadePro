@@ -204,6 +204,7 @@ class GameConstants {
   // ==========================================
   // ✅ NEW : CODE DE SÉCURITÉ POUR EFFACER LE CLASSEMENT
   // ==========================================
+
   static const String leaderboardClearCode = '1234';
 
   // ==========================================

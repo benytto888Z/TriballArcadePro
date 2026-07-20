@@ -79,6 +79,7 @@ class WaitingController extends GetxController {
   void onReady() {
     super.onReady();
     audio.playBgm(AssetPaths.audioBgmNeon);
+    _sendWaitingStatus();
 
     // Demande le premier leaderboard
     if (ws.isConnected) {
@@ -101,6 +102,9 @@ class WaitingController extends GetxController {
   void _listenToConnection() {
     ever(ws.connectionState, (_) {
       espConnected.value = ws.isConnected;
+      if (ws.isConnected) {
+        Future.delayed(const Duration(milliseconds: 500), _sendWaitingStatus);
+      }
     });
     espConnected.value = ws.isConnected;
 
@@ -200,6 +204,7 @@ class WaitingController extends GetxController {
   void _startLeaderboardCarousel() {
     // Change de mode toutes les 10 secondes
     _carouselTimer = Timer.periodic(const Duration(seconds: 10), (_) {
+      _sendWaitingStatus();
       currentLeaderboardMode.value++;
 
       // Demande le nouveau leaderboard à l'ESP32
@@ -227,6 +232,16 @@ class WaitingController extends GetxController {
     if (ws.isConnected) {
       ws.requestLeaderboard(currentMode);
     }
+  }
+
+  void _sendWaitingStatus() {
+    if (!ws.isConnected) return;
+    listener.sendStatusUpdate(
+      state: 'waiting',
+      scores: const {},
+      elapsedSeconds: 0,
+      currentTurn: 0,
+    );
   }
 
   /// Met à jour le dernier gagnant (appelé après une victoire)

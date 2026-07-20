@@ -604,6 +604,9 @@ const Map<String, String> deDE = {
 
   'admin_controls': 'Admin-Steuerung',
   'unlock_admin': 'Entsperren (Admin-Code)',
+  'admin_unlock': 'Administrator-Entsperrung',
+  'session_locked_title': 'SPIEL LÄUFT',
+  'session_locked_message': 'Die Konfiguration ist gesperrt. Sie wird automatisch entsperrt, sobald Game Area zum Wartebildschirm zurückkehrt.',
   'lock_admin': 'Sperren',
   'state_paused': 'Pausiert',
 

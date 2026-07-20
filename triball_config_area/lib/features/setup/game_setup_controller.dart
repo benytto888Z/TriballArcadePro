@@ -9,6 +9,7 @@ import '../../core/controllers/config_broadcaster_controller.dart';
 import '../../core/controllers/websocket_controller.dart';
 import '../../core/services/audio_service.dart';
 import '../../core/services/avatar_capture_service.dart';
+import '../../core/services/game_session_guard_service.dart';
 import '../../core/services/storage_service.dart';
 import '../../core/theme/theme_colors.dart';
 import '../../core/utils/helpers.dart';
@@ -447,6 +448,7 @@ class GameSetupController extends GetxController {
       // L'ACK ESP32 confirme qu'au moins un Game Area a reçu la config.
       // Envoyer les URLs avant de nettoyer la session locale.
       _sendAvatars();
+      Get.find<GameSessionGuardService>().lockForGame('countdown');
       await _resetConfigAreaAfterSuccessfulSend();
     } else {
       sendError.value = 'config_send_failed'.tr;

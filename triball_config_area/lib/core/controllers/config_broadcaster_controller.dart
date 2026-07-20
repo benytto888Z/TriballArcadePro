@@ -10,6 +10,7 @@ import '../../data/models/match_type_model.dart';
 import '../../data/models/remote_game_status_model.dart';
 import '../constants/game_constants.dart';
 import '../localization/locale_controller.dart';
+import '../services/game_session_guard_service.dart';
 import '../theme/app_theme_controller.dart';
 import 'platform_event_bus.dart';
 import 'websocket_controller.dart';
@@ -163,6 +164,11 @@ class ConfigBroadcasterController extends GetxController {
   /// Envoie la configuration de partie à toutes les Game Area connectées
   /// Retourne true si l'envoi a réussi (WebSocket ok, pas de garantie de réception)
   Future<bool> sendGameConfig(GameConfig config) async {
+    final guard = Get.find<GameSessionGuardService>();
+    if (!guard.canConfigureGame) {
+      if (kDebugMode) print('🔒 Config send rejected: game session active');
+      return false;
+    }
     if (!canStartGame) {
       if (kDebugMode) {
         print('⚠️ Cannot send config: Config Area and Game Area are not both ready');
@@ -240,11 +246,13 @@ class ConfigBroadcasterController extends GetxController {
 
   /// ✅ Pause le jeu à distance (admin)
   void remotePause() {
+    if (!Get.find<GameSessionGuardService>().canUseAdminCommands) return;
     _ws.sendRemotePause();
   }
 
   /// ✅ Reprend le jeu à distance (admin)
   void remoteResume() {
+    if (!Get.find<GameSessionGuardService>().canUseAdminCommands) return;
     _ws.sendRemoteResume();
   }
 
@@ -254,6 +262,7 @@ class ConfigBroadcasterController extends GetxController {
 
   /// Envoie une commande d'arrêt de partie à toutes les Game Area
   Future<bool> sendStopGame() async {
+    if (!Get.find<GameSessionGuardService>().canUseAdminCommands) return false;
     if (!_ws.isConnected) return false;
     _ws.sendStopGameRemote();
     if (kDebugMode) print('🛑 Stop game sent to Game Area(s)');
@@ -280,6 +289,7 @@ class ConfigBroadcasterController extends GetxController {
 
   /// ✅ Affiche le leaderboard d'un mode sur Game Area
   void showLeaderboard(GameMode mode) {
+    if (!Get.find<GameSessionGuardService>().canUseAdminCommands) return;
     String modeKey;
     switch (mode) {
       case GameMode.classic:  modeKey = 'classic'; break;
@@ -298,6 +308,7 @@ class ConfigBroadcasterController extends GetxController {
 
   /// ✅ Retour au WaitingScreen sur Game Area
   void showWaiting() {
+    if (!Get.find<GameSessionGuardService>().canUseAdminCommands) return;
     _ws.showWaitingOnGameArea();
   }
 }

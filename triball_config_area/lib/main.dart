@@ -15,6 +15,7 @@ import 'core/services/ websocket_service.dart';
 import 'core/services/audio_service.dart';
 import 'core/services/avatar_capture_service.dart';
 import 'core/services/game_settings_service.dart';
+import 'core/services/game_session_guard_service.dart';
 import 'core/services/platform_config_service.dart';
 import 'core/services/screen_service.dart';
 import 'core/services/settings_export_service.dart';
@@ -24,6 +25,7 @@ import 'core/theme/app_theme_controller.dart';
 import 'core/utils/platform_helper.dart';
 import 'routes/app_pages.dart';
 import 'routes/app_routes.dart';
+import 'widgets/config_area_lock_overlay.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -68,6 +70,7 @@ void main() async {
   Get.put(GameSettingsService(), permanent: true);
   Get.put(PlatformConfigService(), permanent: true);    // ✅ GARDER
   Get.put(ConfigBroadcasterController(), permanent: true);
+  Get.put(GameSessionGuardService(), permanent: true);
   Get.put(SettingsExportService(), permanent: true);
   Get.put(AvatarCaptureService(), permanent: true);
 
@@ -115,7 +118,7 @@ class TriballConfigApp extends StatelessWidget {
               data: MediaQuery.of(context).copyWith(
                 textScaler: TextScaler.noScaling,
               ),
-              child: widget,
+              child: ConfigAreaLockOverlay(child: widget),
             );
           },
         ));

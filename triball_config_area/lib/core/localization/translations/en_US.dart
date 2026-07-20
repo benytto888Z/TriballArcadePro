@@ -624,6 +624,9 @@ const Map<String, String> enUS = {
 
   'admin_controls': 'Admin Controls',
   'unlock_admin': 'Unlock (admin code)',
+  'admin_unlock': 'Administrator unlock',
+  'session_locked_title': 'GAME IN PROGRESS',
+  'session_locked_message': 'Configuration is locked. It will unlock automatically when Game Area returns to the waiting screen.',
   'lock_admin': 'Lock',
   'state_paused': 'Paused',
 

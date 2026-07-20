@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import '../constants/ esp32_config.dart';
 import '../constants/game_constants.dart';
 import '../services/ websocket_service.dart';
+import '../services/game_session_guard_service.dart';
 import '../../data/models/platform_error_model.dart';
 import '../../data/models/platform_ready_model.dart';
 import '../../data/models/platform_status_model.dart';
@@ -365,6 +366,19 @@ class WebSocketController extends GetxController {
 
   /// Envoie une commande JSON brute
   void sendCommand(Map<String, dynamic> data) {
+    if (Get.isRegistered<GameSessionGuardService>()) {
+      final guard = Get.find<GameSessionGuardService>();
+      final type = data['type'] as String? ?? '';
+      const backgroundTypes = {
+        GameConstants.msgTypePing,
+        GameConstants.msgTypeClientDeclare,
+        GameConstants.msgTypeGetClientsInfo,
+      };
+      if (guard.isLocked && !backgroundTypes.contains(type)) {
+        if (kDebugMode) print('🔒 Command blocked while game is active: $type');
+        return;
+      }
+    }
     if (!isConnected) {
       if (kDebugMode) print('⚠️ Cannot send (not connected): $data');
       return;

@@ -600,6 +600,9 @@ const Map<String, String> esES = {
 
   'admin_controls': 'Controles admin',
   'unlock_admin': 'Desbloquear (código admin)',
+  'admin_unlock': 'Desbloqueo de administrador',
+  'session_locked_title': 'PARTIDA EN CURSO',
+  'session_locked_message': 'La configuración está bloqueada. Se desbloqueará automáticamente cuando Game Area vuelva a la pantalla de espera.',
   'lock_admin': 'Bloquear',
   'state_paused': 'En pausa',
 
