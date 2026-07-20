@@ -25,7 +25,7 @@ import 'core/theme/app_theme_controller.dart';
 import 'core/utils/platform_helper.dart';
 import 'routes/app_pages.dart';
 import 'routes/app_routes.dart';
-import 'widgets/config_area_lock_overlay.dart';
+import 'widgets/futuristic_config_area_lock_overlay.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -118,7 +118,9 @@ class TriballConfigApp extends StatelessWidget {
               data: MediaQuery.of(context).copyWith(
                 textScaler: TextScaler.noScaling,
               ),
-              child: ConfigAreaLockOverlay(child: widget),
+              child: FuturisticConfigAreaLockOverlay(
+                child: widget,
+              ),
             );
           },
         ));

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import '../../../core/constants/game_constants.dart';
 import '../../../core/theme/theme_colors.dart';
 import '../tournament_controller.dart';
 
@@ -39,12 +40,14 @@ class TournamentStatsBar extends GetView<TournamentController> {
                   Text(
                     t.name.toUpperCase(),
                     style: TextStyle(
-                      fontFamily: 'Orbitron',
-                      fontSize: 11.sp,
-                      fontWeight: FontWeight.w800,
+                      fontFamily: GameConstants.gameFontFamily,
+                      fontSize: 61.sp,
+                      fontWeight: FontWeight.w900,
                       color: ThemeColors.primary,
                       letterSpacing: 1.5,
-                    ),
+                       shadows : [Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 8)],
+
+              ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -53,9 +56,11 @@ class TournamentStatsBar extends GetView<TournamentController> {
                     '${'tournament_round'.tr} ${t.currentRound.value}/${t.totalRounds} · $completed/$total',
                     style: TextStyle(
                       fontFamily: 'Orbitron',
-                      fontSize: 9.sp,
+                      fontSize: 59.sp,
                       color: ThemeColors.textSecondary,
                       letterSpacing: 1,
+                      shadows : [Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 8)],
+
                     ),
                   ),
                 ],
@@ -81,10 +86,12 @@ class TournamentStatsBar extends GetView<TournamentController> {
                   Text(
                     '${(progress * 100).round()}%',
                     style: TextStyle(
-                      fontFamily: 'Orbitron',
-                      fontSize: 9.sp,
+                      fontFamily: GameConstants.gameFontFamily,
+                      fontSize: 59.sp,
                       color: ThemeColors.warning,
                       fontWeight: FontWeight.w800,
+                      shadows : [Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 8)],
+
                     ),
                   ),
                 ],

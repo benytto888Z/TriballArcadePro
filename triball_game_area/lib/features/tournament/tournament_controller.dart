@@ -8,6 +8,7 @@ import '../../core/constants/asset_paths.dart';
 import '../../core/controllers/config_listener_controller.dart';
 import '../../core/controllers/websocket_controller.dart';
 import '../../core/services/audio_service.dart';
+import '../../core/services/avatar_storage_service.dart';
 import '../../core/services/game_settings_service.dart';
 import '../../core/utils/helpers.dart';
 import '../../data/models/game_config_model.dart';
@@ -26,6 +27,7 @@ class TournamentController extends GetxController {
   final ConfigListenerController _listener =
   Get.find<ConfigListenerController>();
   final GameSettingsService _settings = Get.find<GameSettingsService>();
+  final AvatarStorageService _avatars = Get.find<AvatarStorageService>();
 
   // ============================================
   // OBSERVABLES
@@ -108,12 +110,20 @@ class TournamentController extends GetxController {
     _expectingMatchResult = true;
     waitingForMatch.value = true;
 
+    final base = originalConfig.value;
     final config = GameConfig.tournament(
       mode: selectedMode.value,
       players: [
         match.player1.value!.name,
         match.player2.value!.name,
       ],
+      overshootRule: base?.overshootRule ?? OvershootRule.refuse,
+      ttsEnabled: base?.ttsEnabled ?? true,
+      soundEnabled: base?.soundEnabled ?? true,
+    ).copyWith(
+      ballsPerTurn: base?.ballsPerTurn,
+      turnDurationSeconds: base?.turnDurationSeconds,
+      turnWarningSeconds: base?.turnWarningSeconds,
     );
 
     // Notifie Config Area
@@ -176,7 +186,21 @@ class TournamentController extends GetxController {
   // BACK TO WAITING
   // ============================================
   void backToWaiting() {
+    final t = tournament.value;
+    // Cette sortie normale n'est autorisée qu'une fois la finale terminée.
+    if (t == null || !t.isCompleted.value) return;
+
     _audio.playSfx(AssetPaths.audioButtonPress);
+    _ws.stopGame();
+    _avatars.clearCurrentGameAvatars();
+    _ws.sendClearAvatars();
+    _listener.sendStatusUpdate(
+      state: 'waiting',
+      scores: const {},
+      elapsedSeconds: 0,
+      winner: t.champion.value?.name,
+      currentTurn: t.totalRounds,
+    );
     Get.offAllNamed(AppRoutes.waiting);
   }
 

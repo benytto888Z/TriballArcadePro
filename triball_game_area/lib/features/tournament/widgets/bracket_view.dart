@@ -27,8 +27,8 @@ class BracketView extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                minHeight: availableHeight,
-                maxHeight: availableHeight,
+                minHeight: availableHeight * 5,
+                maxHeight: availableHeight * 5,
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,

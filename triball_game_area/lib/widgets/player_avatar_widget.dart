@@ -51,8 +51,10 @@ class PlayerAvatarWidget extends StatelessWidget {
 
     // GAME SCREEN : le cache temporaire est Rx et doit rester dans Obx.
     return Obx(() {
-      // Bytes pré-téléchargés de la partie en cours.
-      final cachedBytes = avatarService.getCachedBytesByIndex(playerIndex);
+      // Le nom est prioritaire en tournoi : les deux joueurs du duel ont des
+      // index locaux 0/1 différents de leurs index dans la liste initiale.
+      final cachedBytes = avatarService.getCachedBytes(playerName) ??
+          avatarService.getCachedBytesByIndex(playerIndex);
       if (cachedBytes != null) {
         return _PhotoAvatar(
           bytes: cachedBytes,
@@ -64,7 +66,8 @@ class PlayerAvatarWidget extends StatelessWidget {
       }
 
       // 2. URL réseau
-      final url = avatarService.getAvatarUrlByIndex(playerIndex);
+      final url = avatarService.getAvatarUrl(playerName) ??
+          avatarService.getAvatarUrlByIndex(playerIndex);
       if (url != null && url.isNotEmpty) {
         return _NetworkAvatar(
           url: url,

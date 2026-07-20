@@ -124,7 +124,7 @@ class _ChampionDialogContentState extends State<_ChampionDialogContent> {
                       'tournament_winner'.tr.toUpperCase(),
                       style: TextStyle(
                         fontFamily: GameConstants.gameFontFamily,
-                        fontSize: 16.sp,
+                        fontSize: 56.sp,
                         fontWeight: FontWeight.w800,
                         color: widget.color,
                         letterSpacing: 4,
@@ -135,7 +135,7 @@ class _ChampionDialogContentState extends State<_ChampionDialogContent> {
                       widget.championName.toUpperCase(),
                       style: TextStyle(
                         fontFamily: GameConstants.gameFontFamily,
-                        fontSize: 36.sp,
+                        fontSize: 86.sp,
                         fontWeight: FontWeight.w900,
                         color: ThemeColors.textPrimary,
                         letterSpacing: 3,
@@ -206,13 +206,13 @@ class _Stat extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(icon, color: color, size: 20.sp),
+        Icon(icon, color: color, size: 50.sp),
         SizedBox(height: 4.h),
         Text(
           label.toUpperCase(),
           style: TextStyle(
             fontFamily: GameConstants.gameFontFamily,
-            fontSize: 8.sp,
+            fontSize: 58.sp,
             color: ThemeColors.textSecondary,
             letterSpacing: 1.2,
           ),
@@ -222,7 +222,7 @@ class _Stat extends StatelessWidget {
           value,
           style: TextStyle(
             fontFamily: GameConstants.gameFontFamily,
-            fontSize: 14.sp,
+            fontSize: 64.sp,
             fontWeight: FontWeight.w800,
             color: color,
           ),

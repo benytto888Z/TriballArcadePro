@@ -735,6 +735,16 @@ class GameController extends GetxController {
 
     _sendStatusToConfigArea('victory');
 
+    // TOURNOI : enregistrer immédiatement le vainqueur du duel dans le
+    // bracket. La navigation vers le bracket aura lieu après le VictoryDialog.
+    if (isTournament) {
+      try {
+        Get.find<TournamentController>().onMatchResult(winner: player);
+      } catch (e) {
+        if (kDebugMode) print('❌ Tournament result error: $e');
+      }
+    }
+
     _leaderboardSaved = false;
     isNewRecord.value = false;
     isNotInTop10.value = false;
@@ -789,14 +799,40 @@ class GameController extends GetxController {
       returnToWaitingCountdown.value--;
       if (returnToWaitingCountdown.value <= 0) {
         timer.cancel();
-        // ✅ NE PAS re-sauvegarder ici, juste naviguer
-        if (savesToLeaderboard) {
+        // Exception tournoi : retour au bracket entre deux éliminations.
+        // WaitingScreen n'est atteint qu'après la finale.
+        if (isTournament) {
+          _returnToTournamentBracket();
+        } else if (savesToLeaderboard) {
           _goToLeaderboardAfterVictory();
         } else {
           _returnToWaiting(reason: 'victory_timeout');
         }
       }
     });
+  }
+
+  /// Retourne au bracket après un duel de tournoi.
+  /// Ne nettoie pas les avatars : ils restent nécessaires aux tours suivants.
+  void _returnToTournamentBracket() {
+    if (!isTournament) return;
+    _cleanup();
+    _audio.stopBgm();
+    showVictoryDialog.value = false;
+
+    if (kDebugMode) {
+      print('🏆 Tournament match complete → returning to bracket');
+    }
+
+    // TournamentBracketScreen est resté sous GameScreen dans la pile car le
+    // duel a été ouvert avec Get.toNamed().
+    if (Get.currentRoute == AppRoutes.game &&
+        Get.key.currentState?.canPop() == true) {
+      Get.back();
+    } else {
+      // Fallback sans détruire le TournamentController fenix.
+      Get.offNamed(AppRoutes.tournamentBracket);
+    }
   }
 
   /// ✅ Après victoire solo → affiche le leaderboard du mode joué

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import '../../../core/constants/game_constants.dart';
 import '../../../core/theme/theme_colors.dart';
 import '../../../data/models/tournament_model.dart';
 import '../tournament_controller.dart';
@@ -25,7 +26,6 @@ class RoundColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<TournamentController>();
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -43,11 +43,12 @@ class RoundColumn extends StatelessWidget {
           child: Text(
             roundLabel.toUpperCase(),
             style: TextStyle(
-              fontFamily: 'Orbitron',
-              fontSize: 11.sp,
+              fontFamily: GameConstants.gameFontFamily,
+              fontSize: 61.sp,
               fontWeight: FontWeight.w900,
               color: ThemeColors.primary,
               letterSpacing: 2,
+              shadows : [Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 8)],
             ),
           ),
         ),
