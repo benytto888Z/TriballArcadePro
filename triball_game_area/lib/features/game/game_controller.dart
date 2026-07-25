@@ -107,6 +107,8 @@ class GameController extends GetxController {
   // INTERNAL
   // ============================================
   late GameConfig config;
+  TournamentController? _tournamentSession;
+  int? _tournamentMatchId;
   Timer? _gameTimer;
   Timer? _countdownTimer;
   Timer? _eventCooldownTimer;
@@ -236,8 +238,21 @@ class GameController extends GetxController {
   // ============================================
   void _setupArgs() {
     final args = Get.arguments;
+    GameConfig? receivedConfig;
+
     if (args is GameConfig) {
-      config = args.copyWith(
+      receivedConfig = args;
+    } else if (args is Map && args['config'] is GameConfig) {
+      receivedConfig = args['config'] as GameConfig;
+      if (args['tournamentSession'] is TournamentController) {
+        _tournamentSession =
+        args['tournamentSession'] as TournamentController;
+      }
+      _tournamentMatchId = (args['tournamentMatchId'] as num?)?.toInt();
+    }
+
+    if (receivedConfig != null) {
+      config = receivedConfig.copyWith(
         turnDurationSeconds: _settings.turnDurationSeconds.value,
         turnWarningSeconds: _settings.turnWarningSeconds.value,
       );
@@ -739,7 +754,12 @@ class GameController extends GetxController {
     // bracket. La navigation vers le bracket aura lieu après le VictoryDialog.
     if (isTournament) {
       try {
-        Get.find<TournamentController>().onMatchResult(winner: player);
+        final session = _tournamentSession ?? Get.find<TournamentController>();
+        final matchId = _tournamentMatchId;
+        if (matchId == null) {
+          throw StateError('Missing tournamentMatchId in GameScreen arguments');
+        }
+        session.onMatchResult(winner: player, matchId: matchId);
       } catch (e) {
         if (kDebugMode) print('❌ Tournament result error: $e');
       }

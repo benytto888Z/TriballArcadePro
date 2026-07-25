@@ -8,4 +8,19 @@ MPV: [error] cplayer: Failed to recognize file format.
 
 
 
-Comment sécuriser l'interface du Config Area pour que une fois le jeu en marche dans Game Area , les joueurs ne puisse pas interargir sur la tablette si ce n'est l'admin. Ils ne doivent plus avoir la possibilité de cliquer ou d'interagir sur les paramètres et les envoyer au Game Area ou au esp32 dès que le jeu est lancé . Mais dès que la partie est terminée et qu'on revient au WaitingScreen l'interface Config Area sera automatiquement déverrouillé pour permettre une nouvelle partie . Seul l'admin peut déverrouiller l'interface  pendant le deroulement d'une partie .
+Comment sécuriser l'interface du Config Area pour que une fois le jeu en marche dans Game Area , les joueurs ne puisse pas
+interargir sur la tablette si ce n'est l'admin.
+ Ils ne doivent plus avoir la possibilité de cliquer ou d'interagir
+sur les paramètres et les envoyer au Game Area ou au esp32 dès que le jeu
+ est lancé . Mais dès que la partie est terminée et qu'on revient au WaitingScreen l'interface Config Area sera automatiquement déverrouillé
+ pour permettre une nouvelle partie . Seul l'admin peut déverrouiller l'interface  pendant le deroulement d'une partie .
+
+
+ ---------
+
+ Pour les types de Match Competitions et Tournoi on doit joueur équitable. C'est à chaque  fin de tour complet .qu'on doit vérifier
+  les scores de chaque joueur avant
+ de déterminer celui qui a fait exactement le target score. C'est à la fin du jeu du dernier joueur du tour en
+  cours qu'on fera cette vérification ;
+   ce qui permettra d'avoir des fois des vainqueurs excequo.
+    Donc la vérification de vainqueur doit se faire à chaque fin de tour.

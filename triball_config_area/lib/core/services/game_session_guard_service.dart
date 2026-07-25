@@ -60,11 +60,22 @@ class GameSessionGuardService extends GetxService {
 
   void lockForGame([String state = 'countdown']) {
     remoteState.value = state;
+
+    final wasAlreadyActive = gameSessionActive.value;
     gameSessionActive.value = true;
-    adminOverrideActive.value = false;
-    _adminTimer?.cancel();
     _storage.write(_storageKey, true);
-    if (kDebugMode) print('🔒 Config Area locked ($state)');
+
+    // Une nouvelle partie démarre verrouillée. En revanche, les statuts
+    // périodiques playing/paused/victory ne doivent jamais annuler une
+    // session administrateur temporaire déjà accordée.
+    if (!wasAlreadyActive) {
+      adminOverrideActive.value = false;
+      _adminTimer?.cancel();
+    }
+
+    if (kDebugMode) {
+      print('🔒 Game state: $state | adminOverride=${adminOverrideActive.value}');
+    }
   }
 
   void unlockFromWaiting() {

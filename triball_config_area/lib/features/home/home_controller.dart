@@ -1,5 +1,6 @@
 // triball_config_area/lib/features/home/home_controller.dart
 
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import '../../core/constants/asset_paths.dart';
 import '../../core/controllers/config_broadcaster_controller.dart';
@@ -20,10 +21,41 @@ class HomeController extends GetxController {
   // ============================================
   // LIFECYCLE
   // ============================================
+
   @override
   void onReady() {
     super.onReady();
+
     audio.playBgm(AssetPaths.audioBgmNeon);
+
+    refreshHome();
+
+    Future.delayed(
+      const Duration(milliseconds: 700),
+          () {
+        if (!isClosed) {
+          refreshHome();
+        }
+      },
+    );
+  }
+
+  Future<void> refreshHome() async {
+    if (kDebugMode) {
+      print(
+        '🏠 Refreshing Config Area HomeScreen',
+      );
+    }
+
+    if (!ws.isConnected && !ws.isConnecting) {
+      await ws.connect();
+    }
+
+    if (ws.isConnected) {
+      broadcaster.refreshClientsInfo();
+    }
+
+    update();
   }
 
   // ============================================

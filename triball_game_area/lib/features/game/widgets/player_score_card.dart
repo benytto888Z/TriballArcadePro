@@ -53,7 +53,7 @@ class PlayerScoreCard extends StatelessWidget {
           final showProgress = h > 100;
           final showRecentEvents = h > 100;
           final borderWidthActive =
-              GameScreenBreakpoints.playerBorderWidthActive();
+              GameScreenBreakpoints.playerBorderWidthActive() *1.5;
 
           return AnimatedContainer(
             duration: const Duration(milliseconds: 350),
@@ -67,7 +67,7 @@ class PlayerScoreCard extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               color: isActive
-                  ? color.withValues(alpha: 0.10)
+                  ? color.withValues(alpha: 0.05)
                   : ThemeColors.surface.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
@@ -77,7 +77,7 @@ class PlayerScoreCard extends StatelessWidget {
               boxShadow: isActive && ThemeColors.useGlow
                   ? [
                       BoxShadow(
-                        color: color.withValues(alpha: 0.4),
+                        color: color.withValues(alpha: 0.15),
                         blurRadius: 10,
                         offset: Offset(0, 6),
                         spreadRadius: 1,
@@ -101,7 +101,7 @@ class PlayerScoreCard extends StatelessWidget {
                       playerName: player.name,
                       playerIndex: index,
                       size: GameScreenBreakpoints.playerBadgeSize(),
-                      borderWidth: isActive ? 3 : 2,
+                      borderWidth: isActive ? 5 : 2,
                     ),
                     SizedBox(width: 10.w),
 

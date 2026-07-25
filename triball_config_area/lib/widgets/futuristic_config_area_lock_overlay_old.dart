@@ -10,34 +10,11 @@ import '../core/theme/theme_colors.dart';
 import 'animated_triball_background.dart';
 
 /// Écran de sécurité plein écran de Config Area.
-/// Le formulaire admin est rendu dans la même Stack que le verrou : il ne
-/// passe donc jamais derrière le Navigator/Get.dialog.
-class FuturisticConfigAreaLockOverlay extends StatefulWidget {
+/// Il remplace visuellement et interactivement toute l'application pendant
+/// une partie, tout en restant synchronisé avec le thème actif.
+class FuturisticConfigAreaLockOverlay extends StatelessWidget {
   final Widget child;
-
-  const FuturisticConfigAreaLockOverlay({
-    super.key,
-    required this.child,
-  });
-
-  @override
-  State<FuturisticConfigAreaLockOverlay> createState() =>
-      _FuturisticConfigAreaLockOverlayState();
-}
-
-class _FuturisticConfigAreaLockOverlayState
-    extends State<FuturisticConfigAreaLockOverlay> {
-  bool _showAdminPrompt = false;
-
-  void _openAdminPrompt() {
-    if (!mounted) return;
-    setState(() => _showAdminPrompt = true);
-  }
-
-  void _closeAdminPrompt() {
-    if (!mounted) return;
-    setState(() => _showAdminPrompt = false);
-  }
+  const FuturisticConfigAreaLockOverlay({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -46,254 +23,127 @@ class _FuturisticConfigAreaLockOverlayState
     final theme = Get.find<AppThemeController>();
 
     return Obx(() {
+      // Lecture explicite afin de reconstruire l'écran lors d'un changement
+      // Neon / Esports / Carnival effectué par l'administrateur.
       final themeMode = theme.currentTheme.value;
-      final locked = guard.isLocked;
-      final status = broadcaster.remoteGameStatus.value;
+      if (!guard.isLocked) return child;
 
-      // IMPORTANT : le Navigator (widget.child) reste toujours monté.
-      // Le retirer de l'arbre relançait initialRoute/SplashScreen et cassait
-      // le cycle de vie de la connexion WebSocket.
-      return Stack(
-        fit: StackFit.expand,
-        children: [
-          TickerMode(
-            enabled: !locked,
-            child: AbsorbPointer(
-              absorbing: locked,
-              child: widget.child,
-            ),
-          ),
-          if (locked)
+      final status = broadcaster.remoteGameStatus.value;
+      return Scaffold(
+        backgroundColor: ThemeColors.backgroundDeep,
+        body: Stack(
+          children: [
             Positioned.fill(
-              child: Scaffold(
-                backgroundColor: ThemeColors.backgroundDeep,
-                body: Stack(
-                  children: [
-                    Positioned.fill(
-                      child: AnimatedTriballBackground(
-                        opacity: themeMode == AppThemeMode.carnival ? 0.30 : 0.48,
-                        speedFactor: themeMode == AppThemeMode.esports ? 1.25 : 0.9,
-                      ),
-                    ),
-                    Positioned.fill(child: _ThemeAtmosphere(mode: themeMode)),
-                    SafeArea(
-                      child: LayoutBuilder(
-                        builder: (context, constraints) {
-                          final wide = constraints.maxWidth >= 720;
-                          final maxWidth = wide ? 760.0 : 520.0;
-                          return Center(
-                            child: SingleChildScrollView(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: wide ? 36.w : 20.w,
-                                vertical: 24.h,
-                              ),
-                              child: ConstrainedBox(
-                                constraints: BoxConstraints(maxWidth: maxWidth),
-                                child: _SecurityConsole(
-                                  mode: themeMode,
-                                  state: status?.state ?? guard.remoteState.value,
-                                  player: status?.currentPlayerName,
-                                  elapsed: status?.elapsedFormatted ?? '--:--',
-                                  scores: status?.scores ?? const {},
-                                  onAdminUnlock: _openAdminPrompt,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    if (_showAdminPrompt)
-                      Positioned.fill(
-                        child: _AdminUnlockPanel(
-                          guard: guard,
-                          onCancel: _closeAdminPrompt,
-                          onUnlocked: _closeAdminPrompt,
-                        ),
-                      ),
-                  ],
-                ),
+              child: AnimatedTriballBackground(
+                opacity: themeMode == AppThemeMode.carnival ? 0.30 : 0.48,
+                speedFactor: themeMode == AppThemeMode.esports ? 1.25 : 0.9,
               ),
             ),
-        ],
+            Positioned.fill(child: _ThemeAtmosphere(mode: themeMode)),
+            SafeArea(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final wide = constraints.maxWidth >= 720;
+                  final maxWidth = wide ? 760.0 : 520.0;
+                  return Center(
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: wide ? 36.w : 20.w,
+                        vertical: 24.h,
+                      ),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: maxWidth),
+                        child: _SecurityConsole(
+                          mode: themeMode,
+                          state: status?.state ?? guard.remoteState.value,
+                          player: status?.currentPlayerName,
+                          elapsed: status?.elapsedFormatted ?? '--:--',
+                          scores: status?.scores ?? const {},
+                          onAdminUnlock: () => _showAdminDialog(guard),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       );
     });
   }
-}
 
-class _AdminUnlockPanel extends StatefulWidget {
-  final GameSessionGuardService guard;
-  final VoidCallback onCancel;
-  final VoidCallback onUnlocked;
-
-  const _AdminUnlockPanel({
-    required this.guard,
-    required this.onCancel,
-    required this.onUnlocked,
-  });
-
-  @override
-  State<_AdminUnlockPanel> createState() => _AdminUnlockPanelState();
-}
-
-class _AdminUnlockPanelState extends State<_AdminUnlockPanel> {
-  final TextEditingController _codeController = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
-  String? _errorMessage;
-  bool _isChecking = false;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) _focusNode.requestFocus();
-    });
-  }
-
-  @override
-  void dispose() {
-    _codeController.dispose();
-    _focusNode.dispose();
-    super.dispose();
-  }
-
-  void _validateCode() {
-    if (_isChecking) return;
-    setState(() {
-      _isChecking = true;
-      _errorMessage = null;
-    });
-
-    final valid = widget.guard.verifyAndGrantAdmin(
-      _codeController.text.trim(),
-      GameConstants.adminSecurityCode,
-    );
-
-    if (valid) {
-      widget.onUnlocked();
-      return;
-    }
-
-    if (!mounted) return;
-    setState(() {
-      _isChecking = false;
-      _errorMessage = 'invalid_security_code'.tr;
-      _codeController.clear();
-    });
-    _focusNode.requestFocus();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.black.withOpacity(0.82),
-      child: Center(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(24.w),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 480),
-            child: Container(
-              padding: EdgeInsets.all(24.w),
-              decoration: BoxDecoration(
-                color: ThemeColors.surface,
-                borderRadius:
-                BorderRadius.circular(ThemeColors.cornerRadiusLarge),
-                border: Border.all(color: ThemeColors.primary, width: 2),
-                boxShadow: [
-                  BoxShadow(
-                    color: ThemeColors.primary.withOpacity(0.45),
-                    blurRadius: 42,
-                    spreadRadius: 2,
-                  ),
-                ],
+  Future<void> _showAdminDialog(GameSessionGuardService guard) async {
+    final codeController = TextEditingController();
+    await Get.dialog<void>(
+      AlertDialog(
+        backgroundColor: ThemeColors.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(ThemeColors.cornerRadiusLarge),
+          side: BorderSide(color: ThemeColors.primary, width: 2),
+        ),
+        title: Row(
+          children: [
+            Icon(Icons.admin_panel_settings, color: ThemeColors.warning),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                'admin_access'.tr,
+                style: TextStyle(
+                  fontFamily: ThemeColors.fontPrimary,
+                  color: ThemeColors.textPrimary,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.admin_panel_settings,
-                    color: ThemeColors.warning,
-                    size: 54.sp,
-                  ),
-                  SizedBox(height: 14.h),
-                  Text(
-                    'admin_access'.tr,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: ThemeColors.fontDisplay,
-                      fontSize: 22.sp,
-                      fontWeight: FontWeight.w900,
-                      color: ThemeColors.primary,
-                    ),
-                  ),
-                  SizedBox(height: 18.h),
-                  TextField(
-                    controller: _codeController,
-                    focusNode: _focusNode,
-                    autofocus: true,
-                    obscureText: true,
-                    keyboardType: TextInputType.number,
-                    maxLength: 4,
-                    textAlign: TextAlign.center,
-                    onSubmitted: (_) => _validateCode(),
-                    style: TextStyle(
-                      fontFamily: ThemeColors.fontDisplay,
-                      color: ThemeColors.warning,
-                      fontSize: 28.sp,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 10,
-                    ),
-                    decoration: InputDecoration(
-                      labelText: 'enter_admin_code'.tr,
-                      counterText: '',
-                      errorText: _errorMessage,
-                      filled: true,
-                      fillColor: ThemeColors.background.withOpacity(0.65),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: ThemeColors.primary.withOpacity(0.5),
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide:
-                        BorderSide(color: ThemeColors.warning, width: 2),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide:
-                        BorderSide(color: ThemeColors.error, width: 2),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 18.h),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: widget.onCancel,
-                          child: Text('cancel'.tr.toUpperCase()),
-                        ),
-                      ),
-                      SizedBox(width: 12.w),
-                      Expanded(
-                        child: ElevatedButton.icon(
-                          onPressed: _isChecking ? null : _validateCode,
-                          icon: const Icon(Icons.lock_open),
-                          label: Text('unlock_admin'.tr.toUpperCase()),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: ThemeColors.warning,
-                            foregroundColor: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+            ),
+          ],
+        ),
+        content: TextField(
+          controller: codeController,
+          autofocus: true,
+          obscureText: true,
+          keyboardType: TextInputType.number,
+          maxLength: 4,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontFamily: ThemeColors.fontDisplay,
+            color: ThemeColors.primary,
+            fontSize: 24,
+            letterSpacing: 10,
+          ),
+          decoration: InputDecoration(
+            labelText: 'enter_admin_code'.tr,
+            counterText: '',
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: ThemeColors.primary.withOpacity(.5)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: ThemeColors.warning, width: 2),
             ),
           ),
         ),
+        actions: [
+          TextButton(onPressed: Get.back, child: Text('cancel'.tr)),
+          ElevatedButton.icon(
+            onPressed: () {
+              final ok = guard.verifyAndGrantAdmin(
+                codeController.text,
+                GameConstants.adminSecurityCode,
+              );
+              if (ok) {
+                Get.back();
+              } else {
+                Get.snackbar('error'.tr, 'invalid_security_code'.tr);
+              }
+            },
+            icon: const Icon(Icons.lock_open),
+            label: Text('unlock_admin'.tr),
+          ),
+        ],
       ),
+      barrierDismissible: false,
     );
+    codeController.dispose();
   }
 }
 
@@ -305,20 +155,20 @@ class _ThemeAtmosphere extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = switch (mode) {
       AppThemeMode.neon => [
-        const Color(0xE605071A),
-        const Color(0xB30A0E27),
-        const Color(0xB305071A),
-      ],
+          const Color(0xE605071A),
+          const Color(0xB30A0E27),
+          const Color(0xB305071A),
+        ],
       AppThemeMode.esports => [
-        const Color(0xED0F0F1F),
-        const Color(0xC71A1A2E),
-        const Color(0xE60F0F1F),
-      ],
+          const Color(0xED0F0F1F),
+          const Color(0xC71A1A2E),
+          const Color(0xE60F0F1F),
+        ],
       AppThemeMode.carnival => [
-        const Color(0xEFFFF8E7),
-        const Color(0xCFFFF0CA),
-        const Color(0xEFFFF8E7),
-      ],
+          const Color(0xEFFFF8E7),
+          const Color(0xCFFFF0CA),
+          const Color(0xEFFFF8E7),
+        ],
     };
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -355,23 +205,23 @@ class _SecurityConsole extends StatelessWidget {
     final panelColor = ThemeColors.surface.withOpacity(carnival ? .94 : .82);
     final glow = ThemeColors.useGlow
         ? [
-      BoxShadow(
-        color: ThemeColors.primary.withOpacity(.42),
-        blurRadius: 36,
-        spreadRadius: 2,
-      ),
-      BoxShadow(
-        color: ThemeColors.secondary.withOpacity(.22),
-        blurRadius: 70,
-      ),
-    ]
+            BoxShadow(
+              color: ThemeColors.primary.withOpacity(.42),
+              blurRadius: 36,
+              spreadRadius: 2,
+            ),
+            BoxShadow(
+              color: ThemeColors.secondary.withOpacity(.22),
+              blurRadius: 70,
+            ),
+          ]
         : [
-      BoxShadow(
-        color: Colors.black.withOpacity(carnival ? .16 : .48),
-        blurRadius: 28,
-        offset: const Offset(0, 14),
-      ),
-    ];
+            BoxShadow(
+              color: Colors.black.withOpacity(carnival ? .16 : .48),
+              blurRadius: 28,
+              offset: const Offset(0, 14),
+            ),
+          ];
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),

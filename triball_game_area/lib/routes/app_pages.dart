@@ -1,7 +1,7 @@
 // triball_game_area/lib/routes/app_pages.dart
 
 import 'package:get/get.dart';
-import '../features/tournament/tournament_bracket_screen.dart';
+import '../features/tournament/tournament_bracket_screenOLD.dart';
 import '../features/tournament/tournament_controller.dart';
 import 'app_routes.dart';
 import '../features/splash/splash_screen.dart';

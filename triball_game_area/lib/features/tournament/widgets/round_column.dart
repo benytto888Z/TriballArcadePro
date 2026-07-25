@@ -1,11 +1,10 @@
 // triball_game_area/lib/features/tournament/widgets/round_column.dart
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import '../../../core/constants/game_constants.dart';
 import '../../../core/theme/theme_colors.dart';
 import '../../../data/models/tournament_model.dart';
+import '../../game/utils/game_screen_breakpoints.dart';
 import '../tournament_controller.dart';
 import 'match_card.dart';
 
@@ -26,13 +25,20 @@ class RoundColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<TournamentController>();
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
+
+    return SizedBox(
+      width: GameScreenBreakpoints.tournamentRoundWidth(),
+      child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-          margin: EdgeInsets.only(bottom: 10.h),
+          padding: EdgeInsets.symmetric(
+            horizontal: GameScreenBreakpoints.tournamentRoundHeaderPaddingH(),
+            vertical: GameScreenBreakpoints.tournamentRoundHeaderPaddingV(),
+          ),
+          margin: EdgeInsets.only(
+            bottom: GameScreenBreakpoints.tournamentRoundHeaderBottom(),
+          ),
           decoration: BoxDecoration(
             color: ThemeColors.primary.withOpacity(0.15),
             borderRadius: BorderRadius.circular(20),
@@ -43,12 +49,11 @@ class RoundColumn extends StatelessWidget {
           child: Text(
             roundLabel.toUpperCase(),
             style: TextStyle(
-              fontFamily: GameConstants.gameFontFamily,
-              fontSize: 61.sp,
+              fontFamily: 'Orbitron',
+              fontSize: GameScreenBreakpoints.tournamentRoundHeaderSize(),
               fontWeight: FontWeight.w900,
               color: ThemeColors.primary,
               letterSpacing: 2,
-              shadows : [Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 8)],
             ),
           ),
         ),
@@ -69,6 +74,7 @@ class RoundColumn extends StatelessWidget {
           ),
         ),
       ],
+      ),
     );
   }
 }

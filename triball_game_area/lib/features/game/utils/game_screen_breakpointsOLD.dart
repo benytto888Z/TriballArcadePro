@@ -205,7 +205,7 @@ class GameScreenBreakpoints {
   static double topBarBottomSpacing(int playerCount) {
     if (playerCount > 3) {
       return value(
-        mobile: 35.h, tablet: 40.h, iPad: 120.h, tv32: 120.h, tv45: 120.h,
+        mobile: 35.h, tablet: 40.h, iPad: 100.h, tv32: 100.h, tv45: 100.h,
       );
     }
     return value(
@@ -429,14 +429,6 @@ class GameScreenBreakpoints {
     mobile: 28.sp, tablet: 36.sp, iPad: 42.sp, tv32: 52.sp, tv45: 64.sp,
   );
 
-  static double lbEntryRankSize() => value(
-    mobile: 32.w, tablet: 40.w, iPad: 50.w, tv32: 50.w, tv45: 50.w,
-  );
-
-  static double lbEntryRankFontSize() => value(
-    mobile: 20.sp, tablet: 24.sp, iPad: 65.sp, tv32: 65.sp, tv45: 65.sp,
-  );
-
   // --- LEADERBOARD ENTRY TILE ---
   static double lbEntryNameFontSize() => value(
     mobile: 13.sp, tablet: 15.sp, iPad: 17.sp, tv32: 22.sp, tv45: 28.sp,
@@ -456,6 +448,14 @@ class GameScreenBreakpoints {
 
   static double lbEntryRankEmojiSize() => value(
     mobile: 20.sp, tablet: 24.sp, iPad: 28.sp, tv32: 34.sp, tv45: 42.sp,
+  );
+
+  static double lbEntryRankSize() => value(
+    mobile: 32.w, tablet: 40.w, iPad: 50.w, tv32: 50.w, tv45: 50.w,
+  );
+
+  static double lbEntryRankFontSize() => value(
+    mobile: 20.sp, tablet: 24.sp, iPad: 65.sp, tv32: 65.sp, tv45: 65.sp,
   );
 
   static double lbEntryPaddingH() => value(
@@ -673,19 +673,19 @@ class GameScreenBreakpoints {
     mobile: 7.h, tablet: 9.h, iPad: 11.h, tv32: 13.h, tv45: 16.h,
   );
   static double tournamentStatsTitleSize() => value(
-    mobile: 10.sp, tablet: 13.sp, iPad: 17.sp, tv32: 21.sp, tv45: 25.sp,
+    mobile: 10.sp, tablet: 13.sp, iPad: 37.sp, tv32: 21.sp, tv45: 25.sp,
   );
   static double tournamentStatsSubtitleSize() => value(
-    mobile: 8.sp, tablet: 10.sp, iPad: 13.sp, tv32: 16.sp, tv45: 19.sp,
+    mobile: 8.sp, tablet: 10.sp, iPad: 33.sp, tv32: 16.sp, tv45: 19.sp,
   );
   static double tournamentStatsIconSize() => value(
-    mobile: 16.sp, tablet: 20.sp, iPad: 26.sp, tv32: 32.sp, tv45: 38.sp,
+    mobile: 16.sp, tablet: 20.sp, iPad: 46.sp, tv32: 32.sp, tv45: 38.sp,
   );
   static double tournamentProgressWidth() => value(
-    mobile: 80.w, tablet: 105.w, iPad: 145.w, tv32: 190.w, tv45: 240.w,
+    mobile: 80.w, tablet: 105.w, iPad: 240.w, tv32: 190.w, tv45: 240.w,
   );
   static double tournamentProgressHeight() => value(
-    mobile: 5, tablet: 7, iPad: 9, tv32: 11, tv45: 13,
+    mobile: 5, tablet: 7, iPad: 15, tv32: 11, tv45: 13,
   );
 
   static double tournamentBracketPaddingH() => value(
@@ -695,40 +695,13 @@ class GameScreenBreakpoints {
     mobile: 6.h, tablet: 8.h, iPad: 10.h, tv32: 14.h, tv45: 18.h,
   );
   static double tournamentRoundWidth() => value(
-    mobile: 180.w, tablet: 225.w, iPad: 270.w, tv32: 330.w, tv45: 400.w,
-  );
-
-  /// RoundGrid : quatre cartes par ligne à partir des tablettes.
-  static int tournamentGridColumns(int matchCount) {
-    final maxColumns = isMobile ? 2 : 4;
-    if (matchCount <= 0) return 1;
-    return matchCount.clamp(1, maxColumns) as int;
-  }
-
-  static double tournamentGridCardExtent() => value(
-    mobile: 150.h,
-    tablet: 165.h,
-    iPad: 180.h,
-    tv32: 205.h,
-    tv45: 235.h,
-  );
-
-  static double tournamentGridHSpacing() => value(
-    mobile: 8.w, tablet: 12.w, iPad: 16.w, tv32: 22.w, tv45: 28.w,
-  );
-
-  static double tournamentGridVSpacing() => value(
-    mobile: 8.h, tablet: 10.h, iPad: 13.h, tv32: 17.h, tv45: 22.h,
-  );
-
-  static double tournamentRoundSectionSpacing() => value(
-    mobile: 12.h, tablet: 15.h, iPad: 19.h, tv32: 24.h, tv45: 30.h,
+    mobile: 180.w, tablet: 225.w, iPad: 400.w, tv32: 330.w, tv45: 400.w,
   );
   static double tournamentRoundSpacing() => value(
     mobile: 12.w, tablet: 18.w, iPad: 24.w, tv32: 32.w, tv45: 42.w,
   );
   static double tournamentRoundHeaderSize() => value(
-    mobile: 10.sp, tablet: 12.sp, iPad: 15.sp, tv32: 19.sp, tv45: 23.sp,
+    mobile: 10.sp, tablet: 12.sp, iPad: 35.sp, tv32: 19.sp, tv45: 23.sp,
   );
   static double tournamentRoundHeaderPaddingH() => value(
     mobile: 10.w, tablet: 13.w, iPad: 16.w, tv32: 20.w, tv45: 26.w,
@@ -745,16 +718,16 @@ class GameScreenBreakpoints {
     mobile: 3.h, tablet: 5.h, iPad: 7.h, tv32: 9.h, tv45: 12.h,
   );
   static double tournamentMatchHeaderFontSize() => value(
-    mobile: 8.sp, tablet: 10.sp, iPad: 12.sp, tv32: 15.sp, tv45: 18.sp,
+    mobile: 8.sp, tablet: 10.sp, iPad: 32.sp, tv32: 15.sp, tv45: 18.sp,
   );
   static double tournamentMatchStatusFontSize() => value(
-    mobile: 7.sp, tablet: 9.sp, iPad: 11.sp, tv32: 13.sp, tv45: 16.sp,
+    mobile: 7.sp, tablet: 9.sp, iPad: 31.sp, tv32: 13.sp, tv45: 16.sp,
   );
   static double tournamentMatchIconSize() => value(
-    mobile: 11.sp, tablet: 14.sp, iPad: 18.sp, tv32: 22.sp, tv45: 27.sp,
+    mobile: 11.sp, tablet: 14.sp, iPad: 38.sp, tv32: 22.sp, tv45: 27.sp,
   );
   static double tournamentPlayerFontSize() => value(
-    mobile: 10.sp, tablet: 12.sp, iPad: 15.sp, tv32: 18.sp, tv45: 22.sp,
+    mobile: 10.sp, tablet: 12.sp, iPad: 35.sp, tv32: 18.sp, tv45: 22.sp,
   );
   static double tournamentPlayerSlotPaddingH() => value(
     mobile: 7.w, tablet: 9.w, iPad: 12.w, tv32: 15.w, tv45: 19.w,
@@ -763,16 +736,16 @@ class GameScreenBreakpoints {
     mobile: 6.h, tablet: 8.h, iPad: 10.h, tv32: 13.h, tv45: 16.h,
   );
   static double tournamentPlayerColorBarWidth() => value(
-    mobile: 4.w, tablet: 5.w, iPad: 7.w, tv32: 9.w, tv45: 11.w,
+    mobile: 4.w, tablet: 5.w, iPad: 17.w, tv32: 9.w, tv45: 11.w,
   );
   static double tournamentPlayerColorBarHeight() => value(
-    mobile: 15.h, tablet: 19.h, iPad: 24.h, tv32: 30.h, tv45: 36.h,
+    mobile: 15.h, tablet: 19.h, iPad: 40.h, tv32: 30.h, tv45: 36.h,
   );
   static double tournamentStartButtonFontSize() => value(
-    mobile: 9.sp, tablet: 11.sp, iPad: 14.sp, tv32: 17.sp, tv45: 20.sp,
+    mobile: 9.sp, tablet: 11.sp, iPad: 34.sp, tv32: 17.sp, tv45: 20.sp,
   );
   static double tournamentStartButtonIconSize() => value(
-    mobile: 14.sp, tablet: 17.sp, iPad: 21.sp, tv32: 26.sp, tv45: 31.sp,
+    mobile: 14.sp, tablet: 17.sp, iPad: 41.sp, tv32: 26.sp, tv45: 31.sp,
   );
 
   static double tournamentChampionDialogWidth() => value(
@@ -785,19 +758,19 @@ class GameScreenBreakpoints {
     mobile: 20.w, tablet: 24.w, iPad: 30.w, tv32: 38.w, tv45: 46.w,
   );
   static double tournamentChampionTrophySize() => value(
-    mobile: 72.sp, tablet: 90.sp, iPad: 115.sp, tv32: 145.sp, tv45: 175.sp,
+    mobile: 72.sp, tablet: 90.sp, iPad: 150.sp, tv32: 145.sp, tv45: 175.sp,
   );
   static double tournamentChampionTitleSize() => value(
-    mobile: 15.sp, tablet: 18.sp, iPad: 23.sp, tv32: 29.sp, tv45: 35.sp,
+    mobile: 15.sp, tablet: 18.sp, iPad: 43.sp, tv32: 29.sp, tv45: 35.sp,
   );
   static double tournamentChampionNameSize() => value(
-    mobile: 30.sp, tablet: 38.sp, iPad: 48.sp, tv32: 60.sp, tv45: 72.sp,
+    mobile: 30.sp, tablet: 38.sp, iPad: 50.sp, tv32: 50.sp, tv45: 50.sp,
   );
   static double tournamentChampionStatLabelSize() => value(
-    mobile: 8.sp, tablet: 10.sp, iPad: 13.sp, tv32: 16.sp, tv45: 19.sp,
+    mobile: 8.sp, tablet: 10.sp, iPad: 33.sp, tv32: 33.sp, tv45: 33.sp,
   );
   static double tournamentChampionStatValueSize() => value(
-    mobile: 14.sp, tablet: 17.sp, iPad: 22.sp, tv32: 27.sp, tv45: 33.sp,
+    mobile: 14.sp, tablet: 17.sp, iPad: 42.sp, tv32: 42.sp, tv45: 42.sp,
   );
 
   // ============================================

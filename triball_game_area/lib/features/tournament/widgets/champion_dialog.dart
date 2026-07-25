@@ -8,8 +8,8 @@ import '../../../core/constants/game_constants.dart';
 import '../../../core/services/game_settings_service.dart';
 import '../../../core/theme/theme_colors.dart';
 import '../../../core/utils/helpers.dart';
-import '../../../routes/app_routes.dart';
 import '../tournament_controller.dart';
+import '../../game/utils/game_screen_breakpoints.dart';
 
 class ChampionDialog extends GetView<TournamentController> {
   const ChampionDialog({super.key});
@@ -98,11 +98,21 @@ class _ChampionDialogContentState extends State<_ChampionDialogContent> {
           duration: const Duration(milliseconds: 800),
           curve: Curves.elasticOut,
           builder: (context, scale, _) {
+            final screenHeight = MediaQuery.of(context).size.height;
             return Transform.scale(
               scale: scale,
-              child: Container(
-                width: 500.w,
-                padding: EdgeInsets.all(24.w),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: GameScreenBreakpoints.tournamentChampionDialogWidth(),
+                  maxHeight: screenHeight *
+                      GameScreenBreakpoints.tournamentChampionDialogMaxHeight(),
+                ),
+                child: SingleChildScrollView(
+                  child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(
+                  GameScreenBreakpoints.tournamentChampionPadding(),
+                ),
                 decoration: BoxDecoration(
                   color: ThemeColors.surface,
                   borderRadius: BorderRadius.circular(24),
@@ -118,13 +128,13 @@ class _ChampionDialogContentState extends State<_ChampionDialogContent> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('🏆', style: TextStyle(fontSize: 90.sp)),
+                    Text('🏆', style: TextStyle(fontSize: GameScreenBreakpoints.tournamentChampionTrophySize())),
                     SizedBox(height: 6.h),
                     Text(
                       'tournament_winner'.tr.toUpperCase(),
                       style: TextStyle(
                         fontFamily: GameConstants.gameFontFamily,
-                        fontSize: 56.sp,
+                        fontSize: GameScreenBreakpoints.tournamentChampionTitleSize(),
                         fontWeight: FontWeight.w800,
                         color: widget.color,
                         letterSpacing: 4,
@@ -135,7 +145,7 @@ class _ChampionDialogContentState extends State<_ChampionDialogContent> {
                       widget.championName.toUpperCase(),
                       style: TextStyle(
                         fontFamily: GameConstants.gameFontFamily,
-                        fontSize: 86.sp,
+                        fontSize: GameScreenBreakpoints.tournamentChampionNameSize(),
                         fontWeight: FontWeight.w900,
                         color: ThemeColors.textPrimary,
                         letterSpacing: 3,
@@ -180,6 +190,8 @@ class _ChampionDialogContentState extends State<_ChampionDialogContent> {
                     ),
                   ],
                 ),
+                  ),
+                ),
               ),
             );
           },
@@ -206,13 +218,13 @@ class _Stat extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(icon, color: color, size: 50.sp),
+        Icon(icon, color: color, size: 20.sp),
         SizedBox(height: 4.h),
         Text(
           label.toUpperCase(),
           style: TextStyle(
             fontFamily: GameConstants.gameFontFamily,
-            fontSize: 58.sp,
+            fontSize: GameScreenBreakpoints.tournamentChampionStatLabelSize(),
             color: ThemeColors.textSecondary,
             letterSpacing: 1.2,
           ),
@@ -222,7 +234,7 @@ class _Stat extends StatelessWidget {
           value,
           style: TextStyle(
             fontFamily: GameConstants.gameFontFamily,
-            fontSize: 64.sp,
+            fontSize: GameScreenBreakpoints.tournamentChampionStatValueSize(),
             fontWeight: FontWeight.w800,
             color: color,
           ),

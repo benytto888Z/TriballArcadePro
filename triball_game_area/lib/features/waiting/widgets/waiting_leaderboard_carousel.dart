@@ -51,7 +51,7 @@ class _CarouselContentState extends State<_CarouselContent> {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: GameScreenBreakpoints.waitingLeaderboardPadding(),
-        vertical: GameScreenBreakpoints.waitingLeaderboardPadding() *0.5
+        vertical: GameScreenBreakpoints.waitingLeaderboardPadding() * 0.2
       ),
       decoration: BoxDecoration(
         color: ThemeColors.surface.withOpacity(0.5),
@@ -88,14 +88,14 @@ class _CarouselContentState extends State<_CarouselContent> {
                     Icon(
                       Icons.emoji_events,
                       color: ThemeColors.warning,
-                      size: GameScreenBreakpoints.waitingLeaderboardTitleSize(),
+                      size: GameScreenBreakpoints.waitingLeaderboardTitleSize() * 0.8,
                     ),
                     SizedBox(width: 10.w),
                     Text(
                       'TOP 10',
                       style: TextStyle(
                         fontFamily: AppStyles.defaultFontFamily2,
-                        fontSize: GameScreenBreakpoints.waitingLeaderboardTitleSize()*1.3,
+                        fontSize: GameScreenBreakpoints.waitingLeaderboardTitleSize() * 1.2,
                         fontWeight: FontWeight.w900,
                         color: ThemeColors.warning,
                         shadows: [Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 12)],
@@ -132,7 +132,7 @@ class _CarouselContentState extends State<_CarouselContent> {
                   Text(
                     mode.icon,
                     style: TextStyle(
-                      fontSize: GameScreenBreakpoints.waitingLeaderboardModeFontSize(),
+                      fontSize: GameScreenBreakpoints.waitingLeaderboardModeFontSize() * 0.95,
                     ),
                   ),
                   SizedBox(width: 6.w),
@@ -140,7 +140,7 @@ class _CarouselContentState extends State<_CarouselContent> {
                     mode.translationKey.tr.toUpperCase(),
                     style: TextStyle(
                       fontFamily: AppStyles.defaultFontFamily2,
-                      fontSize: GameScreenBreakpoints.waitingLeaderboardModeFontSize()*1.3,
+                      fontSize: GameScreenBreakpoints.waitingLeaderboardModeFontSize() * 1.1,
                       fontWeight: FontWeight.w800,
                       color: ThemeColors.primary,
                       shadows: [Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 12)],

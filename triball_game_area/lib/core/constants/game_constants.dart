@@ -107,7 +107,7 @@ class GameConstants {
   // ==========================================
   // ✅ VICTORY DIALOG DISPLAY DURATION
   // ==========================================
-  static const int victoryDialogDisplaySeconds = 40;
+  static const int victoryDialogDisplaySeconds = 10;
 
   // ==========================================
   // HOLE VALUES (matches ESP32 sensor mapping)

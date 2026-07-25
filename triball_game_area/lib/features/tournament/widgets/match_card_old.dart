@@ -25,7 +25,6 @@ class MatchCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<TournamentController>();
     return Obx(() {
       final p1 = match.player1.value;
       final p2 = match.player2.value;
@@ -134,16 +133,14 @@ class MatchCard extends StatelessWidget {
               playerIndex: p2?.id ?? 1,
             ),
 
-            // Le démarrage ne dépend plus du callback nullable transmis par
-            // RoundGrid. MatchCard appelle directement le contrôleur de la
-            // session tournoi pour le match courant.
-            if (isCurrent && match.isReady && !isInProgress)
+            // Action button (if current)
+            if (isCurrent && match.isReady && onStart != null)
               _AutoStartButton(
                 key: ValueKey('auto_start_match_${match.matchId}'),
                 matchId: match.matchId,
-                onStart: controller.startCurrentMatch,
+                onStart: onStart!,
               ),
-             /* Padding(
+              Padding(
                 padding: EdgeInsets.all(6.w),
                 child: InkWell(
                   onTap: onStart,
@@ -178,7 +175,7 @@ class MatchCard extends StatelessWidget {
                     ),
                   ),
                 ),
-              ),*/
+              ),
           ],
         ),
       );
@@ -325,18 +322,12 @@ class _AutoStartButtonState extends State<_AutoStartButton> {
         return;
       }
 
-      // TournamentBracketScreen reste monté sous GameScreen/VictoryDialog.
-      // Ne jamais consommer le décompte tant que sa route n'est pas visible.
-      final route = ModalRoute.of(context);
-      if (route == null || !route.isCurrent) {
-        return;
-      }
-
       final next = _countdown - 1;
       if (next <= 0) {
         timer.cancel();
         _hasStarted = true;
         if (mounted) setState(() => _countdown = 0);
+
         widget.onStart();
         return;
       }

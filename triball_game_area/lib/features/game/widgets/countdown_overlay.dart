@@ -50,7 +50,7 @@ class CountdownOverlay extends GetView<GameController> {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.2),
+              color: Colors.black.withValues(alpha: 0.18),
               offset: const Offset(
                 5.0,
                 5.0,
@@ -136,9 +136,9 @@ class CountdownOverlay extends GetView<GameController> {
                             ),
                             textAlign: TextAlign.center,
                           ),
-                          SizedBox(width: 18.w),
+                         // SizedBox(width: 18.w),
                           Text(
-                            " - ${'turn_number'.tr}$turnNumber".toUpperCase(),
+                            "-${'turn_number'.tr}$turnNumber".toUpperCase(),
                             style: TextStyle(
                               fontFamily: GameConstants.gameFontFamily,
                               fontSize: GameScreenBreakpoints.countdownSubtitleSize(),
@@ -156,6 +156,7 @@ class CountdownOverlay extends GetView<GameController> {
                               ],
                             ),
                           ),
+                          SizedBox(width: 18.w),
                         ],
                       ),
                       // ✅ Numéro du tour à afficher

@@ -16,7 +16,7 @@ class WaitingStatusBar extends GetView<WaitingController> {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: GameScreenBreakpoints.waitingStatusBarPaddingH(),
-        vertical: GameScreenBreakpoints.waitingStatusBarPaddingV(),
+        vertical: GameScreenBreakpoints.waitingStatusBarPaddingV() * 0.4,
       ),
       decoration: BoxDecoration(
         color: ThemeColors.surface.withOpacity(0.5),

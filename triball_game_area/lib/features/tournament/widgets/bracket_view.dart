@@ -1,12 +1,12 @@
-// triball_game_area/lib/features/tournament/widgets/bracket_view.dart
-
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import '../../../core/theme/theme_colors.dart';
-import '../../../data/models/tournament_model.dart';
-import 'round_column.dart';
 
+import '../../../data/models/tournament_model.dart';
+import '../../game/utils/game_screen_breakpoints.dart';
+import 'round_grid.dart';
+
+/// Bracket vertical composé de RoundGrid.
+/// Tous les matchs d'un round sont visibles simultanément, jusqu'à 4 par ligne.
 class BracketView extends StatelessWidget {
   final TournamentModel tournament;
 
@@ -18,42 +18,38 @@ class BracketView extends StatelessWidget {
       final totalRounds = tournament.totalRounds;
       final currentMatch = tournament.currentMatch;
 
-      return LayoutBuilder(
-        builder: (context, constraints) {
-          final availableHeight = constraints.maxHeight;
+      return Scrollbar(
+        thumbVisibility: GameScreenBreakpoints.isMobile ||
+            GameScreenBreakpoints.isTablet ||
+            GameScreenBreakpoints.isIPad,
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(
+            horizontal: GameScreenBreakpoints.tournamentBracketPaddingH(),
+            vertical: GameScreenBreakpoints.tournamentBracketPaddingV(),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: List.generate(totalRounds, (index) {
+              final round = index + 1;
+              final matches = tournament.getMatchesForRound(round);
+              final roundLabel = tournament.roundName(round).tr;
 
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: availableHeight * 5,
-                maxHeight: availableHeight * 5,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: List.generate(totalRounds, (i) {
-                  final round = i + 1;
-                  final matches = tournament.getMatchesForRound(round);
-                  final roundLabel = tournament.roundName(round).tr;
-
-                  return Padding(
-                    padding: EdgeInsets.only(right: 20.w),
-                    child: SizedBox(
-                      height: availableHeight,
-                      child: RoundColumn(
-                        round: round,
-                        roundLabel: roundLabel,
-                        matches: matches,
-                        currentMatch: currentMatch,
-                      ),
-                    ),
-                  );
-                }),
-              ),
-            ),
-          );
-        },
+              return Padding(
+                padding: EdgeInsets.only(
+                  bottom: index == totalRounds - 1
+                      ? 0
+                      : GameScreenBreakpoints.tournamentRoundSectionSpacing(),
+                ),
+                child: RoundGrid(
+                  round: round,
+                  roundLabel: roundLabel,
+                  matches: matches,
+                  currentMatch: currentMatch,
+                ),
+              );
+            }),
+          ),
+        ),
       );
     });
   }

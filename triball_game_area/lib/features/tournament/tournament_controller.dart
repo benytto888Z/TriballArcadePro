@@ -38,6 +38,8 @@ class TournamentController extends GetxController {
   final Rx<GameConfig?> originalConfig = Rx<GameConfig?>(null);
 
   bool _expectingMatchResult = false;
+  int? _activeMatchId;
+  bool _navigationInProgress = false;
 
   // ============================================
   // GETTERS
@@ -99,14 +101,25 @@ class TournamentController extends GetxController {
   // START MATCH
   // ============================================
   void startCurrentMatch() {
+    if (_navigationInProgress || waitingForMatch.value) return;
+
     final t = tournament.value;
-    if (t == null) return;
+    if (t == null || t.isCompleted.value) return;
 
     final match = t.currentMatch;
-    if (match == null || !match.isReady) return;
+    if (match == null || !match.isReady || match.isInProgress.value) {
+      if (kDebugMode) {
+        print('⚠️ Tournament match cannot start: '
+            'match=${match?.matchId}, ready=${match?.isReady}, '
+            'inProgress=${match?.isInProgress.value}');
+      }
+      return;
+    }
 
+    _navigationInProgress = true;
     _audio.playSfx(AssetPaths.audioCoinInsert);
     match.markAsStarted();
+    _activeMatchId = match.matchId;
     _expectingMatchResult = true;
     waitingForMatch.value = true;
 
@@ -129,21 +142,52 @@ class TournamentController extends GetxController {
     // Notifie Config Area
     _sendTournamentStatus('match_started');
 
-    Get.toNamed(AppRoutes.game, arguments: config);
+    if (kDebugMode) {
+      print('🏁 Starting tournament match #${match.matchId}: '
+          '${match.player1.value!.name} vs ${match.player2.value!.name}');
+    }
+
+    Get.toNamed(
+      AppRoutes.game,
+      arguments: {
+        'config': config,
+        'tournamentSession': this,
+        'tournamentMatchId': match.matchId,
+      },
+    )?.whenComplete(() {
+      _navigationInProgress = false;
+    });
   }
 
   // ============================================
   // MATCH RESULT (appelé par GameController)
   // ============================================
-  void onMatchResult({required PlayerModel winner}) {
-    if (!_expectingMatchResult) return;
-    _expectingMatchResult = false;
+  void onMatchResult({
+    required PlayerModel winner,
+    required int matchId,
+  }) {
+    if (!_expectingMatchResult || _activeMatchId != matchId) {
+      if (kDebugMode) {
+        print('❌ Tournament result rejected: expected=$_activeMatchId, '
+            'received=$matchId, waiting=$_expectingMatchResult');
+      }
+      return;
+    }
 
     final t = tournament.value;
     if (t == null) return;
 
     final match = t.currentMatch;
-    if (match == null) return;
+    if (match == null || match.matchId != matchId) {
+      if (kDebugMode) {
+        print('❌ Tournament current match mismatch: '
+            'current=${match?.matchId}, received=$matchId');
+      }
+      return;
+    }
+
+    _expectingMatchResult = false;
+    _activeMatchId = null;
 
     final matchWinner = (winner.name == match.player1.value?.name)
         ? match.player1.value
@@ -163,6 +207,13 @@ class TournamentController extends GetxController {
 
     waitingForMatch.value = false;
     tournament.refresh();
+
+    if (kDebugMode) {
+      final next = t.currentMatch;
+      print('✅ Tournament match #$matchId completed. '
+          'Next=${next?.matchId}, ready=${next?.isReady}, '
+          'completed=${t.isCompleted.value}');
+    }
   }
 
   // ============================================
