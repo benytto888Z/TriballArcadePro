@@ -67,7 +67,6 @@ class GameController extends GetxController {
   final Rx<ScoreEventModel?> lastEvent = Rx<ScoreEventModel?>(null);
   final Rx<ScoreApplyResult?> lastResult = Rx<ScoreApplyResult?>(null);
   final Rx<PlayerModel?> winner = Rx<PlayerModel?>(null);
-  final RxList<PlayerModel> winners = <PlayerModel>[].obs;
   final RxBool isNewRecord = false.obs;
   final RxBool isNotInTop10 = false.obs;
   final RxBool showVictoryDialog = false.obs;
@@ -116,11 +115,6 @@ class GameController extends GetxController {
   bool _processingEvent = false;
   DateTime _lastEventTime = DateTime.fromMillisecondsSinceEpoch(0);
 
-  // Victoire équitable Competition/Tournament.
-  final Set<int> _playersFrozenAtTarget = <int>{};
-  final Map<int, Duration> _targetReachedAt = <int, Duration>{};
-  int _lastCheckedCompletedRound = 0;
-
   // ============================================
   // GETTERS (identiques Family)
   // ============================================
@@ -155,17 +149,6 @@ class GameController extends GetxController {
   bool get isSoloMode => config.isSolo;
   bool get isMultiMode => config.isMulti;
   bool get savesToLeaderboard => config.savesToLeaderboard;
-  bool get usesFairRoundVictory =>
-      matchType == MatchType.competition || matchType == MatchType.tournament;
-
-  String get winnerNamesFormatted {
-    final list = winners.isNotEmpty
-        ? winners.map((p) => p.name).toList()
-        : [if (winner.value != null) winner.value!.name];
-    if (list.isEmpty) return '';
-    if (list.length == 1) return list.first;
-    return list.join(' & ');
-  }
 
   double get turnProgress {
     if (turnDuration == 0) return 0;
@@ -263,7 +246,7 @@ class GameController extends GetxController {
       receivedConfig = args['config'] as GameConfig;
       if (args['tournamentSession'] is TournamentController) {
         _tournamentSession =
-            args['tournamentSession'] as TournamentController;
+        args['tournamentSession'] as TournamentController;
       }
       _tournamentMatchId = (args['tournamentMatchId'] as num?)?.toInt();
     }
@@ -353,7 +336,7 @@ class GameController extends GetxController {
       currentPlayer: currentPlayer?.name,
       scores: scores,
       elapsedSeconds: elapsedSeconds.value,
-      winner: winners.length > 1 ? winnerNamesFormatted : winner.value?.name,
+      winner: winner.value?.name,
       currentTurn: currentPlayer?.turnsPlayed.value,
     );
   }
@@ -484,57 +467,6 @@ class GameController extends GetxController {
   }
 
   // ============================================
-  // FAIR ROUND VICTORY — COMPETITION / TOURNAMENT
-  // ============================================
-  void _freezePlayerAtTarget(PlayerModel player) {
-    _playersFrozenAtTarget.add(player.id);
-    _targetReachedAt[player.id] = gameStartTime.value == null
-        ? Duration(seconds: elapsedSeconds.value)
-        : DateTime.now().difference(gameStartTime.value!);
-    if (kDebugMode) {
-      print('🎯 ${player.name} reached ${config.targetScore}; score frozen');
-    }
-  }
-
-  bool _checkFairRoundVictory() {
-    if (!usesFairRoundVictory || players.isEmpty) return false;
-
-    final completedRound = players
-        .map((p) => p.turnsPlayed.value)
-        .reduce((a, b) => a < b ? a : b);
-
-    if (completedRound <= _lastCheckedCompletedRound) return false;
-    _lastCheckedCompletedRound = completedRound;
-
-    final candidates = players
-        .where((p) => p.score.value == config.targetScore)
-        .toList();
-
-    if (kDebugMode) {
-      print('🔎 End of complete round $completedRound: '
-          '${candidates.map((p) => p.name).join(', ')}');
-    }
-    if (candidates.isEmpty) return false;
-
-    if (isTournament) {
-      // Un duel d'élimination doit produire un seul qualifié.
-      candidates.sort((a, b) {
-        final balls = a.ballsThrown.value.compareTo(b.ballsThrown.value);
-        if (balls != 0) return balls;
-        final aTime = _targetReachedAt[a.id] ?? Duration.zero;
-        final bTime = _targetReachedAt[b.id] ?? Duration.zero;
-        final time = aTime.compareTo(bTime);
-        if (time != 0) return time;
-        return a.id.compareTo(b.id);
-      });
-      _onVictory(candidates.first, coWinners: [candidates.first]);
-    } else {
-      _onVictory(candidates.first, coWinners: candidates);
-    }
-    return true;
-  }
-
-  // ============================================
   // AUTO-SWITCH + SCORE VIEWING PAUSE
   // ============================================
   void _autoSwitchToNextPlayer({
@@ -551,11 +483,6 @@ class GameController extends GetxController {
     _ws.stopGame();
     phase.value = GamePhase.turnTransition;
     currentPlayer?.incrementTurn();
-
-    // La vérification a lieu uniquement lorsque tous les joueurs ont terminé
-    // le même numéro de tour. Si un gagnant est trouvé, aucune transition vers
-    // le joueur suivant n'est lancée.
-    if (_checkFairRoundVictory()) return;
 
     _comboTriplePauseTimer?.cancel();
     if (scoreOverlayDelay > Duration.zero) {
@@ -662,7 +589,6 @@ class GameController extends GetxController {
     try {
       final player = currentPlayer;
       if (player == null) return;
-      if (_playersFrozenAtTarget.contains(player.id)) return;
 
       final result = _repo.applyScore(
         currentScore: player.score.value,
@@ -724,13 +650,7 @@ class GameController extends GetxController {
       }
 
       if (result.isVictory) {
-        if (usesFairRoundVictory) {
-          _freezePlayerAtTarget(player);
-          _autoSwitchToNextPlayer(reason: 'target reached');
-        } else {
-          // Solo Chrono conserve la victoire immédiate.
-          _onVictory(player);
-        }
+        _onVictory(player);
         return;
       }
 
@@ -796,12 +716,7 @@ class GameController extends GetxController {
   // ============================================
   // ✅ VICTORY → Retour au WaitingScreen après 10s
   // ============================================
-  void _onVictory(
-    PlayerModel player, {
-    List<PlayerModel>? coWinners,
-  }) {
-    winners.assignAll(coWinners ?? [player]);
-
+  void _onVictory(PlayerModel player) {
     // ✅ CRUCIAL : Capturer le temps AVANT tout
     victorySnapshotSeconds.value = elapsedSeconds.value;
 
@@ -831,10 +746,7 @@ class GameController extends GetxController {
     _ws.stopGame();
 
     _playSfx(AssetPaths.audioVictory);
-    _ttsSpeak(
-      'tts_victory_simple',
-      params: {'name': winnerNamesFormatted},
-    );
+    _ttsSpeak('tts_victory_simple', params: {'name': player.name});
 
     _sendStatusToConfigArea('victory');
 
@@ -1160,10 +1072,6 @@ class GameController extends GetxController {
     gameStartTime.value = null;
     gameEndTime.value = null;
     winner.value = null;
-    winners.clear();
-    _playersFrozenAtTarget.clear();
-    _targetReachedAt.clear();
-    _lastCheckedCompletedRound = 0;
     isNewRecord.value = false;
     isNotInTop10.value = false;
     showVictoryDialog.value = false;

@@ -59,7 +59,8 @@ class ScoreModifier {
   static const ScoreModifier perfectStreak = ScoreModifier(
     name: 'perfect_streak',
     translationKey: 'combo_streak',
-    multiplier: 3.0,   // ✅ ×3
+    // Ne modifie pas les points : récompense = nouveau tour uniquement.
+    multiplier: 1.0,
   );
 
   static const ScoreModifier x2Multiplier = ScoreModifier(

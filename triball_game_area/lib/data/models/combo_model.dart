@@ -46,7 +46,10 @@ extension ComboTypeX on ComboType {
     switch (this) {
       case ComboType.doubleCombo:   return 2.0;   // ✅ Modifié : ×2
       case ComboType.tripleCombo:   return 3.0;   // ✅ Modifié : ×3
-      case ComboType.perfectStreak: return 3.0;   // ✅ Modifié : ×3
+    // PERFECT STREAK est neutre sur le score : il accorde uniquement
+    // un nouveau tour. Les éventuels DOUBLE/TRIPLE précédents conservent
+    // leurs propres points sans être remultipliés.
+      case ComboType.perfectStreak: return 1.0;
       case ComboType.precisionShot: return 1.0;
       case ComboType.none:          return 1.0;
     }

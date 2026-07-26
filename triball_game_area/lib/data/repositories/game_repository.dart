@@ -57,7 +57,12 @@ class GameRepository {
 
       // 2. x2 → double le score (avec plafond max)
       if (event.isX2) {
-        newScore = (currentScore * 2).clamp(0, GameConstants.hardcoreMaxScore);
+        // Conserver le signe du score : -10 × 2 = -20.
+        // Seul le plafond positif Hardcore reste appliqué.
+        newScore = currentScore * 2;
+        if (newScore > GameConstants.hardcoreMaxScore) {
+          newScore = GameConstants.hardcoreMaxScore;
+        }
         appliedMultiplier = 2.0;
         modifiers.add(ScoreModifier.x2Multiplier);
         message = 'score_doubled';
@@ -143,7 +148,26 @@ class GameRepository {
       // COMBO mode : multiplicateurs
       if (config.mode == GameMode.combo && combo != null) {
         if (combo.type != ComboType.none && event.value > 0) {
-          final mult = combo.type.multiplier;
+          double mult = combo.type.multiplier;
+
+          // PERFECT STREAK accorde le tour bonus sans remultiplier le score.
+          // Toutefois, si le hit courant complète aussi un DOUBLE/TRIPLE du
+          // même trou, ce bonus de score reste appliqué indépendamment.
+          if (combo.type == ComboType.perfectStreak) {
+            final streakEvents = combo.events;
+            final sameAsCurrent = streakEvents
+                .take(3)
+                .takeWhile((e) => e.hole == event.hole)
+                .length;
+            if (sameAsCurrent >= 3) {
+              mult = 3.0;
+              modifiers.add(ScoreModifier.comboTriple);
+            } else if (sameAsCurrent >= 2) {
+              mult = 2.0;
+              modifiers.add(ScoreModifier.comboDouble);
+            }
+          }
+
           valueToAdd = (event.value * mult).round();
           appliedMultiplier = mult;
           switch (combo.type) {
@@ -226,33 +250,45 @@ class GameRepository {
     if (recentEvents.isEmpty) return null;
     final current = recentEvents.first;
 
-    // ✅ AUCUN combo sur événements négatifs ou x0
-    if (current.value < 0 || current.isX0 || current.isNegative) {
+    // Aucun bonus sur une pénalité ou un multiplicateur spécial.
+    if (current.value < 0 ||
+        current.isNegative ||
+        current.isX0 ||
+        current.isX2) {
       return null;
     }
 
-    // 1. PRECISION SHOT : hit du +30
-    if (current.value >= 30) {
-      return ComboModel(
-        type: ComboType.precisionShot,
-        count: 1,
-        events: [current],
+    // 1. PERFECT STREAK a priorité sur PRECISION et TRIPLE COMBO.
+    // Les 3 derniers hits doivent tous appartenir à {+5, +10, +30}.
+    // Cela couvre exactement les 3³ = 27 combinaisons demandées.
+    const perfectValues = <int>{5, 10, 30};
+    if (currentStreak >= 2 && recentEvents.length >= 3) {
+      final lastThree = recentEvents.take(3).toList();
+      final isPerfectStreak = lastThree.every(
+            (event) =>
+        !event.isX0 &&
+            !event.isX2 &&
+            !event.isNegative &&
+            perfectValues.contains(event.value),
       );
+
+      if (isPerfectStreak) {
+        return ComboModel(
+          type: ComboType.perfectStreak,
+          count: currentStreak + 1,
+          events: lastThree,
+        );
+      }
     }
 
-    // 2. SAME HOLE COMBOS (Double ×2, Triple ×3)
+    // 2. SAME HOLE COMBOS : Double ou Triple si aucun PERFECT STREAK.
     if (recentEvents.length >= 2) {
       int sameCount = 1;
       for (int i = 1; i < recentEvents.length; i++) {
-        // ✅ Skip si le hit suivant dans l'historique est négatif/x0
-        if (recentEvents[i].value < 0 || recentEvents[i].isX0) {
-          break;
-        }
-        if (recentEvents[i].hole == current.hole) {
-          sameCount++;
-        } else {
-          break;
-        }
+        final event = recentEvents[i];
+        if (event.value < 0 || event.isX0 || event.isX2) break;
+        if (event.hole != current.hole) break;
+        sameCount++;
       }
 
       if (sameCount >= 3) {
@@ -272,11 +308,11 @@ class GameRepository {
       }
     }
 
-    // 3. PERFECT STREAK : 3+ positifs consécutifs
-    if (currentStreak >= 2 && current.value > 0) {
+    // 3. PRECISION SHOT : +30 réellement isolé.
+    if (current.value == 30) {
       return ComboModel(
-        type: ComboType.perfectStreak,
-        count: currentStreak + 1,
+        type: ComboType.precisionShot,
+        count: 1,
         events: [current],
       );
     }
