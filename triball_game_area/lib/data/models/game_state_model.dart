@@ -103,8 +103,11 @@ extension GameModeExtension on GameMode {
 
   /// Ce mode active-t-il les multiplicateurs de combos ?
   bool get applyComboMultipliers {
-    return this == GameMode.combo;
+    return this == GameMode.combo || this == GameMode.champion;
   }
+
+  /// Alias métier : Combo et Champion partagent toutes les mécaniques combo.
+  bool get hasComboFeatures => applyComboMultipliers;
 
   /// Ce mode applique-t-il la pénalité hardcore (x0 = -20) ?
   bool get applyHardcorePenalty {

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import '../../../core/constants/game_constants.dart';
 import '../../../core/theme/theme_colors.dart';
 import '../../game/utils/game_screen_breakpoints.dart';
 import '../tournament_controller.dart';
@@ -36,29 +37,31 @@ class TournamentStatsBar extends GetView<TournamentController> {
                 color: ThemeColors.primary, size: GameScreenBreakpoints.tournamentStatsIconSize()),
             SizedBox(width: 8.w),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     t.name.toUpperCase(),
                     style: TextStyle(
-                      fontFamily: 'Orbitron',
-                      fontSize: GameScreenBreakpoints.tournamentStatsTitleSize(),
-                      fontWeight: FontWeight.w800,
+                      fontFamily: GameConstants.gameFontFamily,
+                      fontSize: GameScreenBreakpoints.tournamentStatsTitleSize() * 1.3,
+                      fontWeight: FontWeight.w900,
                       color: ThemeColors.primary,
+                      shadows: [ Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 7)],
                       letterSpacing: 1.5,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: 2.h),
+                  SizedBox(width: 15.w),
                   Text(
                     '${'tournament_round'.tr} ${t.currentRound.value}/${t.totalRounds} · $completed/$total',
                     style: TextStyle(
-                      fontFamily: 'Orbitron',
-                      fontSize: GameScreenBreakpoints.tournamentStatsSubtitleSize(),
+                      fontFamily: GameConstants.gameFontFamily,
+                      fontSize: GameScreenBreakpoints.tournamentStatsSubtitleSize() * 1.3,
                       color: ThemeColors.textSecondary,
+                      shadows: [ Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 7)],
                       letterSpacing: 1,
                     ),
                   ),
@@ -67,9 +70,9 @@ class TournamentStatsBar extends GetView<TournamentController> {
             ),
             SizedBox(width: 12.w),
             SizedBox(
-              width: GameScreenBreakpoints.tournamentProgressWidth(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+              width: GameScreenBreakpoints.tournamentProgressWidth() * 1.4,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ClipRRect(
@@ -81,13 +84,14 @@ class TournamentStatsBar extends GetView<TournamentController> {
                       valueColor: AlwaysStoppedAnimation(ThemeColors.warning),
                     ),
                   ),
-                  SizedBox(height: 2.h),
+                  SizedBox(width: 22.w),
                   Text(
                     '${(progress * 100).round()}%',
                     style: TextStyle(
-                      fontFamily: 'Orbitron',
-                      fontSize: GameScreenBreakpoints.tournamentStatsSubtitleSize(),
+                      fontFamily: GameConstants.gameFontFamily,
+                      fontSize: GameScreenBreakpoints.tournamentStatsSubtitleSize() * 1.3,
                       color: ThemeColors.warning,
+                      shadows: [ Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 7)],
                       fontWeight: FontWeight.w800,
                     ),
                   ),

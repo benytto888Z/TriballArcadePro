@@ -146,7 +146,7 @@ class GameRepository {
       int valueToAdd = event.value;
 
       // COMBO mode : multiplicateurs
-      if (config.mode == GameMode.combo && combo != null) {
+      if (config.mode.hasComboFeatures && combo != null) {
         if (combo.type != ComboType.none && event.value > 0) {
           double mult = combo.type.multiplier;
 

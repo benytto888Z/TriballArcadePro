@@ -32,7 +32,6 @@ class PlayerModel {
   // ============================================
   final RxInt totalShots = 0.obs;
   final RxInt positiveShots = 0.obs;
-  final RxDouble strategicAccuracyPoints = 0.0.obs;
   final RxInt negativeShots = 0.obs;
   final RxInt bonusShots = 0.obs;       // ≥ +30
   final RxInt penaltyShots = 0.obs;     // x0
@@ -64,21 +63,7 @@ class PlayerModel {
   // ============================================
   // COMPUTED
   // ============================================
-  /// Précision principale : pourcentage de hits qui rapprochent réellement
-  /// le score de la cible, quelle que soit la valeur positive ou négative.
   double get accuracy {
-    if (totalShots.value == 0) {
-      return 0;
-    }
-
-    return (
-        strategicAccuracyPoints.value /
-            totalShots.value
-    ) * 100;
-  }
-
-  /// Ancienne précision : pourcentage de hits physiques +5/+10/+30 appliqués.
-  double get positiveHitRate {
     if (totalShots.value == 0) return 0;
     return (positiveShots.value / totalShots.value) * 100;
   }
@@ -116,41 +101,18 @@ class PlayerModel {
   void registerShot({
     required ScoreEventModel event,
     required bool applied,
-    required bool isOvershoot,
-    required int previousScore,
-    required int newScore,
-    required int targetScore,
   }) {
     // Add to recent events (max 5)
     recentEvents.insert(0, event);
     if (recentEvents.length > 5) recentEvents.removeLast();
 
-    // Statistiques globales de toute la partie : aucun de ces compteurs
-    // n'est remis à zéro lors d'un simple changement de tour.
+    // Update stats
     totalShots.value++;
-
-    if (applied && !isOvershoot) {
-      final distanceBefore =
-      (targetScore - previousScore).abs();
-
-      final distanceAfter =
-      (targetScore - newScore).abs();
-
-      final movedTowardTarget =
-          distanceAfter < distanceBefore;
-
-      if (movedTowardTarget) {
-        strategicAccuracyPoints.value +=
-            _strategicWeight(event);
-      }
-    }
 
     if (!applied) {
       _resetStreak();
       return;
     }
-
-
 
     if (event.isX0) {
       penaltyShots.value++;
@@ -167,34 +129,6 @@ class PlayerModel {
     } else if (event.value < 0) {
       negativeShots.value++;
       _resetStreak();
-    }
-  }
-
-  double _strategicWeight(
-      ScoreEventModel event,
-      ) {
-    if (event.isX0) {
-      return 0.25;
-    }
-
-    if (event.isX2) {
-      return 0.90;
-    }
-
-    switch (event.value) {
-      case 5:
-      case -5:
-        return 0.40;
-
-      case 10:
-      case -10:
-        return 0.70;
-
-      case 30:
-        return 1.00;
-
-      default:
-        return 0;
     }
   }
 
@@ -240,7 +174,6 @@ class PlayerModel {
     // Reset stats
     totalShots.value = 0;
     positiveShots.value = 0;
-    strategicAccuracyPoints.value = 0;
     negativeShots.value = 0;
     bonusShots.value = 0;
     penaltyShots.value = 0;

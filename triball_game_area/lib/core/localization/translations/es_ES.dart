@@ -73,7 +73,7 @@ const Map<String, String> esES = {
   'mode_combo': 'Combo',
   'mode_combo_desc': 'Bonus por tiros repetidos',
   'mode_champion': 'Campeón',
-  'mode_champion_desc': 'Alcanza exactamente 200 puntos',
+  'mode_champion_desc': 'Alcanza exactamente 200 puntos con todos los bonus Combo',
   'guide_hardcore_bullet_2': '✅ Exceso de 100 PERMITIDO',
 
 
@@ -197,7 +197,8 @@ const Map<String, String> esES = {
   'tournament_round': 'Ronda {number}',
   'tournament_final': 'FINAL',
   'tournament_semi': 'Semifinal',
-  'tournament_quarter': 'Cuartos de final',
+  'tournament_quarter': '4 de final',
+  'tournament_eight': '8 de final',
   'tournament_match': 'Partido {number}',
   'tournament_vs': 'VS',
   'tournament_winner': 'Campeón del torneo',
@@ -329,6 +330,7 @@ const Map<String, String> esES = {
   'accuracy': 'Precisión',
   'best_shot': 'Mejor tiro',
   'average_score': 'Puntuación media',
+  'positive_hits': 'Aciertos positivos',
   'total_games': 'Partidas jugadas',
   'total_wins': 'Victorias',
   'win_rate': 'Tasa de victorias',

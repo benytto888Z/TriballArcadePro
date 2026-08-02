@@ -73,7 +73,7 @@ const Map<String, String> frFR = {
   'mode_combo': 'Combo',
   'mode_combo_desc': 'Bonus pour les coups répétés',
   'mode_champion': 'Champion',
-  'mode_champion_desc': 'Atteindre 200 points exactement',
+  'mode_champion_desc': 'Atteindre exactement 200 points avec tous les bonus Combo',
 
   'platform_connected': 'Platforme connectée',
   'guide_hardcore_bullet_2': '✅ Dépassement de 100 AUTORISÉ',

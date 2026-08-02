@@ -72,7 +72,7 @@ const Map<String, String> deDE = {
   'mode_combo': 'Combo',
   'mode_combo_desc': 'Bonus für wiederholte Treffer',
   'mode_champion': 'Champion',
-  'mode_champion_desc': 'Erreiche genau 200 Punkte',
+  'mode_champion_desc': 'Erreiche genau 200 Punkte mit allen Combo-Boni',
   'guide_hardcore_bullet_2': '✅ Überschreitung von 100 ERLAUBT',
 
 
@@ -199,6 +199,7 @@ const Map<String, String> deDE = {
   'tournament_final': 'FINALE',
   'tournament_semi': 'Halbfinale',
   'tournament_quarter': 'Viertelfinale',
+  'tournament_eight': 'Achtelfinale',
   'tournament_match': 'Spiel {number}',
   'tournament_vs': 'VS',
   'tournament_winner': 'Turniersieger',
@@ -329,6 +330,7 @@ const Map<String, String> deDE = {
   'accuracy': 'Genauigkeit',
   'best_shot': 'Bester Wurf',
   'average_score': 'Durchschnittspunktzahl',
+  'positive_hits': 'Positive Treffer',
   'total_games': 'Gespielte Spiele',
   'total_wins': 'Siege',
   'win_rate': 'Siegrate',

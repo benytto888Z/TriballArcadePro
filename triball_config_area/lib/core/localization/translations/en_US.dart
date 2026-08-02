@@ -71,7 +71,7 @@ const Map<String, String> enUS = {
   'mode_combo': 'Combo',
   'mode_combo_desc': 'Bonus for repeated shots',
   'mode_champion': 'Champion',
-  'mode_champion_desc': 'Reach exactly 200 points',
+  'mode_champion_desc':'Reach exactly 200 points with all Combo bonuses',
   'guide_hardcore_bullet_2': '✅ Overshoot 100 ALLOWED',
 
 

@@ -71,7 +71,7 @@ const Map<String, String> enUS = {
   'mode_combo': 'Combo',
   'mode_combo_desc': 'Bonus for repeated shots',
   'mode_champion': 'Champion',
-  'mode_champion_desc': 'Reach exactly 200 points',
+  'mode_champion_desc':  'Reach exactly 200 points with all Combo bonuses',
   'guide_hardcore_bullet_2': '✅ Overshoot 100 ALLOWED',
 
 
@@ -196,6 +196,7 @@ const Map<String, String> enUS = {
   'tournament_final': 'FINAL',
   'tournament_semi': 'Semi-final',
   'tournament_quarter': 'Quarter-final',
+  'tournament_eight': 'Round of 16',
   'tournament_match': 'Match {number}',
   'tournament_vs': 'VS',
   'tournament_winner': 'Tournament Champion',
@@ -336,6 +337,7 @@ const Map<String, String> enUS = {
   'accuracy': 'Accuracy',
   'best_shot': 'Best shot',
   'average_score': 'Average score',
+  'positive_hits': 'Positive hits',
   'total_games': 'Games played',
   'total_wins': 'Wins',
   'win_rate': 'Win rate',

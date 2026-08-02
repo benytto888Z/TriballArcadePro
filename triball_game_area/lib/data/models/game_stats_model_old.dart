@@ -7,7 +7,6 @@ import 'score_event_model.dart';
 class GameStats {
   final RxInt totalShots = 0.obs;
   final RxInt positiveShots = 0.obs;
-  final RxInt strategicShots = 0.obs;
   final RxInt negativeShots = 0.obs;
   final RxInt bonusShots = 0.obs;           // +30
   final RxInt penaltyShots = 0.obs;         // x0
@@ -28,11 +27,6 @@ class GameStats {
   // ============================================
   double get accuracy {
     if (totalShots.value == 0) return 0;
-    return (strategicShots.value / totalShots.value) * 100;
-  }
-
-  double get positiveHitRate {
-    if (totalShots.value == 0) return 0;
     return (positiveShots.value / totalShots.value) * 100;
   }
 
@@ -46,22 +40,8 @@ class GameStats {
   // ============================================
   // EVENT REGISTRATION
   // ============================================
-  void registerShot(
-    ScoreEventModel event,
-    bool applied, {
-    required bool isOvershoot,
-    required int previousScore,
-    required int newScore,
-    required int targetScore,
-  }) {
+  void registerShot(ScoreEventModel event, bool applied) {
     totalShots.value++;
-
-    if (applied &&
-        !isOvershoot &&
-        (targetScore - newScore).abs() <
-            (targetScore - previousScore).abs()) {
-      strategicShots.value++;
-    }
 
     // Heatmap
     hitsPerHole[event.hole] = (hitsPerHole[event.hole] ?? 0) + 1;
@@ -114,7 +94,6 @@ class GameStats {
   void reset() {
     totalShots.value = 0;
     positiveShots.value = 0;
-    strategicShots.value = 0;
     negativeShots.value = 0;
     bonusShots.value = 0;
     penaltyShots.value = 0;
@@ -132,7 +111,6 @@ class GameStats {
   Map<String, dynamic> toJson() => {
     'totalShots': totalShots.value,
     'positiveShots': positiveShots.value,
-    'strategicShots': strategicShots.value,
     'negativeShots': negativeShots.value,
     'bonusShots': bonusShots.value,
     'penaltyShots': penaltyShots.value,
@@ -142,7 +120,6 @@ class GameStats {
     'maxCombo': maxComboCount.value,
     'maxStreak': maxStreak.value,
     'accuracy': accuracy,
-    'positiveHitRate': positiveHitRate,
     'hitsPerHole': hitsPerHole,
   };
 }

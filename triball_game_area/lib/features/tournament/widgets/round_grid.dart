@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../core/constants/game_constants.dart';
 import '../../../core/theme/theme_colors.dart';
 import '../../../data/models/tournament_model.dart';
 import '../../game/utils/game_screen_breakpoints.dart';
@@ -99,8 +100,8 @@ class _RoundHeader extends StatelessWidget {
     return Row(
       children: [
         Container(
-          width: GameScreenBreakpoints.tournamentMatchIconSize() * 1.8,
-          height: GameScreenBreakpoints.tournamentMatchIconSize() * 1.8,
+          width: GameScreenBreakpoints.tournamentMatchIconSize() * 1.3,
+          height: GameScreenBreakpoints.tournamentMatchIconSize() * 1.3,
           alignment: Alignment.center,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
@@ -110,10 +111,11 @@ class _RoundHeader extends StatelessWidget {
           child: Text(
             '$round',
             style: TextStyle(
-              fontFamily: 'Orbitron',
-              fontSize: GameScreenBreakpoints.tournamentMatchHeaderFontSize(),
+              fontFamily: GameConstants.gameFontFamily,
+              fontSize: GameScreenBreakpoints.tournamentMatchHeaderFontSize() * 1.3,
               fontWeight: FontWeight.w900,
               color: ThemeColors.primary,
+              shadows: [ Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 7)],
             ),
           ),
         ),
@@ -124,10 +126,11 @@ class _RoundHeader extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              fontFamily: 'Orbitron',
+              fontFamily:  GameConstants.gameFontFamily,
               fontSize: GameScreenBreakpoints.tournamentRoundHeaderSize(),
               fontWeight: FontWeight.w900,
               color: ThemeColors.primary,
+              shadows: [ Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 7)],
               letterSpacing: 2,
             ),
           ),
@@ -144,10 +147,11 @@ class _RoundHeader extends StatelessWidget {
           child: Text(
             '$completed / $total',
             style: TextStyle(
-              fontFamily: 'Orbitron',
-              fontSize: GameScreenBreakpoints.tournamentMatchStatusFontSize(),
+              fontFamily: GameConstants.gameFontFamily,
+              fontSize: GameScreenBreakpoints.tournamentMatchStatusFontSize() *1.3,
               fontWeight: FontWeight.w800,
               color: ThemeColors.success,
+              shadows: [ Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 7)],
             ),
           ),
         ),

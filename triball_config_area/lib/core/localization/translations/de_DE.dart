@@ -71,8 +71,7 @@ const Map<String, String> deDE = {
 
   'mode_combo': 'Combo',
   'mode_combo_desc': 'Bonus für wiederholte Treffer',
-  'mode_champion': 'Champion',
-  'mode_champion_desc': 'Erreiche genau 200 Punkte',
+  'mode_champion': 'Erreiche genau 200 Punkte mit allen Combo-Boni',
   'guide_hardcore_bullet_2': '✅ Überschreitung von 100 ERLAUBT',
 
 

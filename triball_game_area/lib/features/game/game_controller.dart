@@ -144,7 +144,8 @@ class GameController extends GetxController {
   bool get isCompetition => matchType == MatchType.competition;
   bool get isSoloChrono => matchType == MatchType.soloChrono;
   bool get isTournament => matchType == MatchType.tournament;
-  bool get isComboMode => gameMode == GameMode.combo;
+  /// Combo et Champion utilisent le même moteur de bonus/combo.
+  bool get isComboMode => gameMode.hasComboFeatures;
   bool get isPlaying => phase.value == GamePhase.playing;
   bool get isPaused => phase.value == GamePhase.paused;
   bool get isCountdown => phase.value == GamePhase.countdown;
@@ -263,7 +264,7 @@ class GameController extends GetxController {
       receivedConfig = args['config'] as GameConfig;
       if (args['tournamentSession'] is TournamentController) {
         _tournamentSession =
-            args['tournamentSession'] as TournamentController;
+        args['tournamentSession'] as TournamentController;
       }
       _tournamentMatchId = (args['tournamentMatchId'] as num?)?.toInt();
     }
@@ -674,7 +675,14 @@ class GameController extends GetxController {
 
       lastEvent.value = event;
       lastResult.value = result;
-      player.registerShot(event: event, applied: result.applied);
+      player.registerShot(
+        event: event,
+        applied: result.applied,
+        isOvershoot: result.isOvershoot,
+        previousScore: result.previousScore,
+        newScore: result.newScore,
+        targetScore: config.targetScore,
+      );
 
       if (result.isOvershoot) {
         // Priorité absolue : aucun combo visuel, sonore ou tour bonus pour
@@ -693,7 +701,7 @@ class GameController extends GetxController {
           _showComboBanner(combo);
           _playComboFeedback(combo);
         }
-        if (combo.grantsBonusTurn) {
+        if (isComboMode && combo.grantsBonusTurn) {
           Timer(const Duration(milliseconds: 1500), () {
             if (isPlaying) _grantBonusTurn();
           });
@@ -734,7 +742,8 @@ class GameController extends GetxController {
         return;
       }
 
-      final hasBonusTurn = !result.isOvershoot &&
+      final hasBonusTurn = isComboMode &&
+          !result.isOvershoot &&
           result.hasCombo &&
           result.combo!.grantsBonusTurn;
 
@@ -797,9 +806,9 @@ class GameController extends GetxController {
   // ✅ VICTORY → Retour au WaitingScreen après 10s
   // ============================================
   void _onVictory(
-    PlayerModel player, {
-    List<PlayerModel>? coWinners,
-  }) {
+      PlayerModel player, {
+        List<PlayerModel>? coWinners,
+      }) {
     winners.assignAll(coWinners ?? [player]);
 
     // ✅ CRUCIAL : Capturer le temps AVANT tout

@@ -73,7 +73,7 @@ const Map<String, String> esES = {
   'mode_combo': 'Combo',
   'mode_combo_desc': 'Bonus por tiros repetidos',
   'mode_champion': 'Campeón',
-  'mode_champion_desc': 'Alcanza exactamente 200 puntos',
+  'mode_champion_desc':   'Alcanza exactamente 200 puntos con todos los bonus Combo',
   'guide_hardcore_bullet_2': '✅ Exceso de 100 PERMITIDO',
 
 

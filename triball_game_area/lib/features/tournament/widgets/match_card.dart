@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import '../../../core/constants/game_constants.dart';
 import '../../../core/theme/theme_colors.dart';
 import '../../../core/utils/helpers.dart';
 import '../../../data/models/tournament_model.dart';
@@ -80,10 +81,11 @@ class MatchCard extends StatelessWidget {
                   Text(
                     'M${match.matchId + 1}',
                     style: TextStyle(
-                      fontFamily: 'Orbitron',
-                      fontSize: GameScreenBreakpoints.tournamentMatchHeaderFontSize(),
-                      fontWeight: FontWeight.w800,
+                      fontFamily: GameConstants.gameFontFamily,
+                      fontSize: GameScreenBreakpoints.tournamentMatchHeaderFontSize() * 0.9,
+                      fontWeight: FontWeight.w900,
                       color: ThemeColors.textSecondary,
+                      shadows: [ Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 7)],
                       letterSpacing: 1,
                     ),
                   ),
@@ -97,10 +99,11 @@ class MatchCard extends StatelessWidget {
                       Text(
                         'tournament_play_now'.tr.toUpperCase(),
                         style: TextStyle(
-                          fontFamily: 'Orbitron',
-                          fontSize: GameScreenBreakpoints.tournamentMatchStatusFontSize(),
-                          fontWeight: FontWeight.w800,
+                          fontFamily: GameConstants.gameFontFamily,
+                          fontSize: GameScreenBreakpoints.tournamentMatchStatusFontSize() * 0.9,
+                          fontWeight: FontWeight.w900,
                           color: ThemeColors.primary,
+                          shadows: [ Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 7)],
                           letterSpacing: 1.2,
                         ),
                       ),
@@ -143,10 +146,11 @@ class MatchCard extends StatelessWidget {
                 matchId: match.matchId,
                 onStart: controller.startCurrentMatch,
               ),
-             /* Padding(
+             /*Padding(
                 padding: EdgeInsets.all(6.w),
                 child: InkWell(
-                  onTap: onStart,
+                  // onTap: onStart,
+                  onTap:  controller.startCurrentMatch,
                   borderRadius: BorderRadius.circular(6),
                   child: Container(
                     padding: EdgeInsets.symmetric(
@@ -243,8 +247,8 @@ class _PlayerSlot extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                fontFamily: 'Orbitron',
-                fontSize: GameScreenBreakpoints.tournamentPlayerFontSize(),
+                fontFamily: GameConstants.gameFontFamily,
+                fontSize: GameScreenBreakpoints.tournamentPlayerFontSize() * 0.9,
                 fontWeight: isWinner ? FontWeight.w900 : FontWeight.w600,
                 color: isEmpty || isBye
                     ? ThemeColors.textSecondary.withOpacity(0.5)
@@ -253,6 +257,7 @@ class _PlayerSlot extends StatelessWidget {
                     : (isLoser
                     ? ThemeColors.textSecondary.withOpacity(0.5)
                     : ThemeColors.textPrimary)),
+                shadows: [ Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 7)],
                 letterSpacing: 0.8,
               ),
             ),
@@ -265,9 +270,10 @@ class _PlayerSlot extends StatelessWidget {
               child: Text(
                 '$score',
                 style: TextStyle(
-                  fontFamily: 'Orbitron',
+                  fontFamily:  GameConstants.gameFontFamily,
                   fontSize: GameScreenBreakpoints.tournamentPlayerFontSize(),
                   fontWeight: FontWeight.w900,
+                  shadows: [ Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 7)],
                   color: isWinner
                       ? color
                       : ThemeColors.textSecondary.withOpacity(0.6),
@@ -372,10 +378,11 @@ class _AutoStartButtonState extends State<_AutoStartButton> {
             Text(
               '${'auto_start_in'.tr} $_countdown s',
               style: TextStyle(
-                fontFamily: 'Orbitron',
+                fontFamily:  GameConstants.gameFontFamily,
                 fontSize: GameScreenBreakpoints.tournamentStartButtonFontSize(),
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w900,
                 color: ThemeColors.primary,
+                shadows: [ Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 7)],
                 letterSpacing: 1,
               ),
             ),

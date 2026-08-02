@@ -119,6 +119,7 @@ class TournamentModel {
       case 1: return 'tournament_final';
       case 2: return 'tournament_semi';
       case 3: return 'tournament_quarter';
+      case 4: return 'tournament_eight';
       default: return 'tournament_round';
     }
   }
