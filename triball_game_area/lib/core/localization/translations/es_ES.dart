@@ -73,9 +73,9 @@ const Map<String, String> esES = {
   'mode_combo': 'Combo',
   'mode_combo_desc': 'Bonus por tiros repetidos',
   'mode_champion': 'Campeón',
-  'mode_champion_desc': 'Alcanza exactamente 200 puntos con todos los bonus Combo',
+  'mode_champion_desc':
+      'Alcanza exactamente 200 puntos con todos los bonus Combo',
   'guide_hardcore_bullet_2': '✅ Exceso de 100 PERMITIDO',
-
 
   // ==========================================
   // GAME SCREEN
@@ -297,7 +297,8 @@ const Map<String, String> esES = {
   'rule_3_title': '⚡ Agujeros especiales',
   'rule_3_desc': '¡x0 resetea tu puntuación, x2 la duplica!',
   'rule_4_title': '⚠️ Excedido',
-  'rule_4_desc': 'Si pasas de 100, la puntuación se rechaza. Te quedas con la anterior.',
+  'rule_4_desc':
+      'Si pasas de 100, la puntuación se rechaza. Te quedas con la anterior.',
   'rule_5_title': '🏆 Victoria',
   'rule_5_desc': '¡El primer jugador en llegar a exactamente 100 gana!',
 
@@ -335,7 +336,7 @@ const Map<String, String> esES = {
   'total_wins': 'Victorias',
   'win_rate': 'Tasa de victorias',
   'stats_for': 'Stats de {name}',
-//-----------------------------------
+  //-----------------------------------
   'platform': 'Plataforma',
   'platform_status': 'Plataforma',
   'platform_connected': 'Plataforma conectada',
@@ -355,17 +356,20 @@ const Map<String, String> esES = {
   'guide_cat_faq': 'FAQ',
 
   'guide_basics_objective_title': 'Objetivo del juego',
-  'guide_basics_objective_desc': 'Alcanzar exactamente 100 puntos lanzando bolas en los 9 agujeros. ¡El primero en llegar gana!',
+  'guide_basics_objective_desc':
+      'Alcanzar exactamente 100 puntos lanzando bolas en los 9 agujeros. ¡El primero en llegar gana!',
   'guide_basics_turn_title': 'Estructura del turno',
   'guide_basics_turn_desc': 'Cada jugador juega por turnos:',
   'guide_basics_turn_bullet_1': '3 bolas por turno',
   'guide_basics_turn_bullet_2': '40 segundos máximo por turno',
   'guide_basics_turn_bullet_3': 'Cambio automático al siguiente jugador',
   'guide_basics_winning_title': 'Cómo ganar',
-  'guide_basics_winning_desc': 'Debes alcanzar EXACTAMENTE 100 puntos. ¡La estrategia es esencial!',
+  'guide_basics_winning_desc':
+      'Debes alcanzar EXACTAMENTE 100 puntos. ¡La estrategia es esencial!',
 
   'guide_scoring_holes_title': 'Los 9 agujeros',
-  'guide_scoring_holes_desc': 'La plataforma tiene 9 agujeros en cuadrícula 3×3:',
+  'guide_scoring_holes_desc':
+      'La plataforma tiene 9 agujeros en cuadrícula 3×3:',
   'guide_board_layout': 'DISPOSICIÓN DEL TABLERO',
   'guide_board_explanation': 'Valores verdes suman,\nrojos restan.',
   'guide_scoring_special_title': 'Agujeros especiales',
@@ -374,13 +378,18 @@ const Map<String, String> esES = {
   'guide_scoring_x2_bullet': '×2: duplica tu puntuación',
   'guide_scoring_jackpot_bullet': '+30: el jackpot, ideal para avanzar rápido',
   'guide_scoring_overshoot_title': 'Exceso de puntuación',
-  'guide_scoring_overshoot_desc': 'Si excedes el objetivo, el tiro es rechazado y mantienes la puntuación anterior.',
+  'guide_scoring_overshoot_desc':
+      'Si excedes el objetivo, el tiro es rechazado y mantienes la puntuación anterior.',
 
-  'guide_combo_double_desc': 'Toca el mismo agujero 2 veces seguidas. Multiplicador ×1.5.',
-  'guide_combo_triple_desc': 'Toca el mismo agujero 3 veces. ¡Multiplicador ×2.0!',
+  'guide_combo_double_desc':
+      'Toca el mismo agujero 2 veces seguidas. Multiplicador ×1.5.',
+  'guide_combo_triple_desc':
+      'Toca el mismo agujero 3 veces. ¡Multiplicador ×2.0!',
   'guide_combo_mega_desc': 'El combo definitivo: 4+ hits idénticos. ¡×3.0!',
-  'guide_combo_streak_desc': '3 tiros positivos seguidos sin fallar. Bonus ×1.5.',
-  'guide_combo_comeback_desc': 'Ganas 50+ puntos cuando tu puntuación era baja. Bonus ×1.2.',
+  'guide_combo_streak_desc':
+      '3 tiros positivos seguidos sin fallar. Bonus ×1.5.',
+  'guide_combo_comeback_desc':
+      'Ganas 50+ puntos cuando tu puntuación era baja. Bonus ×1.2.',
 
   'guide_controls_pause_title': 'Pausa',
   'guide_controls_pause_desc': 'Pausa el juego. El cronómetro se detiene.',
@@ -392,9 +401,11 @@ const Map<String, String> esES = {
   'guide_controls_quit_desc': 'Sale de la partida y vuelve al menú.',
 
   'guide_tip_1_title': 'Apunta estratégicamente',
-  'guide_tip_1_desc': 'Cerca de ganar (90+ pts), evita el +30. Prefiere +5 y +10.',
+  'guide_tip_1_desc':
+      'Cerca de ganar (90+ pts), evita el +30. Prefiere +5 y +10.',
   'guide_tip_2_title': 'Usa el ×2 con inteligencia',
-  'guide_tip_2_desc': 'Juégalo cuando estés exactamente a 50 pts → ¡100 al instante!',
+  'guide_tip_2_desc':
+      'Juégalo cuando estés exactamente a 50 pts → ¡100 al instante!',
   'guide_tip_3_title': 'Cuidado con el x0',
   'guide_tip_3_desc': 'El ×0 resetea todo. Sé cauto al final de la partida.',
 
@@ -404,16 +415,20 @@ const Map<String, String> esES = {
   'guide_platform_setup_bullet_2': 'Conecta el ESP32',
   'guide_platform_setup_bullet_3': 'Mantente a 2-3 metros',
   'guide_platform_connection_title': 'Conexión WiFi',
-  'guide_platform_connection_desc': 'Conecta tu dispositivo al WiFi "amz_triball" (contraseña: 12345678).',
+  'guide_platform_connection_desc':
+      'Conecta tu dispositivo al WiFi "amz_triball" (contraseña: 12345678).',
   'guide_platform_leds_title': 'LEDs de colores',
-  'guide_platform_leds_desc': 'Las LEDs dan feedback visual: verde para buenos tiros, rojo para malos.',
+  'guide_platform_leds_desc':
+      'Las LEDs dan feedback visual: verde para buenos tiros, rojo para malos.',
 
   'guide_faq_1_title': '¿Por qué no se detecta mi bola?',
-  'guide_faq_1_desc': 'Los sensores IR tienen rango regulable. Verifica el calibrado del potenciómetro.',
+  'guide_faq_1_desc':
+      'Los sensores IR tienen rango regulable. Verifica el calibrado del potenciómetro.',
   'guide_faq_2_title': '¿Cómo cambiar el idioma?',
   'guide_faq_2_desc': 'Ve a Ajustes → Idioma.',
   'guide_faq_3_title': '¿La app funciona sin la plataforma?',
-  'guide_faq_3_desc': 'Sí, en modo degradado. Pero sin detección automática de bolas.',
+  'guide_faq_3_desc':
+      'Sí, en modo degradado. Pero sin detección automática de bolas.',
   'guide_faq_4_title': '¿Cómo borrar mis puntuaciones?',
   'guide_faq_4_desc': 'Ve a Clasificación → Borrar. Es irreversible.',
 
@@ -447,12 +462,12 @@ const Map<String, String> esES = {
   'tournament_quit': 'Salir del torneo',
   'tournament_quit_confirm': 'El torneo actual se perderá. ¿Continuar?',
 
-
   'current_ssid': 'SSID actual',
   'current_password': 'Contraseña actual',
   'auto_connect': 'Auto-conexión',
   'change_wifi_credentials': 'Cambiar credenciales WiFi',
-  'wifi_change_warning': 'La plataforma se reinicia tras los cambios. Reconecta tu dispositivo.',
+  'wifi_change_warning':
+      'La plataforma se reinicia tras los cambios. Reconecta tu dispositivo.',
   'password_min_8_chars': 'Mínimo 8 caracteres',
   'wifi_invalid': 'SSID o contraseña inválidos',
   'wifi_updated': 'WiFi actualizado, plataforma reiniciándose',
@@ -489,7 +504,6 @@ const Map<String, String> esES = {
   'restart_required_desc': 'Reinicia la app para aplicar los cambios.',
   'data_management_info': 'La exportación contiene TODOS tus datos.',
 
-
   'build': 'Build',
   'open_source_licenses': 'Licencias código abierto',
 
@@ -518,7 +532,8 @@ const Map<String, String> esES = {
 
   'loading_leaderboard': 'Cargando clasificación...',
   'leaderboard_offline_title': 'Plataforma no conectada',
-  'leaderboard_offline_desc': 'La clasificación se guarda en la borne.\nConéctate al WiFi de la plataforma para acceder.',
+  'leaderboard_offline_desc':
+      'La clasificación se guarda en la borne.\nConéctate al WiFi de la plataforma para acceder.',
   'refresh': 'Actualizar',
   'clear_mode_only': 'Esto borrará solo el modo {mode}.',
 
@@ -527,7 +542,8 @@ const Map<String, String> esES = {
 
   'tts_hardcore_overshoot': '¡Atención, {points} puntos de más! Vuelve a 100.',
   'mode_hardcore_desc': 'x0 = -20 pts, exceso: Sí',
-  'guide_hardcore_new_rule': 'En HARDCORE, puedes exceder 100! Usa los agujeros negativos (-5, -10) para volver exactamente a 100.',
+  'guide_hardcore_new_rule':
+      'En HARDCORE, puedes exceder 100! Usa los agujeros negativos (-5, -10) para volver exactamente a 100.',
 
   'end_of_turn': 'Fin del turno',
   'next_turn_in': 'Próximo turno en',
@@ -545,14 +561,16 @@ const Map<String, String> esES = {
   'back_to_waiting': 'Pantalla de espera',
   'auto_return_in': 'Retorno en',
 
-  'clear_requires_code': 'Ingresa el código de seguridad para borrar el ranking',
+  'clear_requires_code':
+      'Ingresa el código de seguridad para borrar el ranking',
   'clear_mode_warning': 'Esto borrará el TOP 10 del modo {mode}.',
   'invalid_security_code': 'Código de seguridad incorrecto',
   'leaderboard_cleared': 'Clasificación borrada con éxito',
 
   'remote_leaderboard': 'Ranking TV',
   'remote_leaderboard_short': 'Mostrar TOP 10 en pantalla',
-  'remote_leaderboard_desc': 'Selecciona un modo para mostrar su TOP 10 en la pantalla de juego (TV).',
+  'remote_leaderboard_desc':
+      'Selecciona un modo para mostrar su TOP 10 en la pantalla de juego (TV).',
   'select_mode_to_display': 'Elegir modo a mostrar',
   'show_top10_on_tv': 'Mostrar TOP 10 en TV',
   'back_to_waiting_remote': 'Volver a pantalla de espera TV',
@@ -566,4 +584,19 @@ const Map<String, String> esES = {
   'quit_app': 'Salir de la aplicación',
 
   'auto_start_in': 'Inicio auto en',
+  'winner_comparison_title': 'COMPARACIÓN DE FINALISTAS',
+
+  'comparison_tie_confirmed':
+      'Mismo objetivo en la misma ronda: ganadores empatados',
+
+  'comparison_fewer_balls': 'Ganador: menos pelotas utilizadas',
+
+  'comparison_best_time': 'Ganador: objetivo alcanzado más rápido',
+
+  'comparison_deterministic_order':
+      'Estadísticas idénticas: desempate determinista',
+
+  'comparison_single_winner': 'Solo un jugador alcanzó el objetivo',
+
+  'victory_in': 'Resultado en',
 };

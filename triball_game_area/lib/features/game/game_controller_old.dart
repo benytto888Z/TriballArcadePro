@@ -71,12 +71,6 @@ class GameController extends GetxController {
   final RxBool isNewRecord = false.obs;
   final RxBool isNotInTop10 = false.obs;
   final RxBool showVictoryDialog = false.obs;
-  final RxBool showWinnerComparison = false.obs;
-  final RxList<PlayerModel> comparisonPlayers = <PlayerModel>[].obs;
-  final Rx<PlayerModel?> comparisonWinner = Rx<PlayerModel?>(null);
-  final RxString comparisonReasonKey = ''.obs;
-  final RxInt comparisonCountdown = 0.obs;
-  Timer? _winnerComparisonTimer;
   final RxInt newRecordRank = 0.obs;
   final RxInt comboCount = 0.obs;
 
@@ -251,7 +245,6 @@ class GameController extends GetxController {
     _transitionTimer?.cancel();
     _scoreViewingTimer?.cancel();
     _comboTriplePauseTimer?.cancel();
-    _winnerComparisonTimer?.cancel();
     _statusUpdateTimer?.cancel();
     _returnToWaitingTimer?.cancel();
     // Ne pas envoyer stop_game ici : _cleanup() est aussi appelé par onClose
@@ -271,7 +264,7 @@ class GameController extends GetxController {
       receivedConfig = args['config'] as GameConfig;
       if (args['tournamentSession'] is TournamentController) {
         _tournamentSession =
-            args['tournamentSession'] as TournamentController;
+        args['tournamentSession'] as TournamentController;
       }
       _tournamentMatchId = (args['tournamentMatchId'] as num?)?.toInt();
     }
@@ -524,80 +517,23 @@ class GameController extends GetxController {
     }
     if (candidates.isEmpty) return false;
 
-    if (candidates.length == 1) {
-      _onVictory(candidates.first, coWinners: candidates);
-      return true;
-    }
-
     if (isTournament) {
-      final ranked = List<PlayerModel>.from(candidates)..sort(_compareFinalists);
-      final selected = ranked.first;
-      _beginWinnerComparison(
-        candidates: ranked,
-        selectedWinner: selected,
-        reasonKey: _tournamentTieBreakReason(ranked),
-        finalWinners: [selected],
-      );
+      // Un duel d'élimination doit produire un seul qualifié.
+      candidates.sort((a, b) {
+        final balls = a.ballsThrown.value.compareTo(b.ballsThrown.value);
+        if (balls != 0) return balls;
+        final aTime = _targetReachedAt[a.id] ?? Duration.zero;
+        final bTime = _targetReachedAt[b.id] ?? Duration.zero;
+        final time = aTime.compareTo(bTime);
+        if (time != 0) return time;
+        return a.id.compareTo(b.id);
+      });
+      _onVictory(candidates.first, coWinners: [candidates.first]);
     } else {
-      // En compétition, la comparaison explique l'ex æquo sans départager.
-      _beginWinnerComparison(
-        candidates: candidates,
-        selectedWinner: null,
-        reasonKey: 'comparison_tie_confirmed',
-        finalWinners: candidates,
-      );
+      _onVictory(candidates.first, coWinners: candidates);
     }
     return true;
   }
-
-  int _compareFinalists(PlayerModel a, PlayerModel b) {
-    final balls = a.ballsThrown.value.compareTo(b.ballsThrown.value);
-    if (balls != 0) return balls;
-    final aTime = _targetReachedAt[a.id] ?? Duration.zero;
-    final bTime = _targetReachedAt[b.id] ?? Duration.zero;
-    final time = aTime.compareTo(bTime);
-    if (time != 0) return time;
-    return a.id.compareTo(b.id);
-  }
-
-  String _tournamentTieBreakReason(List<PlayerModel> ranked) {
-    if (ranked.length < 2) return 'comparison_single_winner';
-    if (ranked[0].ballsThrown.value != ranked[1].ballsThrown.value) {
-      return 'comparison_fewer_balls';
-    }
-    final firstTime = _targetReachedAt[ranked[0].id] ?? Duration.zero;
-    final secondTime = _targetReachedAt[ranked[1].id] ?? Duration.zero;
-    if (firstTime != secondTime) return 'comparison_best_time';
-    return 'comparison_deterministic_order';
-  }
-
-  void _beginWinnerComparison({
-    required List<PlayerModel> candidates,
-    required PlayerModel? selectedWinner,
-    required String reasonKey,
-    required List<PlayerModel> finalWinners,
-  }) {
-    comparisonPlayers.assignAll(candidates);
-    comparisonWinner.value = selectedWinner;
-    comparisonReasonKey.value = reasonKey;
-    comparisonCountdown.value = GameConstants.winnerComparisonDisplaySeconds;
-    showWinnerComparison.value = true;
-
-    _winnerComparisonTimer?.cancel();
-    _winnerComparisonTimer = Timer.periodic(
-      const Duration(seconds: 1),
-      (timer) {
-        comparisonCountdown.value--;
-        if (comparisonCountdown.value > 0) return;
-        timer.cancel();
-        showWinnerComparison.value = false;
-        _onVictory(finalWinners.first, coWinners: finalWinners);
-      },
-    );
-  }
-
-  Duration targetReachedTimeFor(PlayerModel player) =>
-      _targetReachedAt[player.id] ?? Duration.zero;
 
   // ============================================
   // AUTO-SWITCH + SCORE VIEWING PAUSE
@@ -870,9 +806,9 @@ class GameController extends GetxController {
   // ✅ VICTORY → Retour au WaitingScreen après 10s
   // ============================================
   void _onVictory(
-    PlayerModel player, {
-    List<PlayerModel>? coWinners,
-  }) {
+      PlayerModel player, {
+        List<PlayerModel>? coWinners,
+      }) {
     winners.assignAll(coWinners ?? [player]);
 
     // ✅ CRUCIAL : Capturer le temps AVANT tout
@@ -1240,12 +1176,6 @@ class GameController extends GetxController {
     isNewRecord.value = false;
     isNotInTop10.value = false;
     showVictoryDialog.value = false;
-    showWinnerComparison.value = false;
-    comparisonPlayers.clear();
-    comparisonWinner.value = null;
-    comparisonReasonKey.value = '';
-    comparisonCountdown.value = 0;
-    _winnerComparisonTimer?.cancel();
     newRecordRank.value = 0;
     lastEvent.value = null;
     lastResult.value = null;

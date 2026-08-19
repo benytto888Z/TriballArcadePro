@@ -75,7 +75,6 @@ const Map<String, String> deDE = {
   'mode_champion_desc': 'Erreiche genau 200 Punkte mit allen Combo-Boni',
   'guide_hardcore_bullet_2': '✅ Überschreitung von 100 ERLAUBT',
 
-
   // ==========================================
   // GAME SCREEN
   // ==========================================
@@ -297,7 +296,8 @@ const Map<String, String> deDE = {
   'rule_3_title': '⚡ Spezial-Löcher',
   'rule_3_desc': 'x0 setzt deine Punkte auf null, x2 verdoppelt sie!',
   'rule_4_title': '⚠️ Überschreitung',
-  'rule_4_desc': 'Bei mehr als 100 wird die Punktzahl abgelehnt. Du bleibst bei der vorherigen.',
+  'rule_4_desc':
+      'Bei mehr als 100 wird die Punktzahl abgelehnt. Du bleibst bei der vorherigen.',
   'rule_5_title': '🏆 Sieg',
   'rule_5_desc': 'Der erste Spieler mit genau 100 Punkten gewinnt!',
 
@@ -343,7 +343,6 @@ const Map<String, String> deDE = {
   'check_platform': 'Prüfe, ob die Plattform eingeschaltet ist',
   'error_connection': 'Verbindung zur Plattform nicht möglich',
 
-
   //guide
   'how_to_play_subtitle': 'Vollständiger Spielguide',
 
@@ -357,14 +356,16 @@ const Map<String, String> deDE = {
   'guide_cat_faq': 'FAQ',
 
   'guide_basics_objective_title': 'Spielziel',
-  'guide_basics_objective_desc': 'Erreiche genau 100 Punkte, indem du Bälle in die 9 Löcher wirfst. Der Erste gewinnt!',
+  'guide_basics_objective_desc':
+      'Erreiche genau 100 Punkte, indem du Bälle in die 9 Löcher wirfst. Der Erste gewinnt!',
   'guide_basics_turn_title': 'Zug-Struktur',
   'guide_basics_turn_desc': 'Jeder Spieler spielt abwechselnd:',
   'guide_basics_turn_bullet_1': '3 Bälle pro Zug',
   'guide_basics_turn_bullet_2': '40 Sekunden maximal pro Zug',
   'guide_basics_turn_bullet_3': 'Auto-Wechsel zum nächsten Spieler',
   'guide_basics_winning_title': 'Wie gewinnen',
-  'guide_basics_winning_desc': 'Du musst GENAU 100 Punkte erreichen. Strategie ist entscheidend!',
+  'guide_basics_winning_desc':
+      'Du musst GENAU 100 Punkte erreichen. Strategie ist entscheidend!',
 
   'guide_scoring_holes_title': 'Die 9 Löcher',
   'guide_scoring_holes_desc': 'Die Plattform hat 9 Löcher in einem 3×3-Raster:',
@@ -374,17 +375,21 @@ const Map<String, String> deDE = {
   'guide_scoring_special_desc': 'Einige haben Spezialeffekte:',
   'guide_scoring_x0_bullet': '×0: setzt deine Punkte auf null!',
   'guide_scoring_x2_bullet': '×2: verdoppelt deine Punkte',
-  'guide_scoring_jackpot_bullet': '+30: der Jackpot, ideal für schnellen Fortschritt',
+  'guide_scoring_jackpot_bullet':
+      '+30: der Jackpot, ideal für schnellen Fortschritt',
   'guide_scoring_overshoot_title': 'Punkte-Überschreitung',
   'guide_scoring_overshoot_desc': 'Bei Überschreitung wird der Wurf abgelehnt.',
 
   'guide_combo_mega_desc': 'Der ultimative Combo: 4+ gleiche Treffer. ×3.0!',
-  'guide_combo_comeback_desc': 'Du gewinnst 50+ Punkte bei niedrigem Score. Bonus ×1.2.',
+  'guide_combo_comeback_desc':
+      'Du gewinnst 50+ Punkte bei niedrigem Score. Bonus ×1.2.',
 
-
-  'guide_combo_double_desc': 'Triff 2× das gleiche Loch hintereinander. ×2 Multiplikator beim zweiten Treffer.',
-  'guide_combo_triple_desc': 'Triff 3× das gleiche Loch hintereinander. ×3 Multiplikator beim dritten Treffer.',
-  'guide_combo_streak_desc': '3 positive Würfe in Folge ohne Fehler. ×3 Multiplikator + Bonus-Zug (Timer auf 40s zurückgesetzt für 3 weitere Würfe).',
+  'guide_combo_double_desc':
+      'Triff 2× das gleiche Loch hintereinander. ×2 Multiplikator beim zweiten Treffer.',
+  'guide_combo_triple_desc':
+      'Triff 3× das gleiche Loch hintereinander. ×3 Multiplikator beim dritten Treffer.',
+  'guide_combo_streak_desc':
+      '3 positive Würfe in Folge ohne Fehler. ×3 Multiplikator + Bonus-Zug (Timer auf 40s zurückgesetzt für 3 weitere Würfe).',
 
   'guide_controls_pause_title': 'Pause',
   'guide_controls_pause_desc': 'Pausiert das Spiel.',
@@ -396,7 +401,8 @@ const Map<String, String> deDE = {
   'guide_controls_quit_desc': 'Beendet das Spiel.',
 
   'guide_tip_1_title': 'Zielen strategisch',
-  'guide_tip_1_desc': 'Nahe am Sieg (90+ Pkt), meide +30. Bevorzuge +5 und +10.',
+  'guide_tip_1_desc':
+      'Nahe am Sieg (90+ Pkt), meide +30. Bevorzuge +5 und +10.',
   'guide_tip_2_title': 'Nutze ×2 clever',
   'guide_tip_2_desc': 'Spiel es bei genau 50 Pkt → BOOM, 100!',
   'guide_tip_3_title': 'Vorsicht beim x0',
@@ -408,19 +414,22 @@ const Map<String, String> deDE = {
   'guide_platform_setup_bullet_2': 'ESP32 einstecken',
   'guide_platform_setup_bullet_3': '2-3 Meter Abstand halten',
   'guide_platform_connection_title': 'WLAN-Verbindung',
-  'guide_platform_connection_desc': 'Verbinde dein Gerät mit "amz_triball" (Passwort: 12345678).',
+  'guide_platform_connection_desc':
+      'Verbinde dein Gerät mit "amz_triball" (Passwort: 12345678).',
   'guide_platform_leds_title': 'Farbige LEDs',
-  'guide_platform_leds_desc': 'LEDs geben visuelles Feedback: grün für gute Würfe, rot für schlechte.',
+  'guide_platform_leds_desc':
+      'LEDs geben visuelles Feedback: grün für gute Würfe, rot für schlechte.',
 
   'guide_faq_1_title': 'Warum wird mein Ball nicht erkannt?',
-  'guide_faq_1_desc': 'IR-Sensoren haben regelbare Reichweite. Prüfe die Potentiometer-Kalibrierung.',
+  'guide_faq_1_desc':
+      'IR-Sensoren haben regelbare Reichweite. Prüfe die Potentiometer-Kalibrierung.',
   'guide_faq_2_title': 'Wie ändere ich die Sprache?',
   'guide_faq_2_desc': 'Gehe zu Einstellungen → Sprache.',
   'guide_faq_3_title': 'Funktioniert die App ohne Plattform?',
-  'guide_faq_3_desc': 'Ja, im reduzierten Modus. Aber ohne automatische Balldetektion.',
+  'guide_faq_3_desc':
+      'Ja, im reduzierten Modus. Aber ohne automatische Balldetektion.',
   'guide_faq_4_title': 'Wie setze ich meine Punkte zurück?',
   'guide_faq_4_desc': 'Gehe zu Bestenliste → Löschen. Unwiderruflich.',
-
 
   'turn_number': 'Zug',
   'new_turn': 'Neuer Zug',
@@ -439,7 +448,6 @@ const Map<String, String> deDE = {
   'players': 'Spieler',
   'other_rankings': 'Weitere Rankings',
 
-
   'tournament_size': 'Turniergröße',
   'tournament_default_name': 'Mein Turnier',
   'tournament_rounds': 'Runden',
@@ -453,12 +461,12 @@ const Map<String, String> deDE = {
   'tournament_quit': 'Turnier beenden',
   'tournament_quit_confirm': 'Aktuelles Turnier geht verloren. Fortfahren?',
 
-
   'current_ssid': 'Aktuelle SSID',
   'current_password': 'Aktuelles Passwort',
   'auto_connect': 'Auto-Verbinden',
   'change_wifi_credentials': 'WLAN-Daten ändern',
-  'wifi_change_warning': 'Plattform startet nach Änderungen neu. Verbinde dein Gerät neu.',
+  'wifi_change_warning':
+      'Plattform startet nach Änderungen neu. Verbinde dein Gerät neu.',
   'password_min_8_chars': 'Mindestens 8 Zeichen',
   'wifi_invalid': 'Ungültige SSID oder Passwort',
   'wifi_updated': 'WLAN aktualisiert, Plattform startet neu',
@@ -522,7 +530,8 @@ const Map<String, String> deDE = {
 
   'loading_leaderboard': 'Bestenliste wird geladen...',
   'leaderboard_offline_title': 'Plattform nicht verbunden',
-  'leaderboard_offline_desc': 'Die Bestenliste ist auf der Konsole gespeichert.\nVerbinde dich mit dem Plattform-WLAN.',
+  'leaderboard_offline_desc':
+      'Die Bestenliste ist auf der Konsole gespeichert.\nVerbinde dich mit dem Plattform-WLAN.',
   'refresh': 'Aktualisieren',
   'clear_mode_only': 'Dies löscht nur den {mode}-Modus.',
 
@@ -531,7 +540,8 @@ const Map<String, String> deDE = {
 
   'tts_hardcore_overshoot': 'Achtung, {points} Punkte zu viel! Zurück auf 100.',
   'mode_hardcore_desc': 'x0 = -20 Pkt, Überschreitung: ja',
-  'guide_hardcore_new_rule': 'In HARDCORE kannst du 100 überschreiten! Nutze negative Löcher (-5, -10) um genau auf 100 zurück zu kommen.',
+  'guide_hardcore_new_rule':
+      'In HARDCORE kannst du 100 überschreiten! Nutze negative Löcher (-5, -10) um genau auf 100 zurück zu kommen.',
 
   'end_of_turn': 'Ende des Zugs',
   'next_turn_in': 'Nächster Zug in',
@@ -549,14 +559,16 @@ const Map<String, String> deDE = {
   'back_to_waiting': 'Wartebildschirm',
   'auto_return_in': 'Rückkehr in',
 
-  'clear_requires_code': 'Sicherheitscode eingeben um die Bestenliste zu löschen',
+  'clear_requires_code':
+      'Sicherheitscode eingeben um die Bestenliste zu löschen',
   'clear_mode_warning': 'Dies löscht die TOP 10 des {mode}-Modus.',
   'invalid_security_code': 'Falscher Sicherheitscode',
   'leaderboard_cleared': 'Bestenliste erfolgreich gelöscht',
 
   'remote_leaderboard': 'TV-Bestenliste',
   'remote_leaderboard_short': 'TOP 10 auf Bildschirm anzeigen',
-  'remote_leaderboard_desc': 'Wähle einen Modus um seine TOP 10 Bestenliste auf dem Spielbildschirm (TV) anzuzeigen.',
+  'remote_leaderboard_desc':
+      'Wähle einen Modus um seine TOP 10 Bestenliste auf dem Spielbildschirm (TV) anzuzeigen.',
   'select_mode_to_display': 'Modus zum Anzeigen wählen',
   'show_top10_on_tv': 'TOP 10 auf TV anzeigen',
   'back_to_waiting_remote': 'Zurück zum TV-Wartebildschirm',
@@ -570,4 +582,18 @@ const Map<String, String> deDE = {
   'quit_app': 'App beenden',
 
   'auto_start_in': 'Auto-Start in',
+
+  'winner_comparison_title': 'FINALISTENVERGLEICH',
+
+  'comparison_tie_confirmed': 'Gleiches Ziel in derselben Runde: gemeinsame Sieger',
+
+  'comparison_fewer_balls': 'Sieger: weniger Bälle verwendet',
+
+  'comparison_best_time': 'Sieger: Ziel am schnellsten erreicht',
+
+  'comparison_deterministic_order': 'Identische Statistiken: deterministische Entscheidung',
+
+  'comparison_single_winner': 'Nur ein Spieler hat das Ziel erreicht',
+
+  'victory_in': 'Ergebnis in',
 };

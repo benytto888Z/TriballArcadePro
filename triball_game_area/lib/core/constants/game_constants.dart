@@ -104,6 +104,9 @@ class GameConstants {
   /// En mode Combo, laisse le feedback TRIPLE visible avant le récapitulatif.
   static const int comboTriplePauseBeforeScoreOverlaySeconds = 3;
 
+  /// Durée du tableau comparatif avant le VictoryDialog.
+  static const int winnerComparisonDisplaySeconds = 8;
+
   // ==========================================
   // ✅ VICTORY DIALOG DISPLAY DURATION
   // ==========================================

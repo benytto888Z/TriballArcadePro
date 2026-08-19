@@ -71,9 +71,8 @@ const Map<String, String> enUS = {
   'mode_combo': 'Combo',
   'mode_combo_desc': 'Bonus for repeated shots',
   'mode_champion': 'Champion',
-  'mode_champion_desc':  'Reach exactly 200 points with all Combo bonuses',
+  'mode_champion_desc': 'Reach exactly 200 points with all Combo bonuses',
   'guide_hardcore_bullet_2': '✅ Overshoot 100 ALLOWED',
-
 
   // ==========================================
   // GAME SCREEN
@@ -275,7 +274,6 @@ const Map<String, String> enUS = {
   'platform_connected': 'Platform connected',
   'platform_disconnected': 'Platform disconnected',
 
-
   'connect_platform': 'Connecting to Platform...',
 
   // ==========================================
@@ -304,7 +302,8 @@ const Map<String, String> enUS = {
   'rule_3_title': '⚡ Special Holes',
   'rule_3_desc': 'x0 resets your score, x2 doubles your score!',
   'rule_4_title': '⚠️ Overshoot',
-  'rule_4_desc': 'If you exceed 100, the score is refused. You stay at the previous score.',
+  'rule_4_desc':
+      'If you exceed 100, the score is refused. You stay at the previous score.',
   'rule_5_title': '🏆 Victory',
   'rule_5_desc': 'The first player to reach exactly 100 wins!',
 
@@ -348,7 +347,7 @@ const Map<String, String> enUS = {
   // Header
   'how_to_play_subtitle': 'Complete game guide',
 
-// Categories
+  // Categories
   'guide_cat_basics': 'Basics',
   'guide_cat_modes': 'Modes',
   'guide_cat_scoring': 'Scoring',
@@ -358,9 +357,10 @@ const Map<String, String> enUS = {
   'guide_cat_platform': 'Platform',
   'guide_cat_faq': 'FAQ',
 
-// Basics
+  // Basics
   'guide_basics_objective_title': 'Game objective',
-  'guide_basics_objective_desc': 'Reach exactly 100 points (or 200 in Champion mode) by throwing balls into the 9 holes. First to reach the target wins!',
+  'guide_basics_objective_desc':
+      'Reach exactly 100 points (or 200 in Champion mode) by throwing balls into the 9 holes. First to reach the target wins!',
 
   'guide_basics_turn_title': 'Turn structure',
   'guide_basics_turn_desc': 'Each player plays in turn:',
@@ -369,13 +369,16 @@ const Map<String, String> enUS = {
   'guide_basics_turn_bullet_3': 'Auto-switch to next player',
 
   'guide_basics_winning_title': 'How to win',
-  'guide_basics_winning_desc': 'You must reach EXACTLY 100 points. If you overshoot, your shot is refused (or bounces depending on the mode). Strategic play is essential!',
+  'guide_basics_winning_desc':
+      'You must reach EXACTLY 100 points. If you overshoot, your shot is refused (or bounces depending on the mode). Strategic play is essential!',
 
-// Scoring
+  // Scoring
   'guide_scoring_holes_title': 'The 9 holes',
-  'guide_scoring_holes_desc': 'The platform has 9 holes in a 3×3 grid. Each gives or takes points based on its position:',
+  'guide_scoring_holes_desc':
+      'The platform has 9 holes in a 3×3 grid. Each gives or takes points based on its position:',
   'guide_board_layout': 'BOARD LAYOUT',
-  'guide_board_explanation': 'Green values add points,\nred values remove them.',
+  'guide_board_explanation':
+      'Green values add points,\nred values remove them.',
 
   'guide_scoring_special_title': 'Special holes',
   'guide_scoring_special_desc': 'Some holes have special effects:',
@@ -384,62 +387,80 @@ const Map<String, String> enUS = {
   'guide_scoring_jackpot_bullet': '+30: the jackpot, great for fast progress',
 
   'guide_scoring_overshoot_title': 'Score overshoot',
-  'guide_scoring_overshoot_desc': 'If your score exceeds the target (e.g. 105 when aiming for 100), the shot is refused and you keep the previous score. "Bounce" mode available in settings: score bounces back (100 - overshoot).',
+  'guide_scoring_overshoot_desc':
+      'If your score exceeds the target (e.g. 105 when aiming for 100), the shot is refused and you keep the previous score. "Bounce" mode available in settings: score bounces back (100 - overshoot).',
 
-// Combos
-  'guide_combo_mega_desc': 'The ultimate combo: 4+ same hits. ×3.0 multiplier! Rare but devastating.',
-  'guide_combo_comeback_desc': 'Gain 50+ points at once while your score was low (< 30). ×1.2 bonus for the spectacular comeback.',
+  // Combos
+  'guide_combo_mega_desc':
+      'The ultimate combo: 4+ same hits. ×3.0 multiplier! Rare but devastating.',
+  'guide_combo_comeback_desc':
+      'Gain 50+ points at once while your score was low (< 30). ×1.2 bonus for the spectacular comeback.',
   'bonus_turn': 'Bonus Turn',
   'bonus_turn_granted': 'Bonus turn granted!',
 
-
-
-  'guide_combo_double_desc': 'Hit the same hole 2 times in a row. ×2 multiplier on the second hit.',
-  'guide_combo_triple_desc': 'Hit the same hole 3 times in a row. ×3 multiplier on the third hit.',
-  'guide_combo_streak_desc': '3 positive shots in a row without missing. ×3 multiplier + bonus turn (timer reset to 40s for 3 more throws).',
-// Controls
+  'guide_combo_double_desc':
+      'Hit the same hole 2 times in a row. ×2 multiplier on the second hit.',
+  'guide_combo_triple_desc':
+      'Hit the same hole 3 times in a row. ×3 multiplier on the third hit.',
+  'guide_combo_streak_desc':
+      '3 positive shots in a row without missing. ×3 multiplier + bonus turn (timer reset to 40s for 3 more throws).',
+  // Controls
   'guide_controls_pause_title': 'Pause',
-  'guide_controls_pause_desc': 'Pauses the game. Timer stops, sensors disabled. Resume anytime.',
+  'guide_controls_pause_desc':
+      'Pauses the game. Timer stops, sensors disabled. Resume anytime.',
   'guide_controls_next_title': 'Next player',
-  'guide_controls_next_desc': 'Manually switch to next player (useful if a ball was not detected). Multi-player only.',
+  'guide_controls_next_desc':
+      'Manually switch to next player (useful if a ball was not detected). Multi-player only.',
   'guide_controls_restart_title': 'Restart',
-  'guide_controls_restart_desc': 'Completely resets the game. Scores reset to zero and 3-2-1 countdown restarts.',
+  'guide_controls_restart_desc':
+      'Completely resets the game. Scores reset to zero and 3-2-1 countdown restarts.',
   'guide_controls_quit_title': 'Quit',
-  'guide_controls_quit_desc': 'Quits the current game and returns to main menu. Confirmation is requested.',
+  'guide_controls_quit_desc':
+      'Quits the current game and returns to main menu. Confirmation is requested.',
 
-// Tips
+  // Tips
   'guide_tip_1_title': 'Aim strategically',
-  'guide_tip_1_desc': 'Near victory (90+ pts), avoid +30 (CENTER_MID) which would overshoot. Prefer +5 and +10.',
+  'guide_tip_1_desc':
+      'Near victory (90+ pts), avoid +30 (CENTER_MID) which would overshoot. Prefer +5 and +10.',
   'guide_tip_2_title': 'Use ×2 smartly',
-  'guide_tip_2_desc': '×2 doubles your score. Play it when exactly at 50 pts → BOOM, instant 100!',
+  'guide_tip_2_desc':
+      '×2 doubles your score. Play it when exactly at 50 pts → BOOM, instant 100!',
   'guide_tip_3_title': 'Beware of x0',
-  'guide_tip_3_desc': '×0 resets everything. Be careful when score is high. The most dangerous hole at end-game.',
+  'guide_tip_3_desc':
+      '×0 resets everything. Be careful when score is high. The most dangerous hole at end-game.',
 
-// Platform
+  // Platform
   'guide_platform_setup_title': 'Setup',
-  'guide_platform_setup_desc': 'To play properly, here\'s how to install the platform:',
+  'guide_platform_setup_desc':
+      'To play properly, here\'s how to install the platform:',
   'guide_platform_setup_bullet_1': 'Place on a stable surface',
   'guide_platform_setup_bullet_2': 'Plug ESP32 to power',
   'guide_platform_setup_bullet_3': 'Stand 2-3 meters away',
 
   'guide_platform_connection_title': 'WiFi connection',
-  'guide_platform_connection_desc': 'Connect your device to WiFi network "amz_triball" (password: 12345678). The app auto-connects to the platform WebSocket.',
+  'guide_platform_connection_desc':
+      'Connect your device to WiFi network "amz_triball" (password: 12345678). The app auto-connects to the platform WebSocket.',
 
   'guide_platform_leds_title': 'Colored LEDs',
-  'guide_platform_leds_desc': 'WS2812 LEDs around holes give visual feedback: green for good shots, red for bad, cyan for jackpot, gold for ×2.',
+  'guide_platform_leds_desc':
+      'WS2812 LEDs around holes give visual feedback: green for good shots, red for bad, cyan for jackpot, gold for ×2.',
 
-// FAQ
+  // FAQ
   'guide_faq_1_title': 'Why isn\'t my ball detected?',
-  'guide_faq_1_desc': 'IR sensors have adjustable detection range (2-30 cm). Check the potentiometer calibration on the sensor, or use a brighter ball (white/yellow).',
+  'guide_faq_1_desc':
+      'IR sensors have adjustable detection range (2-30 cm). Check the potentiometer calibration on the sensor, or use a brighter ball (white/yellow).',
 
   'guide_faq_2_title': 'How to change language?',
-  'guide_faq_2_desc': 'Go to Settings → Language. Choose between French, English, Spanish, German. TTS adapts automatically.',
+  'guide_faq_2_desc':
+      'Go to Settings → Language. Choose between French, English, Spanish, German. TTS adapts automatically.',
 
   'guide_faq_3_title': 'Does the app work without the platform?',
-  'guide_faq_3_desc': 'Yes, the app works in degraded mode without connection. But without the platform, no automatic ball detection.',
+  'guide_faq_3_desc':
+      'Yes, the app works in degraded mode without connection. But without the platform, no automatic ball detection.',
 
   'guide_faq_4_title': 'How to reset my scores?',
-  'guide_faq_4_desc': 'Go to Leaderboard → Clear leaderboard. This action is irreversible and deletes all your top 10 data.',
+  'guide_faq_4_desc':
+      'Go to Leaderboard → Clear leaderboard. This action is irreversible and deletes all your top 10 data.',
 
   'turn_number': 'Turn',
   'new_turn': 'New turn',
@@ -449,7 +470,6 @@ const Map<String, String> enUS = {
   'voice_enabled': 'Voice enabled',
   'no_voices_available': 'No voices available for this language',
   'stop': 'Stop',
-
 
   'filter_all_time': 'All',
   'filter_today': 'Today',
@@ -472,12 +492,12 @@ const Map<String, String> enUS = {
   'tournament_quit': 'Quit Tournament',
   'tournament_quit_confirm': 'Current tournament will be lost. Continue?',
 
-
   'current_ssid': 'Current SSID',
   'current_password': 'Current password',
   'auto_connect': 'Auto-connect',
   'change_wifi_credentials': 'Change WiFi credentials',
-  'wifi_change_warning': 'Platform restarts after changes. Reconnect your device to the new network.',
+  'wifi_change_warning':
+      'Platform restarts after changes. Reconnect your device to the new network.',
   'password_min_8_chars': 'Minimum 8 characters',
   'wifi_invalid': 'Invalid SSID or password',
   'wifi_updated': 'WiFi updated, platform restarting',
@@ -502,7 +522,8 @@ const Map<String, String> enUS = {
   'export_settings': 'Export settings',
   'import_settings': 'Import settings',
   'reset_all_data': 'Reset all data',
-  'reset_all_data_confirm': 'This will erase ALL your data: settings, leaderboards, recent players. Continue?',
+  'reset_all_data_confirm':
+      'This will erase ALL your data: settings, leaderboards, recent players. Continue?',
   'reset_confirm': 'Erase all',
   'all_data_reset': 'Data erased',
   'settings_exported_to_clipboard': 'Settings copied (paste elsewhere to save)',
@@ -512,7 +533,8 @@ const Map<String, String> enUS = {
   'settings_imported': 'Settings imported',
   'restart_required': 'Restart required',
   'restart_required_desc': 'Restart the app to apply changes.',
-  'data_management_info': 'Export contains ALL your settings, leaderboards and recent players.',
+  'data_management_info':
+      'Export contains ALL your settings, leaderboards and recent players.',
 
   'build': 'Build',
   'open_source_licenses': 'Open source licenses',
@@ -541,17 +563,19 @@ const Map<String, String> enUS = {
 
   'loading_leaderboard': 'Loading leaderboard...',
   'leaderboard_offline_title': 'Platform not connected',
-  'leaderboard_offline_desc': 'Leaderboard is stored on the board.\nConnect to the platform WiFi to access it.',
+  'leaderboard_offline_desc':
+      'Leaderboard is stored on the board.\nConnect to the platform WiFi to access it.',
   'refresh': 'Refresh',
   'clear_mode_only': 'This will only clear the {mode} mode.',
-
 
   'overshoot_rule_hardcore': 'Overshoot allowed (hardcore)',
   'hardcore_overshoot': 'Overshoot! Come back to 100',
 
-  'tts_hardcore_overshoot': 'Warning, {points} points too many! Come back to 100.',
+  'tts_hardcore_overshoot':
+      'Warning, {points} points too many! Come back to 100.',
   'mode_hardcore_desc': 'x0 = -20 pts, overshoot: yes',
-  'guide_hardcore_new_rule': 'In HARDCORE, you can overshoot 100! Use negative holes (-5, -10) to come back exactly to 100.',
+  'guide_hardcore_new_rule':
+      'In HARDCORE, you can overshoot 100! Use negative holes (-5, -10) to come back exactly to 100.',
 
   'end_of_turn': 'End of turn',
   'next_turn_in': 'Next turn in',
@@ -576,7 +600,8 @@ const Map<String, String> enUS = {
 
   'remote_leaderboard': 'TV Leaderboard',
   'remote_leaderboard_short': 'Show TOP 10 on screen',
-  'remote_leaderboard_desc': 'Select a mode to display its TOP 10 leaderboard on the game screen (TV).',
+  'remote_leaderboard_desc':
+      'Select a mode to display its TOP 10 leaderboard on the game screen (TV).',
   'select_mode_to_display': 'Choose mode to display',
   'show_top10_on_tv': 'Show TOP 10 on TV',
   'back_to_waiting_remote': 'Back to TV waiting screen',
@@ -590,4 +615,19 @@ const Map<String, String> enUS = {
   'quit_app': 'Quit application',
 
   'auto_start_in': 'Auto start in',
+
+  'winner_comparison_title': 'FINALISTS COMPARISON',
+
+  'comparison_tie_confirmed': 'Same target in the same round: joint winners',
+
+  'comparison_fewer_balls': 'Winner: fewer balls used',
+
+  'comparison_best_time': 'Winner: target reached fastest',
+
+  'comparison_deterministic_order':
+      'Identical statistics: deterministic tie-break',
+
+  'comparison_single_winner': 'Only one player reached the target',
+
+  'victory_in': 'Result in',
 };

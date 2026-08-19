@@ -16,7 +16,6 @@ import 'widgets/score_popup.dart';
 import 'widgets/score_viewing_pause_overlay.dart';
 import 'widgets/turn_timer_widget.dart';
 import 'widgets/victory_dialog.dart';
-import 'widgets/winner_comparison_overlay.dart';
 import 'game_controller.dart';
 import 'widgets/combo_indicator.dart';
 import 'widgets/controls_toggle_button.dart';
@@ -29,9 +28,6 @@ class GameScreen extends GetView<GameController> {
   @override
   Widget build(BuildContext context) {
     final plys = controller.players.toList();
-
-    // ✅ Récupère la taille du turn timer selon le device
-    final turnTimerSize = GameScreenBreakpoints.turnTimerSize();
 
     return LandscapeImmersiveWrapper(
       child: Scaffold(
@@ -51,13 +47,6 @@ class GameScreen extends GetView<GameController> {
             FloatingParticles(
               count: GameScreenBreakpoints.particlesCount(),
             ),
-
-            // ✅ Turn timer — position et taille adaptées
-           /* Positioned(
-              top: GameScreenBreakpoints.turnTimerTop(),
-              left: GameScreenBreakpoints.turnTimerLeft(),
-              child: TurnTimerWidget(size: GameScreenBreakpoints.turnTimerSize()),
-            ),*/
 
             Positioned(
               top: GameScreenBreakpoints.turnTimerTop(),
@@ -147,15 +136,14 @@ class GameScreen extends GetView<GameController> {
             Positioned(
               top: 250.h,
               bottom: 0.h,
-              left: 380.w,
-              right: 380.w,
+              left: 550.w,
+              right: 550.w,
               child: const Center(child: CountdownOverlay()),
             ),
 
             // ============================================
-            // WINNER COMPARISON puis VICTORY DIALOG
+            // VICTORY DIALOG
             // ============================================
-            const WinnerComparisonOverlay(),
             const VictoryDialog(),
           ],
         ),
@@ -184,9 +172,10 @@ class _TopBar extends GetView<GameController> {
                   '${controller.config.mode.translationKey.tr.toUpperCase()}:',
                   style: TextStyle(
                     fontFamily: GameConstants.gameFontFamily,
-                    fontSize: GameScreenBreakpoints.topBarFontSize(),    // ✅
-                    fontWeight: FontWeight.w700,
+                    fontSize: GameScreenBreakpoints.topBarFontSize()*1.3,    // ✅
+                    fontWeight: FontWeight.w900,
                     color: ThemeColors.primary,
+                    shadows:[Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 5)],
                     letterSpacing: 2,
                   ),
                   maxLines: 1,
@@ -196,8 +185,10 @@ class _TopBar extends GetView<GameController> {
                   ' ${controller.targetScore} pts',
                   style: TextStyle(
                     fontFamily: GameConstants.gameFontFamily,
-                    fontSize: GameScreenBreakpoints.topBarFontSize(),    // ✅
+                    fontSize: GameScreenBreakpoints.topBarFontSize()*1.2,    // ✅
+                    fontWeight: FontWeight.w900,
                     color: ThemeColors.textSecondary,
+                    shadows:[Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 5)],
                     letterSpacing: 1,
                   ),
                   maxLines: 1,
@@ -218,8 +209,10 @@ class _TopBar extends GetView<GameController> {
                   '${'time'.tr.toUpperCase()}: ',
                   style: TextStyle(
                     fontFamily: GameConstants.gameFontFamily,
-                    fontSize: GameScreenBreakpoints.topBarFontSize(),    // ✅
+                    fontSize: GameScreenBreakpoints.topBarFontSize()*1.2,    // ✅
+                    fontWeight: FontWeight.w900,
                     color: ThemeColors.textSecondary,
+                    shadows:[Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 5)],
                     letterSpacing: 2,
                   ),
                 ),
@@ -229,13 +222,13 @@ class _TopBar extends GetView<GameController> {
                     controller.elapsedFormatted,
                     style: TextStyle(
                       fontFamily: GameConstants.gameFontFamily,
-                      fontSize: GameScreenBreakpoints.topBarTimeFontSize(), // ✅
+                      fontSize: GameScreenBreakpoints.topBarTimeFontSize()*1.2, // ✅
                       fontWeight: FontWeight.w900,
                       color: ThemeColors.warning,
                       letterSpacing: 2,
                       shadows: ThemeColors.useGlow
-                          ? [Shadow(color: ThemeColors.warning, blurRadius: 12)]
-                          : null,
+                          ? [Shadow(color: ThemeColors.warning,offset: Offset(0, 6), blurRadius: 5)]
+                          : [Shadow(color: Color(0xff0b0302), offset: Offset(0, 6), blurRadius: 5)],
                     ),
                   ),
                 ),

@@ -620,4 +620,18 @@ const Map<String, String> frFR = {
 
   'auto_start_in': 'Démarrage auto dans',
 
+  'winner_comparison_title': 'COMPARAISON DES FINALISTES',
+
+  'comparison_tie_confirmed': 'Même cible au même tour : vainqueurs ex æquo',
+
+  'comparison_fewer_balls': 'Vainqueur : moins de balles utilisées',
+
+  'comparison_best_time': 'Vainqueur : cible atteinte le plus rapidement',
+
+  'comparison_deterministic_order': 'Statistiques identiques : ordre de départage',
+
+  'comparison_single_winner': 'Un seul joueur a atteint la cible',
+
+  'victory_in': 'Résultat dans',
+
 };
