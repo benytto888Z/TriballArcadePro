@@ -1,15 +1,17 @@
 // lib/features/tournament/widgets/match_card.dart
+// ⚠️ ARCHIVE — copie obsolete, non compilée (hors lib/). Déplacée depuis triball_game_area/lib/features/tournament/widgets/match_cardOlD01.dart
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import '../../../core/theme/theme_colors.dart';
-import '../../../core/utils/helpers.dart';
-import '../../../data/models/tournament_model.dart';
-import '../../game/utils/game_screen_breakpoints.dart';
-import '../tournament_controller.dart';
+import 'package:tribal_game_area/core/theme/theme_colors.dart';
+import 'package:tribal_game_area/core/utils/helpers.dart';
+import 'package:tribal_game_area/data/models/tournament_model.dart';
+import 'package:tribal_game_area/features/game/utils/game_screen_breakpoints.dart';
+import 'package:tribal_game_area/features/tournament/tournament_controller.dart';
 
 class MatchCard extends StatelessWidget {
   final TournamentMatch match;
@@ -39,8 +41,8 @@ class MatchCard extends StatelessWidget {
           : ThemeColors.primary.withOpacity(0.2));
 
       return Container(
-        width: double.infinity,
-        height: double.infinity,
+        width: 160.w,
+        margin: EdgeInsets.symmetric(vertical: 3.h),
         decoration: BoxDecoration(
           color: ThemeColors.surface.withOpacity(0.6),
           borderRadius: BorderRadius.circular(10),
@@ -80,7 +82,7 @@ class MatchCard extends StatelessWidget {
                     'M${match.matchId + 1}',
                     style: TextStyle(
                       fontFamily: 'Orbitron',
-                      fontSize: GameScreenBreakpoints.tournamentMatchHeaderFontSize(),
+                      fontSize: 8.sp,
                       fontWeight: FontWeight.w800,
                       color: ThemeColors.textSecondary,
                       letterSpacing: 1,
@@ -88,16 +90,16 @@ class MatchCard extends StatelessWidget {
                   ),
                   if (isCompleted)
                     Icon(Icons.check_circle,
-                        color: ThemeColors.success, size: GameScreenBreakpoints.tournamentMatchIconSize())
+                        color: ThemeColors.success, size: 10.sp)
                   else if (isInProgress)
                     Icon(Icons.play_circle,
-                        color: ThemeColors.warning, size: GameScreenBreakpoints.tournamentMatchIconSize())
+                        color: ThemeColors.warning, size: 10.sp)
                   else if (isCurrent)
                       Text(
                         'tournament_play_now'.tr.toUpperCase(),
                         style: TextStyle(
                           fontFamily: 'Orbitron',
-                          fontSize: GameScreenBreakpoints.tournamentMatchStatusFontSize(),
+                          fontSize: 7.sp,
                           fontWeight: FontWeight.w800,
                           color: ThemeColors.primary,
                           letterSpacing: 1.2,
@@ -138,7 +140,7 @@ class MatchCard extends StatelessWidget {
               _AutoStartButton(
                 key: ValueKey('auto_start_match_${match.matchId}'),
                 matchId: match.matchId,
-                onStart: onStart!,
+                onStart: onStart,
               ),
               Padding(
                 padding: EdgeInsets.all(6.w),
@@ -159,13 +161,13 @@ class MatchCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.play_arrow,
-                            color: ThemeColors.primary, size: GameScreenBreakpoints.tournamentStartButtonIconSize()),
+                            color: ThemeColors.primary, size: 14.sp),
                         SizedBox(width: 4.w),
                         Text(
                           'play'.tr.toUpperCase(),
                           style: TextStyle(
                             fontFamily: 'Orbitron',
-                            fontSize: GameScreenBreakpoints.tournamentStartButtonFontSize(),
+                            fontSize: 9.sp,
                             fontWeight: FontWeight.w800,
                             color: ThemeColors.primary,
                             letterSpacing: 1,
@@ -209,10 +211,7 @@ class _PlayerSlot extends StatelessWidget {
     final color = Helpers.playerColor(playerIndex);
 
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: GameScreenBreakpoints.tournamentPlayerSlotPaddingH(),
-        vertical: GameScreenBreakpoints.tournamentPlayerSlotPaddingV(),
-      ),
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 7.h),
       decoration: BoxDecoration(
         color: isWinner
             ? color.withOpacity(0.18)
@@ -222,8 +221,8 @@ class _PlayerSlot extends StatelessWidget {
         children: [
           if (!isEmpty && !isBye)
             Container(
-              width: GameScreenBreakpoints.tournamentPlayerColorBarWidth(),
-              height: GameScreenBreakpoints.tournamentPlayerColorBarHeight(),
+              width: 5.w,
+              height: 16.h,
               decoration: BoxDecoration(
                 color: color,
                 borderRadius: BorderRadius.circular(2),
@@ -241,7 +240,7 @@ class _PlayerSlot extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontFamily: 'Orbitron',
-                fontSize: GameScreenBreakpoints.tournamentPlayerFontSize(),
+                fontSize: 11.sp,
                 fontWeight: isWinner ? FontWeight.w900 : FontWeight.w600,
                 color: isEmpty || isBye
                     ? ThemeColors.textSecondary.withOpacity(0.5)
@@ -255,7 +254,7 @@ class _PlayerSlot extends StatelessWidget {
             ),
           ),
           if (isWinner)
-            Icon(Icons.emoji_events, color: color, size: GameScreenBreakpoints.tournamentMatchIconSize()),
+            Icon(Icons.emoji_events, color: color, size: 12.sp),
           if (showScore && !isEmpty && !isBye)
             Padding(
               padding: EdgeInsets.only(left: 4.w),
@@ -263,7 +262,7 @@ class _PlayerSlot extends StatelessWidget {
                 '$score',
                 style: TextStyle(
                   fontFamily: 'Orbitron',
-                  fontSize: GameScreenBreakpoints.tournamentPlayerFontSize(),
+                  fontSize: 11.sp,
                   fontWeight: FontWeight.w900,
                   color: isWinner
                       ? color
@@ -279,7 +278,7 @@ class _PlayerSlot extends StatelessWidget {
 
 class _AutoStartButton extends StatefulWidget {
   final int matchId;
-  final VoidCallback onStart;
+  final VoidCallback? onStart;
 
   const _AutoStartButton({
     super.key,
@@ -315,20 +314,26 @@ class _AutoStartButtonState extends State<_AutoStartButton> {
     _timer?.cancel();
     _countdown = _initialCountdown;
     _hasStarted = false;
+    //print("Timer tournoi canceled tournoi tournoi tournoi tournoi tournoi");
 
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (!mounted || _hasStarted) {
         timer.cancel();
+       //print("Timer tournoi canceled tournoi tournoi tournoi tournoi tournoi");
         return;
       }
 
+      print("_countdown = ");
+      print(_countdown);
+
       final next = _countdown - 1;
       if (next <= 0) {
+        print("Timer tournoi");
         timer.cancel();
         _hasStarted = true;
         if (mounted) setState(() => _countdown = 0);
 
-        widget.onStart();
+        widget.onStart?.call();
         return;
       }
 

@@ -1,4 +1,5 @@
 // triball_game_area/lib/core/utils/game_screen_breakpoints.dart
+// ⚠️ ARCHIVE — copie obsolete, non compilée (hors lib/). Déplacée depuis triball_game_area/lib/features/game/utils/game_screen_breakpoints_oldd.dart
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

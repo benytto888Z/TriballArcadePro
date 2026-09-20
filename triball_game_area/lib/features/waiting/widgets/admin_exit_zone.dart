@@ -1,10 +1,14 @@
 // triball_game_area/lib/features/waiting/widgets/admin_exit_zone.dart
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:window_manager/window_manager.dart';
 import '../../../core/constants/game_constants.dart';
+import '../../../core/services/avatar_storage_service.dart';
 import '../../../core/theme/theme_colors.dart';
 import '../../../core/utils/platform_helper.dart';
 
@@ -149,6 +153,16 @@ class _AdminExitZoneState extends State<AdminExitZone> {
               },
             ),
             Divider(color: ThemeColors.primary.withOpacity(0.3)),
+            // ✅ Diagnostic du stockage des avatars (support sur site)
+            ListTile(
+              leading: Icon(Icons.photo_library_outlined,
+                  color: ThemeColors.primary),
+              title: Text('admin_avatar_diagnostics'.tr),
+              onTap: () async {
+                Get.back();
+                await _showAvatarDiagnostics();
+              },
+            ),
             // Quit
             ListTile(
               leading: Icon(Icons.exit_to_app, color: ThemeColors.error),
@@ -174,6 +188,152 @@ class _AdminExitZoneState extends State<AdminExitZone> {
         ],
       ),
     );
+  }
+
+  // ============================================
+  // ✅ DIAGNOSTIC AVATARS — où sont les .jpg du top 10 ?
+  // ============================================
+  /// Le dossier est choisi à l'exécution (exe -> cwd -> Documents -> Temp) et
+  /// n'est donc pas toujours celui qu'on attend. Cet écran de support affiche le
+  /// chemin réellement utilisé et les fichiers présents, sans brancher de console.
+  Future<void> _showAvatarDiagnostics() async {
+    AvatarStorageService? service;
+    try {
+      service = Get.find<AvatarStorageService>();
+    } catch (_) {
+      service = null; // service absent (ne doit pas arriver : permanent dans main)
+    }
+
+    final dir = service?.avatarsDirectory;
+    final files = service == null ? <String>[] : await service!.listAvatarFiles();
+
+    if (!mounted) return;
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: ThemeColors.surface,
+        title: Text(
+          'admin_avatar_diagnostics'.tr,
+          style: TextStyle(color: ThemeColors.primary, fontSize: 16),
+        ),
+        content: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 520),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _diagRow(
+                  'avatar_storage_state'.tr,
+                  service != null && service.isAvatarStorageReady
+                      ? 'avatar_storage_ready'.tr
+                      : 'avatar_storage_unavailable'.tr,
+                  ok: service != null && service.isAvatarStorageReady,
+                ),
+                const SizedBox(height: 8),
+                _diagRow('avatar_storage_dir'.tr, dir ?? '—'),
+                const SizedBox(height: 8),
+                _diagRow(
+                  '${'avatar_storage_files'.tr} (${files.length})',
+                  files.isEmpty
+                      ? 'avatar_storage_empty'.tr
+                      : files.take(15).join('\n'),
+                ),
+                if (files.length > 15)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      '… +${files.length - 15}',
+                      style: const TextStyle(color: ThemeColors.textSecondary),
+                    ),
+                  ),
+                if (dir == null) ...[
+                  const SizedBox(height: 10),
+                  Text(
+                    'avatar_storage_no_dir'.tr,
+                    style: TextStyle(
+                      color: ThemeColors.warning,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          if (dir != null)
+            TextButton(
+              onPressed: () => _openAvatarsFolder(dir),
+              child: Text('avatar_storage_open'.tr),
+            ),
+          if (dir != null)
+            TextButton(
+              onPressed: () async {
+                await Clipboard.setData(ClipboardData(text: dir));
+                Get.snackbar(
+                  'success'.tr,
+                  'avatar_storage_copied'.tr,
+                  snackPosition: SnackPosition.BOTTOM,
+                  backgroundColor: ThemeColors.success.withOpacity(0.9),
+                  colorText: Colors.white,
+                );
+              },
+              child: Text('avatar_storage_copy_path'.tr),
+            ),
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text('close'.tr),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _diagRow(String label, String value, {bool? ok}) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 120,
+          child: Text(
+            label,
+            style: const TextStyle(
+              color: ThemeColors.textSecondary,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Text(
+            value,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: ok == null
+                  ? ThemeColors.textPrimary
+                  : (ok ? ThemeColors.success : ThemeColors.error),
+              fontSize: 12,
+              fontFamily: 'Consolas',
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Note: `explorer` renvoie un code de sortie non nul même en cas de succès
+  /// sous Windows -> on ne teste pas exitCode.
+  Future<void> _openAvatarsFolder(String path) async {
+    try {
+      if (Platform.isWindows) {
+        await Process.run('explorer', [path]);
+      } else if (Platform.isLinux) {
+        await Process.run('xdg-open', [path]);
+      } else if (Platform.isMacOS) {
+        await Process.run('open', [path]);
+      }
+    } catch (_) {
+      // Ouvrir le dossier n'est jamais bloquant pour le jeu.
+    }
   }
 
   @override

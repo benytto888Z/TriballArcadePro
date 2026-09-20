@@ -583,6 +583,21 @@ const Map<String, String> esES = {
   'toggle_always_on_top': 'Alternar siempre arriba',
   'quit_app': 'Salir de la aplicación',
 
+  // ==========================================
+  // ✅ AVATAR STORAGE DIAGNOSTIC (ADMIN)
+  // ==========================================
+  'admin_avatar_diagnostics': 'Diagnóstico de avatares',
+  'avatar_storage_state': 'Estado del almacenamiento',
+  'avatar_storage_dir': 'Carpeta',
+  'avatar_storage_files': 'Fotos guardadas',
+  'avatar_storage_ready': 'Listo (carpeta con permiso de escritura)',
+  'avatar_storage_unavailable': 'No disponible (sin carpeta editable)',
+  'avatar_storage_empty': 'Aún no hay fotos guardadas',
+  'avatar_storage_no_dir': 'No se pudo crear la carpeta de avatares: revisar la consola al iniciar.',
+  'avatar_storage_open': 'Abrir carpeta',
+  'avatar_storage_copy_path': 'Copiar ruta',
+  'avatar_storage_copied': 'Ruta copiada al portapapeles',
+
   'auto_start_in': 'Inicio auto en',
   'winner_comparison_title': 'COMPARACIÓN DE FINALISTAS',
 

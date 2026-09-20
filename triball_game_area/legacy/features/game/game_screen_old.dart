@@ -1,26 +1,27 @@
 // lib/features/game/game_screen.dart
+// ⚠️ ARCHIVE — copie obsolete, non compilée (hors lib/). Déplacée depuis triball_game_area/lib/features/game/game_screen_old.dart
 
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import '../../core/constants/game_constants.dart';
-import '../../core/theme/theme_colors.dart';
-import '../../data/models/game_state_model.dart';
-import 'widgets/countdown_overlay.dart';
-import '../../widgets/floating_particles.dart';
-import '../../widgets/orientation_wrappers.dart';
-import 'utils/game_screen_breakpoints.dart';       // ✅ NEW
-import 'widgets/player_score_card.dart';
-import 'widgets/score_popup.dart';
-import 'widgets/score_viewing_pause_overlay.dart';
-import 'widgets/turn_timer_widget.dart';
-import 'widgets/victory_dialog.dart';
-import 'game_controller.dart';
-import 'widgets/combo_indicator.dart';
-import 'widgets/controls_toggle_button.dart';
-import 'widgets/game_controls_bar.dart';
-import 'widgets/stats_panel.dart';
+import 'package:tribal_game_area/core/constants/game_constants.dart';
+import 'package:tribal_game_area/core/theme/theme_colors.dart';
+import 'package:tribal_game_area/data/models/game_state_model.dart';
+import 'package:tribal_game_area/features/game/widgets/countdown_overlay.dart';
+import 'package:tribal_game_area/widgets/floating_particles.dart';
+import 'package:tribal_game_area/widgets/orientation_wrappers.dart';
+import 'package:tribal_game_area/features/game/utils/game_screen_breakpoints.dart';       // ✅ NEW
+import 'package:tribal_game_area/features/game/widgets/player_score_card.dart';
+import 'package:tribal_game_area/features/game/widgets/score_popup.dart';
+import 'package:tribal_game_area/features/game/widgets/score_viewing_pause_overlay.dart';
+import 'package:tribal_game_area/features/game/widgets/turn_timer_widget.dart';
+import 'package:tribal_game_area/features/game/widgets/victory_dialog.dart';
+import 'package:tribal_game_area/features/game/game_controller.dart';
+import 'package:tribal_game_area/features/game/widgets/combo_indicator.dart';
+import 'package:tribal_game_area/features/game/widgets/controls_toggle_button.dart';
+import 'package:tribal_game_area/features/game/widgets/game_controls_bar.dart';
+import 'package:tribal_game_area/features/game/widgets/stats_panel.dart';
 
 class GameScreen extends GetView<GameController> {
   const GameScreen({super.key});

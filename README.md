@@ -72,7 +72,9 @@ affiché au démarrage dans la console :
 ```
 
 Le dossier est créé par le code (avec test d'écriture réel) ; il n'a pas besoin
-d'exister avant le premier lancement.
+d'exister avant le premier lancement. Sur une TV en release (pas de console), le
+menu admin affiche le même état : lobby → 5 appuis en haut à droite → code `1234`
+→ **Diagnostic des avatars**. Voir [`docs/TEST-AVATARS-TV.md`](docs/TEST-AVATARS-TV.md).
 
 ## Build
 
@@ -122,12 +124,15 @@ Deux conventions à respecter quand on modifie l'UI :
 
 * `pubspec.yaml` déclare `assets/images/` : le dossier est versionné via `.gitkeep`,
   sinon `flutter build` échoue (« unable to find directory entry in pubspec.yaml »).
+* Les copies obsolètes (`*_old.dart`, `*OLD.dart`, 12 fichiers) sont hors de `lib/`,
+  dans `<app>/legacy/` : ni compilées, ni analysées. Voir `triball_game_area/legacy/README.md`.
+  Le routeur importait encore `tournament_bracket_screenOLD.dart` (contenu identique à
+  la version courante) — il pointe maintenant sur le fichier canonique.
+* Diagnostic sur site sans console : lobby → **5 appuis en haut à droite** → code `1234`
+  → **Diagnostic des avatars** (chemin réel + fichiers + « Ouvrir le dossier »).
+  Procédure complète : [`docs/TEST-AVATARS-TV.md`](docs/TEST-AVATARS-TV.md).
 * `GameConstants.victoryDialogDisplaySeconds` : 10 s (Game Area) vs 40 s (Config Area),
   et le broadcast de config n'inclut pas ce réglage → à aligner si on veut le piloter
-  depuis la tablette.
-* `victoryAnimationDuration` est inutilisé dans les deux apps.
-* Fichiers morts encore présents (non compilés, non importés) à purger avant la V1
-  finale : `game_controller_old.dart`, `game_screen_old.dart`, `victory_dialog_old.dart`,
-  `stats_panel_old.dart`, `player_model_old.dart`, `game_stats_model_old.dart`,
-  `match_card_old.dart`, `match_cardOlD01.dart`, `tournament_bracket_screenOLD.dart`,
-  `game_screen_breakpoints_oldd.dart`.
+  depuis la tablette (le Game Area utilise désormais la valeur persistée localement).
+* `victoryAnimationDuration` est inutilisé dans les deux apps (5000 vs 50000 : inoffensif).
+

@@ -1,33 +1,34 @@
 // triball_game_area/lib/features/game/game_controller.dart
+// ⚠️ ARCHIVE — copie obsolete, non compilée (hors lib/). Déplacée depuis triball_game_area/lib/features/game/game_controller_old.dart
 
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
-import '../../core/constants/asset_paths.dart';
-import '../../core/constants/game_constants.dart';
-import '../../core/controllers/config_listener_controller.dart';
-import '../../core/controllers/platform_event_bus.dart';
-import '../../core/controllers/websocket_controller.dart';
-import '../../core/services/audio_service.dart';
-import '../../core/services/avatar_storage_service.dart';
-import '../../core/services/game_settings_service.dart';
-import '../../core/services/tts_service.dart';
-import '../../core/services/storage_service.dart';
-import '../../core/utils/game_time_formatter.dart';
-import '../../data/models/combo_model.dart';
-import '../../data/models/game_config_model.dart';
-import '../../data/models/game_state_model.dart';
-import '../../data/models/match_type_model.dart';
-import '../../data/models/platform_error_model.dart';
-import '../../data/models/player_model.dart';
-import '../../data/models/score_event_model.dart';
-import '../../data/models/stop_game_command_model.dart';
-import '../../data/repositories/game_repository.dart';
-import '../../data/repositories/leaderboard_repository.dart';
-import '../../routes/app_routes.dart';
-import '../tournament/tournament_controller.dart';
-import '../waiting/waiting_controller.dart';
+import 'package:tribal_game_area/core/constants/asset_paths.dart';
+import 'package:tribal_game_area/core/constants/game_constants.dart';
+import 'package:tribal_game_area/core/controllers/config_listener_controller.dart';
+import 'package:tribal_game_area/core/controllers/platform_event_bus.dart';
+import 'package:tribal_game_area/core/controllers/websocket_controller.dart';
+import 'package:tribal_game_area/core/services/audio_service.dart';
+import 'package:tribal_game_area/core/services/avatar_storage_service.dart';
+import 'package:tribal_game_area/core/services/game_settings_service.dart';
+import 'package:tribal_game_area/core/services/tts_service.dart';
+import 'package:tribal_game_area/core/services/storage_service.dart';
+import 'package:tribal_game_area/core/utils/game_time_formatter.dart';
+import 'package:tribal_game_area/data/models/combo_model.dart';
+import 'package:tribal_game_area/data/models/game_config_model.dart';
+import 'package:tribal_game_area/data/models/game_state_model.dart';
+import 'package:tribal_game_area/data/models/match_type_model.dart';
+import 'package:tribal_game_area/data/models/platform_error_model.dart';
+import 'package:tribal_game_area/data/models/player_model.dart';
+import 'package:tribal_game_area/data/models/score_event_model.dart';
+import 'package:tribal_game_area/data/models/stop_game_command_model.dart';
+import 'package:tribal_game_area/data/repositories/game_repository.dart';
+import 'package:tribal_game_area/data/repositories/leaderboard_repository.dart';
+import 'package:tribal_game_area/routes/app_routes.dart';
+import 'package:tribal_game_area/features/tournament/tournament_controller.dart';
+import 'package:tribal_game_area/features/waiting/waiting_controller.dart';
 
 class GameController extends GetxController {
   // ============================================

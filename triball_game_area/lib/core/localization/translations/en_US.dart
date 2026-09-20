@@ -614,6 +614,21 @@ const Map<String, String> enUS = {
   'toggle_always_on_top': 'Toggle always on top',
   'quit_app': 'Quit application',
 
+  // ==========================================
+  // ✅ AVATAR STORAGE DIAGNOSTIC (ADMIN)
+  // ==========================================
+  'admin_avatar_diagnostics': 'Avatar diagnostics',
+  'avatar_storage_state': 'Storage state',
+  'avatar_storage_dir': 'Folder',
+  'avatar_storage_files': 'Saved photos',
+  'avatar_storage_ready': 'Ready (writable folder)',
+  'avatar_storage_unavailable': 'Unavailable (no writable folder)',
+  'avatar_storage_empty': 'No photo saved yet',
+  'avatar_storage_no_dir': 'Avatar folder creation failed: check the console at startup.',
+  'avatar_storage_open': 'Open folder',
+  'avatar_storage_copy_path': 'Copy path',
+  'avatar_storage_copied': 'Path copied to clipboard',
+
   'auto_start_in': 'Auto start in',
 
   'winner_comparison_title': 'FINALISTS COMPARISON',

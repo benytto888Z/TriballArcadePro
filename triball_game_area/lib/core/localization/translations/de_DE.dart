@@ -581,6 +581,21 @@ const Map<String, String> deDE = {
   'toggle_always_on_top': 'Immer im Vordergrund',
   'quit_app': 'App beenden',
 
+  // ==========================================
+  // ✅ AVATAR STORAGE DIAGNOSTIC (ADMIN)
+  // ==========================================
+  'admin_avatar_diagnostics': 'Avatar-Diagnose',
+  'avatar_storage_state': 'Speicherstatus',
+  'avatar_storage_dir': 'Ordner',
+  'avatar_storage_files': 'Gespeicherte Fotos',
+  'avatar_storage_ready': 'Bereit (Ordner beschreibbar)',
+  'avatar_storage_unavailable': 'Nicht verfügbar (kein beschreibbarer Ordner)',
+  'avatar_storage_empty': 'Noch kein Foto gespeichert',
+  'avatar_storage_no_dir': 'Avatar-Ordner konnte nicht erstellt werden: Konsole beim Start prüfen.',
+  'avatar_storage_open': 'Ordner öffnen',
+  'avatar_storage_copy_path': 'Pfad kopieren',
+  'avatar_storage_copied': 'Pfad in die Zwischenablage kopiert',
+
   'auto_start_in': 'Auto-Start in',
 
   'winner_comparison_title': 'FINALISTENVERGLEICH',
