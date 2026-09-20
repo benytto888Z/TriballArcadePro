@@ -56,15 +56,20 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Triball Config utilise la caméra pour photographier les joueurs et afficher leur avatar sur l'écran de jeu.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Triball Config doit accéder au réseau local pour communiquer avec la plateforme arcade (WebSocket) et envoyer les photos des joueurs à l'écran de jeu.</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<!-- Pas de Split View / Slide Over : la config reste plein ecran en portrait. -->
+	<key>UIRequiresFullScreen</key>
+	<true/>
 </dict>
 </plist>

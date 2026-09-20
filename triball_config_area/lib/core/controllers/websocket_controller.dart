@@ -5,9 +5,9 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
-import '../constants/ esp32_config.dart';
+import '../constants/esp32_config.dart';
 import '../constants/game_constants.dart';
-import '../services/ websocket_service.dart';
+import '../services/websocket_service.dart';
 import '../services/game_session_guard_service.dart';
 import '../../data/models/platform_error_model.dart';
 import '../../data/models/platform_ready_model.dart';

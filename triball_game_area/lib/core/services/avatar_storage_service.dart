@@ -63,78 +63,90 @@ class AvatarStorageService extends GetxService {
   }
 
   // ============================================
-  // ✅ INIT DOSSIER AVATARS — À côté de l'exe
+  // ✅ DOSSIER AVATARS — Résolution + auto-diagnostic
   // ============================================
+
+  /// Chemin absolu du dossier retenu (null = pas encore prêt / indisponible).
+  /// ✅ Utile pour l'UI de debug : c'est ICI que les .jpg sont écrits.
+  String? get avatarsDirectory => _avatarsDir;
+
+  /// true quand un dossier écrivable a été trouvé.
+  bool get isAvatarStorageReady => _avatarsDir != null;
+
+  /// Résumé lisible de l'état du stockage (pour les logs / dalle de debug).
+  String get avatarStorageStatus => _avatarsDir == null
+      ? 'avatars: UNAVAILABLE (see console log)'
+      : 'avatars: $_avatarsDir';
+
+  /// Le dossier est créé à côté de l'exécutable quand c'est possible, sinon on
+  /// dégrade proprement (dossier courant → Documents). Chaque candidat est
+  /// validé par un VRAI test d'écriture, donc `isAvatarStorageReady` ne
+  /// ment jamais.
+  ///
+  /// ⚠️ En `flutter run -d windows`, l'exe vit dans
+  ///   build\windows\x64\runner\Debug\  → le dossier y est aussi,
+  ///   pas à la racine du projet. En release : <dossier\TriballGameArea.exe>\avatars
   Future<void> _initAvatarsDir() async {
+    final sep = Platform.pathSeparator;
+    final candidates = <String>[];
+
+    void addCandidate(String parent, String tail) {
+      if (parent.isEmpty) return;
+      final path = '$parent$sep$tail';
+      if (!candidates.contains(path)) candidates.add(path);
+    }
+
+    // 1) À côté de l'exe (préférable : suit l'installation sur la TV/PC arcade)
+    if (Platform.isWindows) {
+      addCandidate(File(Platform.resolvedExecutable).parent.path, 'avatars');
+    }
+    // 2) Dossier courant (utile en dev / lancement depuis un raccourci)
+    addCandidate(Directory.current.path, 'avatars');
+    // 3) Documents utilisateur (toujours écrivable, même sans droits admin)
     try {
-      String avatarsPath;
-
-      // ✅ Stratégie multi-niveaux
-      if (Platform.isWindows) {
-        // Niveau 1 : À côté de l'exe
-        try {
-          final exeDir = File(Platform.resolvedExecutable).parent.path;
-          avatarsPath = '$exeDir\\avatars';
-          final testFile = File('$avatarsPath\\.test');
-          await Directory(avatarsPath).create(recursive: true);
-          await testFile.writeAsString('test');
-          await testFile.delete();
-          // ✅ Écriture possible
-        } catch (_) {
-          // Niveau 2 : Dossier courant
-          try {
-            avatarsPath = '${Directory.current.path}\\avatars';
-            await Directory(avatarsPath).create(recursive: true);
-          } catch (_) {
-            // Niveau 3 : Documents utilisateur
-            final appDir = await getApplicationDocumentsDirectory();
-            avatarsPath = '${appDir.path}\\triball_avatars';
-            await Directory(avatarsPath).create(recursive: true);
-          }
-        }
-      } else {
-        // Linux/Mac
-        avatarsPath = '${Directory.current.path}/avatars';
-        await Directory(avatarsPath).create(recursive: true);
-      }
-
-      _avatarsDir = avatarsPath;
-
-      if (kDebugMode) {
-        print('📸 ✅ Avatars directory ready: $_avatarsDir');
-        final files = await listAvatarFiles();
-        print('   Existing files: ${files.length}');
-      }
+      final docs = await getApplicationDocumentsDirectory();
+      addCandidate(docs.path, 'TriballGame${sep}avatars');
     } catch (e) {
-      if (kDebugMode) {
-        print('❌ CRITICAL: Cannot create avatars directory');
-        print('   Error: $e');
+      debugPrint('📸 [avatars] Documents dir unavailable: $e');
+    }
+    // 4) Temp (dernier recours : ne plante pas le jeu, survit tant que le PC reste allumé)
+    addCandidate(Directory.systemTemp.path, 'TriballGame_avatars');
+
+    for (final path in candidates) {
+      try {
+        final dir = Directory(path);
+        await dir.create(recursive: true);
+
+        // ✅ Test d'écriture réel : le dossier existe VRAIMENT et est utilisable.
+        final probe = File('$path$sep.write-test');
+        await probe.writeAsString('ok', flush: true);
+        await probe.delete();
+
+        _avatarsDir = dir.path;
+        break;
+      } catch (e) {
+        debugPrint('📸 [avatars] not writable, trying next candidate: $path ($e)');
       }
     }
-  }
 
-  /// ✅ Fallback si le chemin principal échoue
-  Future<void> _tryFallbackDir() async {
-    try {
-      // Option 1 : Dossier courant
-      final currentDir = Directory.current.path;
-      final fallbackPath = '$currentDir/avatars';
+    final dir = _avatarsDir;
+    if (dir == null) {
+      debugPrint('════════════════════════════════════════');
+      debugPrint('📸 ❌ AVATARS: aucun dossier écrivable trouvé.');
+      debugPrint('   Candidats testés: ${candidates.join(", ")}');
+      debugPrint('   Les top-10 seront affichés sans photo.');
+      debugPrint('════════════════════════════════════════');
+      return;
+    }
 
-      if (kDebugMode) {
-        print('📸 Trying fallback dir: $fallbackPath');
-      }
-
-      final dir = Directory(fallbackPath);
-      if (!await dir.exists()) {
-        await dir.create(recursive: true);
-      }
-      _avatarsDir = fallbackPath;
-
-      if (kDebugMode) {
-        print('   ✅ Fallback dir created: $_avatarsDir');
-      }
-    } catch (e) {
-      if (kDebugMode) print('❌ Fallback dir also failed: $e');
+    final existing = await listAvatarFiles();
+    debugPrint('════════════════════════════════════════');
+    debugPrint('📸 ✅ AVATARS DIR = $dir');
+    debugPrint('   executable      = ${Platform.resolvedExecutable}');
+    debugPrint('   .jpg déjà présents = ${existing.length}');
+    debugPrint('════════════════════════════════════════');
+    if (kDebugMode && existing.isNotEmpty) {
+      debugPrint('   ${existing.join(", ")}');
     }
   }
 
@@ -269,31 +281,33 @@ class AvatarStorageService extends GetxService {
   }
 
   // ============================================
-  // ✅ TOP 10 — Fichiers JPEG dans assets/avatars
+  // ✅ TOP 10 — Fichiers .jpg dans <dossier de l'exe>/avatars
   // ============================================
 
-  /// Nom de fichier sécurisé
+  /// Nom de fichier sécurisé.
+  /// ✅ Normalisé (minuscules + [a-f0-9-]) : la même UUID donne toujours le
+  /// même nom, et la comparaison dans [syncTop10WithLeaderboard] est fiable.
   String _safeFileName(String gameMode, String avatarId) {
-    final safeUuid = avatarId.toLowerCase().replaceAll(
-      RegExp(r'[^a-f0-9-]'),
-      '',
-    );
-    return '${gameMode}_$safeUuid.jpg';
+    return '${gameMode}_${_sanitizeAvatarId(avatarId)}.jpg';
   }
+
+  static String _sanitizeAvatarId(String avatarId) => avatarId
+      .toLowerCase()
+      .replaceAll(RegExp(r'[^a-f0-9-]'), '');
 
   String _avatarFilePath(String gameMode, String avatarId) {
-    return '$_avatarsDir/${_safeFileName(gameMode, avatarId)}';
+    return '$_avatarsDir${Platform.pathSeparator}${_safeFileName(gameMode, avatarId)}';
   }
 
-  /// ✅ Sauvegarde l'avatar sur le disque
-  Future<void> saveTop10Avatar({
+  /// ✅ Sauvegarde l'avatar sur le disque. Retourne true si le fichier est écrit.
+  Future<bool> saveTop10Avatar({
     required String gameMode,
     required String avatarId,
     required Uint8List bytes,
   }) async {
     if (_avatarsDir == null) {
-      if (kDebugMode) print('❌ Cannot save avatar: dir not initialized');
-      return;
+      debugPrint('📸 ❌ Cannot save avatar: no writable avatars directory');
+      return false;
     }
 
     try {
@@ -308,8 +322,10 @@ class AvatarStorageService extends GetxService {
       }
 
       await _cleanOldAvatarsForMode(gameMode);
+      return await file.exists();
     } catch (e) {
-      if (kDebugMode) print('📸 Save avatar error: $e');
+      debugPrint('📸 ❌ Save avatar error: $e');
+      return false;
     }
   }
 
@@ -355,7 +371,13 @@ class AvatarStorageService extends GetxService {
     required List<String> top10AvatarIds,
   }) async {
     if (_avatarsDir == null) return;
-    final validIds = top10AvatarIds.where((id) => id.isNotEmpty).toSet();
+    // ✅ Comparaison normalisée comme les noms de fichiers : sans ça, une UUID
+    // renvoyée en majuscules par la plateforme ferait tout supprimer.
+    final validIds = top10AvatarIds
+        .where((id) => id.isNotEmpty)
+        .map(_sanitizeAvatarId)
+        .where((id) => id.isNotEmpty)
+        .toSet();
     try {
       final dir = Directory(_avatarsDir!);
       if (!await dir.exists()) return;

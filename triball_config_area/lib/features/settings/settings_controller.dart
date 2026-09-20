@@ -1,7 +1,7 @@
 // triball_config_area/lib/features/settings/settings_controller.dart
 
 import 'package:get/get.dart';
-import '../../core/constants/ esp32_config.dart';
+import '../../core/constants/esp32_config.dart';
 import '../../core/constants/asset_paths.dart';
 import '../../core/controllers/config_broadcaster_controller.dart';
 import '../../core/controllers/websocket_controller.dart';

@@ -94,7 +94,10 @@ class GameConstants {
   // ==========================================
   // ✅ TURN MANAGEMENT (NOUVEAU)
   // ==========================================
-  static const int turnDurationSeconds = 30;     // Durée d'un tour
+  /// Durée d'un tour. ✅ 40 s = règle officielle TRIBALL, identique au
+  /// Config Area. Le Config Area peut la surcharger via `turnDurationSeconds`
+  /// dans le broadcast de config; cette valeur n'est que le défaut local.
+  static const int turnDurationSeconds = 40;
   static const int turnWarningSeconds = 10;      // Warning à 10s restantes
   static const int turnTransitionMs = 1800;      // Pause entre 2 tours
 

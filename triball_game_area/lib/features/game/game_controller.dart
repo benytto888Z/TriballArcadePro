@@ -973,8 +973,10 @@ class GameController extends GetxController {
   // ✅ RETURN TO WAITING TIMER — Ne re-sauvegarde PAS
   // ============================================
   void _startReturnToWaitingTimer() {
+    // ✅ Respecte le réglage persisté (Game Area > Settings), sinon le défaut.
+    final configured = _settings.victoryDisplaySeconds.value;
     returnToWaitingCountdown.value =
-        GameConstants.victoryDialogDisplaySeconds;
+        configured > 0 ? configured : GameConstants.victoryDialogDisplaySeconds;
 
     _returnToWaitingTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       returnToWaitingCountdown.value--;

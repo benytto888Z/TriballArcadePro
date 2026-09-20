@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import '../../../../../core/theme/theme_colors.dart';
+import '../../../core/theme/theme_colors.dart';
 import '../../../core/constants/game_constants.dart';
 import '../game_controller.dart';
 import '../utils/game_screen_breakpoints.dart';
