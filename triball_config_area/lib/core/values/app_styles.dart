@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../utils/ dimens.dart';
+import '../utils/dimens.dart';
 import '../values/color_values.dart';
 
 class AppStyles {

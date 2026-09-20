@@ -1,13 +1,14 @@
 // lib/features/game/widgets/victory_dialog.dart
+// ⚠️ ARCHIVE — copie obsolete, non compilée (hors lib/). Déplacée depuis triball_game_area/lib/features/game/widgets/victory_dialog_old.dart
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import '../../../../../core/constants/game_constants.dart';
-import '../../../../../core/theme/theme_colors.dart';
-import '../../../../../core/utils/helpers.dart';
-import '../game_controller.dart';
-import '../utils/game_screen_breakpoints.dart';
+import 'package:tribal_game_area/core/constants/game_constants.dart';
+import 'package:tribal_game_area/core/theme/theme_colors.dart';
+import 'package:tribal_game_area/core/utils/helpers.dart';
+import 'package:tribal_game_area/features/game/game_controller.dart';
+import 'package:tribal_game_area/features/game/utils/game_screen_breakpoints.dart';
 
 class VictoryDialog extends GetView<GameController> {
   const VictoryDialog({super.key});

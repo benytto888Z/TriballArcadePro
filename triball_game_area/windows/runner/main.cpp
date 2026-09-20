@@ -28,7 +28,7 @@ FlutterWindow window(project);
 Win32Window::Point origin(0, 0);
 Win32Window::Size size(1920, 1080);
 
-if (!window.Create(L"Triball Pro Game Area", origin, size)) {
+if (!window.Create(L"TRIBALL Arcade Pro", origin, size)) {
 return EXIT_FAILURE;
 }
 

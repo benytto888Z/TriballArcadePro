@@ -6,7 +6,7 @@ const Map<String, String> frFR = {
   // ==========================================
   'app_name': 'TRIBALL ARCADE',
   'app_subtitle': 'PRO',
-  'app_version': 'Version 1.0.0',
+  'app_version': 'Version 1.0.0 · BETA 1',
   'loading': 'Chargement...',
   'please_wait': 'Veuillez patienter',
   'ready': 'Prêt !',
@@ -617,6 +617,21 @@ const Map<String, String> frFR = {
   'toggle_fullscreen': 'Basculer plein écran',
   'toggle_always_on_top': 'Basculer toujours au premier plan',
   'quit_app': 'Quitter l\'application',
+
+  // ==========================================
+  // ✅ AVATAR STORAGE DIAGNOSTIC (ADMIN)
+  // ==========================================
+  'admin_avatar_diagnostics': 'Diagnostic des avatars',
+  'avatar_storage_state': 'État du stockage',
+  'avatar_storage_dir': 'Dossier',
+  'avatar_storage_files': 'Photos sauvegardées',
+  'avatar_storage_ready': 'Prêt (dossier écrivable)',
+  'avatar_storage_unavailable': 'Indisponible (aucun dossier écrivable)',
+  'avatar_storage_empty': 'Aucune photo pour le moment',
+  'avatar_storage_no_dir': 'Le dossier d\'avatars a échoué : vérifier la console au démarrage.',
+  'avatar_storage_open': 'Ouvrir le dossier',
+  'avatar_storage_copy_path': 'Copier le chemin',
+  'avatar_storage_copied': 'Chemin copié dans le presse-papier',
 
   'auto_start_in': 'Démarrage auto dans',
 

@@ -1,1 +1,13 @@
 *.patch
+
+# Données joueurs écrites à l'exécution : les photos sont des données
+# personnelles et ne doivent jamais être versionnées.
+avatars/
+data/flutter_assets/assets/avatars/
+
+# Outillage
+node_modules/
+*.tmp
+
+# Artefacts d'export (paquets Windows, zips livrables)
+/dist/

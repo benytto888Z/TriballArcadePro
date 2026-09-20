@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../core/controllers/websocket_controller.dart';
-import '../core/services/ websocket_service.dart';
+import '../core/services/websocket_service.dart';
 import '../core/theme/theme_colors.dart';
 import 'glow_container.dart';
 

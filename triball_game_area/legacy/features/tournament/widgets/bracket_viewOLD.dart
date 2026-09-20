@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../data/models/tournament_model.dart';
-import '../../game/utils/game_screen_breakpoints.dart';
-import 'round_grid.dart';
+import 'package:tribal_game_area/data/models/tournament_model.dart';
+import 'package:tribal_game_area/features/game/utils/game_screen_breakpoints.dart';
+import 'package:tribal_game_area/features/tournament/widgets/round_grid.dart';
 
 /// Bracket vertical composé de RoundGrid.
 /// Tous les matchs d'un round sont visibles simultanément, jusqu'à 4 par ligne.

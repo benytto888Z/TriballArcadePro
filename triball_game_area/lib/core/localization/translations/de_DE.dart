@@ -6,7 +6,7 @@ const Map<String, String> deDE = {
   // ==========================================
   'app_name': 'TRIBALL ARCADE',
   'app_subtitle': 'PRO',
-  'app_version': 'Version 1.0.0',
+  'app_version': 'Version 1.0.0 · BETA 1',
   'loading': 'Lädt...',
   'please_wait': 'Bitte warten',
   'ready': 'Bereit!',
@@ -340,7 +340,6 @@ const Map<String, String> deDE = {
   'platform_status': 'Plattform',
   'platform_connected': 'Plattform verbunden',
   'platform_disconnected': 'Plattform getrennt',
-  'check_platform': 'Prüfe, ob die Plattform eingeschaltet ist',
   'error_connection': 'Verbindung zur Plattform nicht möglich',
 
   //guide
@@ -580,6 +579,21 @@ const Map<String, String> deDE = {
   'toggle_fullscreen': 'Vollbild umschalten',
   'toggle_always_on_top': 'Immer im Vordergrund',
   'quit_app': 'App beenden',
+
+  // ==========================================
+  // ✅ AVATAR STORAGE DIAGNOSTIC (ADMIN)
+  // ==========================================
+  'admin_avatar_diagnostics': 'Avatar-Diagnose',
+  'avatar_storage_state': 'Speicherstatus',
+  'avatar_storage_dir': 'Ordner',
+  'avatar_storage_files': 'Gespeicherte Fotos',
+  'avatar_storage_ready': 'Bereit (Ordner beschreibbar)',
+  'avatar_storage_unavailable': 'Nicht verfügbar (kein beschreibbarer Ordner)',
+  'avatar_storage_empty': 'Noch kein Foto gespeichert',
+  'avatar_storage_no_dir': 'Avatar-Ordner konnte nicht erstellt werden: Konsole beim Start prüfen.',
+  'avatar_storage_open': 'Ordner öffnen',
+  'avatar_storage_copy_path': 'Pfad kopieren',
+  'avatar_storage_copied': 'Pfad in die Zwischenablage kopiert',
 
   'auto_start_in': 'Auto-Start in',
 

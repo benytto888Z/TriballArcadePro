@@ -1,8 +1,9 @@
 // lib/data/models/player_model.dart
+// ⚠️ ARCHIVE — copie obsolete, non compilée (hors lib/). Déplacée depuis triball_game_area/lib/data/models/player_model_old.dart
 
 import 'package:get/get.dart';
-import '../../core/utils/game_time_formatter.dart';
-import 'score_event_model.dart';
+import 'package:tribal_game_area/core/utils/game_time_formatter.dart';
+import 'package:tribal_game_area/data/models/score_event_model.dart';
 
 class PlayerModel {
   final int id;

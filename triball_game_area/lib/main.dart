@@ -12,7 +12,7 @@ import 'core/controllers/config_listener_controller.dart';
 import 'core/controllers/websocket_controller.dart';
 import 'core/localization/app_translations.dart';
 import 'core/localization/locale_controller.dart';
-import 'core/services/ websocket_service.dart';
+import 'core/services/websocket_service.dart';
 import 'core/services/audio_service.dart';
 import 'core/services/avatar_storage_service.dart';
 import 'core/services/game_settings_service.dart';
@@ -166,7 +166,7 @@ class _TriballGameAppState extends State<TriballGameApp> with WindowListener {
       splitScreenMode: false,
       builder: (context, child) {
         return Obx(() => GetMaterialApp(
-          title: 'Triball Pro Game Area',
+          title: 'TRIBALL Arcade Pro',
           debugShowCheckedModeBanner: false,
           theme: themeController.currentThemeData,
           darkTheme: themeController.currentThemeData,

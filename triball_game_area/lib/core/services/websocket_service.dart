@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
-import '../constants/ esp32_config.dart';
+import '../constants/esp32_config.dart';
 
 // ✅ Renommé pour éviter le conflit avec Flutter's ConnectionState
 enum WsConnectionState {
@@ -160,7 +160,8 @@ class WebSocketService {
     _subscription = null;
     if (_channel != null) {
       try {
-        _channel!.sink.close(status.goingAway);
+        // ✅ CORRIGÉ : Utilise 1000 au lieu de status.goingAway (1001)
+        _channel!.sink.close(1000);
       } catch (_) {}
       _channel = null;
     }
@@ -177,9 +178,8 @@ class WebSocketService {
 
     reconnectAttempts++;
 
-    // Ne jamais abandonner : la tablette doit se reconnecter automatiquement
-    // dès que le Wi-Fi/SoftAP ESP32 redevient disponible. La valeur max sert
-    // uniquement à plafonner le backoff et le compteur affiché.
+    // Mode borne : ne jamais abandonner. Dès que le SoftAP ESP32 redevient
+    // disponible, Game Area doit se reconnecter sans action humaine.
     final cappedAttempt = reconnectAttempts
         .clamp(1, Esp32Config.maxReconnectAttempts) as int;
     int delay = Esp32Config.reconnectDelay *

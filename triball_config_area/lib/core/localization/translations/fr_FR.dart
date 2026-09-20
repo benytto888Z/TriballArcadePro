@@ -674,4 +674,13 @@ const Map<String, String> frFR = {
   'capture_failed': 'Échec de la capture',
   'victory_display_duration': 'Durée affichage victoire',
 
+
+  // ==========================================
+  // ✅ Completees ici : utilisees par les ecrans admin /
+  //    infos Game Area, declarees cote Game Area uniquement.
+  // ==========================================
+  'admin_access': 'Accès administrateur',
+  'enter_admin_code': 'Entrez le code administrateur',
+  'invalid_security_code': 'Code de sécurité incorrect',
+  'unknown': 'Inconnu',
 };

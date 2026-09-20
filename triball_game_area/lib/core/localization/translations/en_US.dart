@@ -6,7 +6,7 @@ const Map<String, String> enUS = {
   // ==========================================
   'app_name': 'TRIBALL ARCADE',
   'app_subtitle': 'PRO',
-  'app_version': 'Version 1.0.0',
+  'app_version': 'Version 1.0.0 · BETA 1',
   'loading': 'Loading...',
   'please_wait': 'Please wait',
   'ready': 'Ready!',
@@ -613,6 +613,21 @@ const Map<String, String> enUS = {
   'toggle_fullscreen': 'Toggle fullscreen',
   'toggle_always_on_top': 'Toggle always on top',
   'quit_app': 'Quit application',
+
+  // ==========================================
+  // ✅ AVATAR STORAGE DIAGNOSTIC (ADMIN)
+  // ==========================================
+  'admin_avatar_diagnostics': 'Avatar diagnostics',
+  'avatar_storage_state': 'Storage state',
+  'avatar_storage_dir': 'Folder',
+  'avatar_storage_files': 'Saved photos',
+  'avatar_storage_ready': 'Ready (writable folder)',
+  'avatar_storage_unavailable': 'Unavailable (no writable folder)',
+  'avatar_storage_empty': 'No photo saved yet',
+  'avatar_storage_no_dir': 'Avatar folder creation failed: check the console at startup.',
+  'avatar_storage_open': 'Open folder',
+  'avatar_storage_copy_path': 'Copy path',
+  'avatar_storage_copied': 'Path copied to clipboard',
 
   'auto_start_in': 'Auto start in',
 

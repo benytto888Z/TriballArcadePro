@@ -6,7 +6,7 @@ const Map<String, String> esES = {
   // ==========================================
   'app_name': 'TRIBALL ARCADE',
   'app_subtitle': 'PRO',
-  'app_version': 'Versión 1.0.0',
+  'app_version': 'Versión 1.0.0 · BETA 1',
   'loading': 'Cargando...',
   'please_wait': 'Por favor espera',
   'ready': '¡Listo!',
@@ -119,6 +119,8 @@ const Map<String, String> esES = {
   'streak': 'Racha',
   'combo_max': 'Combo máx',
   'hardcore_penalty': '¡-20 puntos!',
+  'bonus_turn': 'Turno bonus',
+  'bonus_turn_granted': '¡Turno bonus concedido!',
 
   // ==========================================
   // SCORE EVENTS
@@ -341,7 +343,6 @@ const Map<String, String> esES = {
   'platform_status': 'Plataforma',
   'platform_connected': 'Plataforma conectada',
   'platform_disconnected': 'Plataforma desconectada',
-  'check_platform': 'Comprueba que la Plataforma esté encendida',
   'error_connection': 'No se puede conectar a la Plataforma',
 
   'how_to_play_subtitle': 'Guía completa del juego',
@@ -582,6 +583,21 @@ const Map<String, String> esES = {
   'toggle_fullscreen': 'Alternar pantalla completa',
   'toggle_always_on_top': 'Alternar siempre arriba',
   'quit_app': 'Salir de la aplicación',
+
+  // ==========================================
+  // ✅ AVATAR STORAGE DIAGNOSTIC (ADMIN)
+  // ==========================================
+  'admin_avatar_diagnostics': 'Diagnóstico de avatares',
+  'avatar_storage_state': 'Estado del almacenamiento',
+  'avatar_storage_dir': 'Carpeta',
+  'avatar_storage_files': 'Fotos guardadas',
+  'avatar_storage_ready': 'Listo (carpeta con permiso de escritura)',
+  'avatar_storage_unavailable': 'No disponible (sin carpeta editable)',
+  'avatar_storage_empty': 'Aún no hay fotos guardadas',
+  'avatar_storage_no_dir': 'No se pudo crear la carpeta de avatares: revisar la consola al iniciar.',
+  'avatar_storage_open': 'Abrir carpeta',
+  'avatar_storage_copy_path': 'Copiar ruta',
+  'avatar_storage_copied': 'Ruta copiada al portapapeles',
 
   'auto_start_in': 'Inicio auto en',
   'winner_comparison_title': 'COMPARACIÓN DE FINALISTAS',

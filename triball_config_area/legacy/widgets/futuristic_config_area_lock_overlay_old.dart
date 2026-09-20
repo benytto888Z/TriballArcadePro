@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../core/constants/game_constants.dart';
-import '../core/controllers/config_broadcaster_controller.dart';
-import '../core/services/game_session_guard_service.dart';
-import '../core/theme/app_theme_controller.dart';
-import '../core/theme/theme_colors.dart';
-import 'animated_triball_background.dart';
+import 'package:amzneontriballui/core/constants/game_constants.dart';
+import 'package:amzneontriballui/core/controllers/config_broadcaster_controller.dart';
+import 'package:amzneontriballui/core/services/game_session_guard_service.dart';
+import 'package:amzneontriballui/core/theme/app_theme_controller.dart';
+import 'package:amzneontriballui/core/theme/theme_colors.dart';
+import 'package:amzneontriballui/widgets/animated_triball_background.dart';
 
 /// Écran de sécurité plein écran de Config Area.
 /// Il remplace visuellement et interactivement toute l'application pendant
