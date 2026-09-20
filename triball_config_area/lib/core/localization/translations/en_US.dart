@@ -643,4 +643,13 @@ const Map<String, String> enUS = {
   'victory_display_duration': 'Victory display duration',
 
 
+
+  // ==========================================
+  // ✅ Completees ici : utilisees par les ecrans admin /
+  //    infos Game Area, declarees cote Game Area uniquement.
+  // ==========================================
+  'admin_access': 'Admin Access',
+  'enter_admin_code': 'Enter admin code',
+  'invalid_security_code': 'Invalid security code',
+  'unknown': 'Unknown',
 };

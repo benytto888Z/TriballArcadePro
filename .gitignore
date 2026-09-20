@@ -8,3 +8,6 @@ data/flutter_assets/assets/avatars/
 # Outillage
 node_modules/
 *.tmp
+
+# Artefacts d'export (paquets Windows, zips livrables)
+/dist/

@@ -6,7 +6,7 @@ const Map<String, String> esES = {
   // ==========================================
   'app_name': 'TRIBALL ARCADE',
   'app_subtitle': 'PRO',
-  'app_version': 'Versión 1.0.0',
+  'app_version': 'Versión 1.0.0 · BETA 1',
   'loading': 'Cargando...',
   'please_wait': 'Por favor espera',
   'ready': '¡Listo!',
@@ -119,6 +119,8 @@ const Map<String, String> esES = {
   'streak': 'Racha',
   'combo_max': 'Combo máx',
   'hardcore_penalty': '¡-20 puntos!',
+  'bonus_turn': 'Turno bonus',
+  'bonus_turn_granted': '¡Turno bonus concedido!',
 
   // ==========================================
   // SCORE EVENTS
@@ -341,7 +343,6 @@ const Map<String, String> esES = {
   'platform_status': 'Plataforma',
   'platform_connected': 'Plataforma conectada',
   'platform_disconnected': 'Plataforma desconectada',
-  'check_platform': 'Comprueba que la Plataforma esté encendida',
   'error_connection': 'No se puede conectar a la Plataforma',
 
   'how_to_play_subtitle': 'Guía completa del juego',

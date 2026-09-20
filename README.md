@@ -120,6 +120,22 @@ Deux conventions à respecter quand on modifie l'UI :
   **landscape immersive**.
 * Dans l'UI on écrit « Platform », jamais « ESP32 » (réservé au code/logs techniques).
 
+## Exporter un exécutable Windows (beta)
+
+```powershell
+# depuis un PC Windows qui a le SDK Flutter :
+powershell -ExecutionPolicy Bypass -File tools\package-windows.ps1 -Label beta1
+#   -> dist\TriballGameArea-v1.0.0-beta1-<date>.zip (+ .sha256)
+
+# ou sans SDK : Actions -> "Build Windows — Game Area (exportable)" -> Run workflow
+#   (le meme script est rejoue en CI ; un tag v* publie une GitHub Release avec le zip)
+```
+
+Le paquet est **portable** (exe + DLL + `data\` + `avatars\`) et embarque
+`install-on-target.ps1` pour le PC de la TV : installation sans droits admin,
+raccourci, démarrage automatique optionnel, préservation des photos du top 10.
+Procédure, contrôles et pannes typiques : [`docs/INSTALL-WINDOWS-BETA.md`](docs/INSTALL-WINDOWS-BETA.md).
+
 ## État known-good / points ouverts
 
 * `pubspec.yaml` déclare `assets/images/` : le dossier est versionné via `.gitkeep`,

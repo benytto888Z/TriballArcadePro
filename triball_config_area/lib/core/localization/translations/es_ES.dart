@@ -119,6 +119,8 @@ const Map<String, String> esES = {
   'streak': 'Racha',
   'combo_max': 'Combo máx',
   'hardcore_penalty': '¡-20 puntos!',
+  'bonus_turn': 'Turno bonus',
+  'bonus_turn_granted': '¡Turno bonus concedido!',
 
   // ==========================================
   // SCORE EVENTS
@@ -335,7 +337,6 @@ const Map<String, String> esES = {
   'platform_status': 'Plataforma',
   'platform_connected': 'Plataforma conectada',
   'platform_disconnected': 'Plataforma desconectada',
-  'check_platform': 'Comprueba que la Plataforma esté encendida',
   'error_connection': 'No se puede conectar a la Plataforma',
 
   'how_to_play_subtitle': 'Guía completa del juego',
@@ -618,4 +619,13 @@ const Map<String, String> esES = {
   'capture_failed': 'Error en la captura',
   'victory_display_duration': 'Duración pantalla victoria',
 
+
+  // ==========================================
+  // ✅ Completees ici : utilisees par les ecrans admin /
+  //    infos Game Area, declarees cote Game Area uniquement.
+  // ==========================================
+  'admin_access': 'Acceso administrador',
+  'enter_admin_code': 'Ingresa el código admin',
+  'invalid_security_code': 'Código de seguridad incorrecto',
+  'unknown': 'Desconocido',
 };

@@ -6,7 +6,7 @@ const Map<String, String> enUS = {
   // ==========================================
   'app_name': 'TRIBALL ARCADE',
   'app_subtitle': 'PRO',
-  'app_version': 'Version 1.0.0',
+  'app_version': 'Version 1.0.0 · BETA 1',
   'loading': 'Loading...',
   'please_wait': 'Please wait',
   'ready': 'Ready!',

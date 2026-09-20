@@ -6,7 +6,7 @@ const Map<String, String> deDE = {
   // ==========================================
   'app_name': 'TRIBALL ARCADE',
   'app_subtitle': 'PRO',
-  'app_version': 'Version 1.0.0',
+  'app_version': 'Version 1.0.0 · BETA 1',
   'loading': 'Lädt...',
   'please_wait': 'Bitte warten',
   'ready': 'Bereit!',
@@ -340,7 +340,6 @@ const Map<String, String> deDE = {
   'platform_status': 'Plattform',
   'platform_connected': 'Plattform verbunden',
   'platform_disconnected': 'Plattform getrennt',
-  'check_platform': 'Prüfe, ob die Plattform eingeschaltet ist',
   'error_connection': 'Verbindung zur Plattform nicht möglich',
 
   //guide

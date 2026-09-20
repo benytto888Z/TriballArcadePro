@@ -166,7 +166,7 @@ class _TriballGameAppState extends State<TriballGameApp> with WindowListener {
       splitScreenMode: false,
       builder: (context, child) {
         return Obx(() => GetMaterialApp(
-          title: 'Triball Pro Game Area',
+          title: 'TRIBALL Arcade Pro',
           debugShowCheckedModeBanner: false,
           theme: themeController.currentThemeData,
           darkTheme: themeController.currentThemeData,

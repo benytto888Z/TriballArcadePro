@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.amzelitegames" "\0"
-            VALUE "FileDescription", "triball_game_area" "\0"
+            VALUE "CompanyName", "AMZ Elite Games" "\0"
+            VALUE "FileDescription", "TRIBALL Arcade Pro - Game Area (ecran de jeu)" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "triball_game_area" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 com.amzelitegames. All rights reserved." "\0"
             VALUE "OriginalFilename", "triball_game_area.exe" "\0"
-            VALUE "ProductName", "triball_game_area" "\0"
+            VALUE "ProductName", "TRIBALL Arcade Pro" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

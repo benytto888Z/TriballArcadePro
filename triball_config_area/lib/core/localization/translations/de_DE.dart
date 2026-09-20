@@ -71,7 +71,8 @@ const Map<String, String> deDE = {
 
   'mode_combo': 'Combo',
   'mode_combo_desc': 'Bonus für wiederholte Treffer',
-  'mode_champion': 'Erreiche genau 200 Punkte mit allen Combo-Boni',
+  'mode_champion': 'Champion',
+  'mode_champion_desc': 'Erreiche genau 200 Punkte mit allen Combo-Boni',
   'guide_hardcore_bullet_2': '✅ Überschreitung von 100 ERLAUBT',
 
 
@@ -334,7 +335,6 @@ const Map<String, String> deDE = {
   'platform_status': 'Plattform',
   'platform_connected': 'Plattform verbunden',
   'platform_disconnected': 'Plattform getrennt',
-  'check_platform': 'Prüfe, ob die Plattform eingeschaltet ist',
   'error_connection': 'Verbindung zur Plattform nicht möglich',
 
 
@@ -621,4 +621,13 @@ const Map<String, String> deDE = {
   'capture_failed': 'Aufnahme fehlgeschlagen',
   'victory_display_duration': 'Sieganzeige-Dauer',
 
+
+  // ==========================================
+  // ✅ Completees ici : utilisees par les ecrans admin /
+  //    infos Game Area, declarees cote Game Area uniquement.
+  // ==========================================
+  'admin_access': 'Admin-Zugang',
+  'enter_admin_code': 'Admin-Code eingeben',
+  'invalid_security_code': 'Falscher Sicherheitscode',
+  'unknown': 'Unbekannt',
 };
