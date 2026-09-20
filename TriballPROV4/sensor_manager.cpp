@@ -1,3 +1,4 @@
+#include "esp32-hal-gpio.h"
 // sensor_manager.cpp
 #include "sensor_manager.h"
 
@@ -17,7 +18,7 @@ SensorManager::SensorManager()
 
 void SensorManager::begin() {
   for (int i = 0; i < IR_SENSOR_COUNT; i++) {
-    pinMode(IR_PINS[i], INPUT_PULLUP);
+    pinMode(IR_PINS[i], INPUT);
     int raw = digitalRead(IR_PINS[i]);
     _lastState[i]   = _isTriggered(raw);
     _stableState[i] = _lastState[i];

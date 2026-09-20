@@ -141,12 +141,12 @@ class MatchCard extends StatelessWidget {
             // RoundGrid. MatchCard appelle directement le contrôleur de la
             // session tournoi pour le match courant.
             if (isCurrent && match.isReady && !isInProgress)
-              _AutoStartButton(
+             /* _AutoStartButton(
                 key: ValueKey('auto_start_match_${match.matchId}'),
                 matchId: match.matchId,
                 onStart: controller.startCurrentMatch,
-              ),
-             /*Padding(
+              ),*/
+             Padding(
                 padding: EdgeInsets.all(6.w),
                 child: InkWell(
                   // onTap: onStart,
@@ -182,7 +182,7 @@ class MatchCard extends StatelessWidget {
                     ),
                   ),
                 ),
-              ),*/
+              ),
           ],
         ),
       );

@@ -57,7 +57,7 @@ void main() async {
       await windowManager.setResizable(false);
 
       // ✅ Toujours au premier plan (optionnel pour TV)
-     // await windowManager.setAlwaysOnTop(true);
+     //await windowManager.setAlwaysOnTop(true);
 
       // ✅ Empêcher la fermeture accidentelle
       await windowManager.setPreventClose(true);

@@ -19,7 +19,7 @@
 // IR Sensors (inchangé)
 // ============================================
 #define IR_SENSOR_COUNT 9
-#define IR_ACTIVE_LOW  true
+#define IR_ACTIVE_LOW  false
 
 const uint8_t IR_PINS[IR_SENSOR_COUNT] = {
   32, 33, 25, 26, 27, 14, 23, 4, 15
@@ -29,13 +29,14 @@ const uint8_t IR_PINS[IR_SENSOR_COUNT] = {
 // LEDs (inchangé)
 // ============================================
 #define LED_PIN        13
-#define LED_COUNT      27
-#define LED_BRIGHTNESS 150
+#define LED_COUNT      90
+// #define LED_BRIGHTNESS 150
+#define LED_BRIGHTNESS 20
 
 // ============================================
 // Timing (inchangé)
 // ============================================
-#define SCAN_INTERVAL      5
+#define SCAN_INTERVAL      1
 #define DETECTION_COOLDOWN 1500
 #define STATUS_INTERVAL    5000
 #define LED_FLASH_DURATION 1200

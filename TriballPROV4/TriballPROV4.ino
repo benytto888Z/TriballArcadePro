@@ -102,10 +102,12 @@ void loop() {
 
   unsigned long now = millis();
 
+  sensors.scan();
+
   // Scan IR sensors
   if (now - lastScanTime >= SCAN_INTERVAL) {
     lastScanTime = now;
-    sensors.scan();
+    //sensors.scan();
   }
 
   // Send detection if any

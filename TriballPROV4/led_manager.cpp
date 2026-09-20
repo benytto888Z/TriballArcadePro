@@ -1,6 +1,32 @@
 // led_manager.cpp
 #include "led_manager.h"
 
+// Définition des couleurs initiales pour chaque trou
+// {bleu, orange, vert, orange, jaune, orange, bleu, violet, cyan}
+const ColorRGB LedManager::DEFAULT_HOLE_COLORS[9] = {
+  {0,   0,   255},  // 0: Bleu
+  {255, 120, 0  },  // 1: Orange
+  {0,   255, 0  },  // 2: Vert
+  {255, 120, 0  },  // 3: Orange
+  {255, 220, 0  },  // 4: Jaune
+  {255, 120, 0  },  // 5: Orange
+  {0,   0,   255},  // 6: Bleu
+  {180, 0,   255},  // 7: Violet
+  {0,   255, 255}   // 8: Cyan
+};
+
+/*const ColorRGB LedManager::DEFAULT_HOLE_COLORS[9] = {
+  {0,   0,   0},  // 0: Bleu
+  {0, 0, 0  },  // 1: Orange
+  {0,   0, 0  },  // 2: Vert
+  {0, 0, 0  },  // 3: Orange
+  {0, 0, 0  },  // 4: Jaune
+  {0, 0, 0  },  // 5: Orange
+  {0,   0,   0},  // 6: Bleu
+  {0, 0,   0},  // 7: Violet
+  {0,   0, 0}   // 8: Cyan
+};*/
+
 LedManager::LedManager()
   : _leds(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800),
     _idleAnim(false),
@@ -8,7 +34,7 @@ LedManager::LedManager()
 {
   for (int i = 0; i < 9; i++) {
     _flashHoleUntil[i] = 0;
-    _flashColor[i] = 0;
+    _flashColor[i] = {255, 255, 255};
   }
 }
 
@@ -25,14 +51,28 @@ void LedManager::begin() {
 
 void LedManager::update() {
   unsigned long now = millis();
+  bool needShow = false;
 
+  // Gestion des flashs des trous (1.5 sec)
   for (int i = 0; i < 9; i++) {
-    if (_flashHoleUntil[i] != 0 && now >= _flashHoleUntil[i]) {
-      _writeHole(i, 0, 0, 0);
-      _flashHoleUntil[i] = 0;
+    if (_flashHoleUntil[i] != 0) {
+      if (now >= _flashHoleUntil[i]) {
+        // Le flash est terminé -> retour à la couleur initiale
+        _flashHoleUntil[i] = 0;
+        _restoreHole(i);
+      } else {
+        // Effet stroboscope dynamique (clignotement toutes les 75ms)
+        bool flashState = ((now / 75) % 2) == 0;
+        if (flashState) {
+          _writeHole(i, _flashColor[i].r, _flashColor[i].g, _flashColor[i].b);
+        } else {
+          _writeHole(i, 0, 0, 0); // Éteint brièvement pour l'effet de flash
+        }
+      }
     }
   }
 
+  // Animation d'attente (Idle) si activée
   if (_idleAnim && (now - _lastAnimUpdate > 50)) {
     _lastAnimUpdate = now;
     static uint16_t hue = 0;
@@ -64,9 +104,21 @@ void LedManager::setHole(int holeIndex, uint8_t r, uint8_t g, uint8_t b) {
   _writeHole(holeIndex, r, g, b);
 }
 
+void LedManager::restoreHole(int holeIndex) {
+  _restoreHole(holeIndex);
+}
+
+void LedManager::_restoreHole(int idx) {
+  if (idx < 0 || idx >= 9) return;
+  _writeHole(idx, 
+             DEFAULT_HOLE_COLORS[idx].r, 
+             DEFAULT_HOLE_COLORS[idx].g, 
+             DEFAULT_HOLE_COLORS[idx].b);
+}
+
 void LedManager::_writeHole(int idx, uint8_t r, uint8_t g, uint8_t b) {
-  int startLED = idx * 3;
-  for (int i = 0; i < 3; i++) {
+  int startLED = idx * 10;
+  for (int i = 0; i < 10; i++) {
     int led = startLED + i;
     if (led < LED_COUNT) {
       _leds.setPixelColor(led, _leds.Color(r, g, b));
@@ -80,13 +132,13 @@ void LedManager::showStartup() {
   for (int i = 0; i < LED_COUNT; i++) {
     _leds.setPixelColor(i, _leds.Color(0, 255, 255));
     _leds.show();
-    delay(20);
+    delay(10);
   }
-  delay(300);
+  delay(200);
   for (int i = LED_COUNT - 1; i >= 0; i--) {
     _leds.setPixelColor(i, 0);
     _leds.show();
-    delay(15);
+    delay(10);
   }
 }
 
@@ -96,18 +148,24 @@ void LedManager::showReady() {
 }
 
 void LedManager::showGameActive() {
-  setAll(0, 80, 0);
-  if (DEBUG_SERIAL) Serial.println("💡 LED GAME ACTIVE");
+  _idleAnim = false;
+  // Allumer chaque trou avec sa couleur assignée
+  for (int i = 0; i < 9; i++) {
+    _flashHoleUntil[i] = 0;
+    _restoreHole(i);
+  }
+  if (DEBUG_SERIAL) Serial.println("💡 LED GAME ACTIVE (Couleurs par trou activées)");
 }
 
 void LedManager::showGameStopped() {
+  _idleAnim = false;
   setAll(80, 0, 0);
   if (DEBUG_SERIAL) Serial.println("💡 LED GAME STOPPED");
 }
 
 void LedManager::showGameReset() {
   setAll(0, 0, 255);
-  delay(400);
+  delay(300);
   showGameActive();
 }
 
@@ -115,37 +173,35 @@ void LedManager::flashHole(const String& holeId, const String& effect, int value
   int idx = _holeNameToIndex(holeId);
   if (idx < 0) return;
 
-  uint8_t r = 0, g = 255, b = 0;
+  // Flash blanc éclatant par défaut
+  uint8_t r = 255, g = 255, b = 255;
 
-  if (effect == "x0") {
-    r = 255; g = 0; b = 0;
+  // Ajustement optionnel si effet spécial
+  if (effect == "x0" || effect == "negative") {
+    r = 255; g = 0; b = 0; // Rouge pour malus
   } else if (effect == "x2") {
-    r = 255; g = 215; b = 0;
-  } else if (effect == "negative") {
-    r = 255; g = 0; b = 0;
-  } else if (value >= 30) {
-    r = 0; g = 255; b = 255;
-  } else if (value > 0) {
-    r = 0; g = 255; b = 0;
+    r = 255; g = 215; b = 0; // Or pour bonus
   }
 
-  _writeHole(idx, r, g, b);
-  _flashColor[idx] = _leds.Color(r, g, b);
-    Serial.println("Detected ok ok ok");
-  _flashHoleUntil[idx] = millis() + LED_FLASH_DURATION;
+  _flashColor[idx] = {r, g, b};
+  
+  // Flash d'une durée exacte de 1.5 seconde (1500 ms)
+  _flashHoleUntil[idx] = millis() + 1500; 
 
-
+  if (DEBUG_SERIAL) {
+    Serial.printf("🎯 Hole %s (idx: %d) flash 1.5s triggered\n", holeId.c_str(), idx);
+  }
 }
 
 int LedManager::_holeNameToIndex(const String& holeId) {
-  if (holeId == HOLE_LEFT_TOP)    return 0;
-  if (holeId == HOLE_CENTER_TOP)  return 1;
-  if (holeId == HOLE_RIGHT_TOP)   return 2;
-  if (holeId == HOLE_LEFT_MID)    return 3;
-  if (holeId == HOLE_CENTER_MID)  return 4;
-  if (holeId == HOLE_RIGHT_MID)   return 5;
-  if (holeId == HOLE_LEFT_LOW)    return 6;
-  if (holeId == HOLE_CENTER_LOW)  return 7;
-  if (holeId == HOLE_RIGHT_LOW)   return 8;
+  if (holeId == HOLE_LEFT_TOP)   return 0;
+  if (holeId == HOLE_CENTER_TOP) return 1;
+  if (holeId == HOLE_RIGHT_TOP)  return 2;
+  if (holeId == HOLE_LEFT_MID)   return 3;
+  if (holeId == HOLE_CENTER_MID) return 4;
+  if (holeId == HOLE_RIGHT_MID)  return 5;
+  if (holeId == HOLE_LEFT_LOW)   return 6;
+  if (holeId == HOLE_CENTER_LOW) return 7;
+  if (holeId == HOLE_RIGHT_LOW)  return 8;
   return -1;
 }
